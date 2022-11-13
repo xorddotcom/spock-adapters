@@ -5,6 +5,7 @@
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
     "@trivago/prettier-plugin-sort-imports": "^3.3.1",
+    "@typechain/ethers-v5": "^10.1.1",
     "@types/node": "^18.11.1",
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
@@ -18,6 +19,7 @@
     "prettier": "^2.7.1",
     "shx": "^0.3.4",
     "ts-node": "^10.9.1",
+    "typechain": "^8.1.1",
     "typescript": "^4.8.4"
   },
   "main": "./dist/index.js",
@@ -28,11 +30,14 @@
     "lint": "yarn lint:ts && yarn prettier:check && yarn typecheck",
     "lint:ts": "eslint --config \"./.eslintrc.yml\" --ignore-path \"./.eslintignore\" --ext .js,.ts .",
     "postinstall": "husky install",
-    "postpublish": "pinst --enable",
-    "prepublishOnly": "pinst --disable",
     "prettier": "prettier --config \"./.prettierrc.yml\" --ignore-path \"./.prettierignore\" --write \"**/*.{js,json,md,ts,yml}\"",
     "prettier:check": "prettier --check --config \"./.prettierrc.yml\" --ignore-path \"./.prettierignore\" \"**/*.{js,json,md,ts,yml}\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generate": "chmod u+x ./src/scripts/generate.sh && ./src/scripts/generate.sh"
   },
-  "types": "./dist/index.d.ts"
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@ethersproject/experimental": "^5.7.0",
+    "ethers": "^5.7.2"
+  }
 }
