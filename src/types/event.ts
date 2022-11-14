@@ -1,13 +1,12 @@
 import { BigNumber } from "@ethersproject/bignumber";
+import { Chain } from "constant/chains";
 
-import { Chain } from "../constant/chains";
-
-interface Block {
+export interface Block {
   number: number;
   hash: string;
 }
 
-interface Transaction {
+export interface Transaction {
   hash: string;
   from: string;
   to: string;
@@ -17,7 +16,8 @@ interface Transaction {
   maxPriorityFeePerGas: BigNumber;
 }
 
-export interface Event {
+export interface Event<T> {
+  params: T;
   signature: string;
   block: Block;
   transaction: Transaction;

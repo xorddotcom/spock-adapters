@@ -8,6 +8,7 @@
 **/build
 **/dist
 **/node_modules
+**/src/projects/*/types
 
 # files
 *.env
