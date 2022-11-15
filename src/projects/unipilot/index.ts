@@ -1,7 +1,6 @@
-import { Chain } from "constant/chains";
-import { Adapter } from "types/adapter";
-import { Event } from "types/event";
-
+import { Chain } from "../../constants/chains";
+import { Adapter } from "../../types/adapter";
+import { Event } from "../../types/event";
 import { Staking__factory, Vault__factory } from "./types";
 import { StakeOrUnstakeOrClaimEventObject } from "./types/Staking";
 import { DepositEventObject, WithdrawEventObject } from "./types/Vault";

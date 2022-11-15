@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-read -p "project: " PROJECT
+# read -p "project: " PROJECT
+PROJECT=$1
 cd ./src/projects/$PROJECT
 
 if [ -d "./abis" ]
