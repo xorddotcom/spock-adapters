@@ -1,4 +1,4 @@
-import { Chain } from "../../constant/chains";
+import { Chain } from "../../constants/chains";
 import { Adapter } from "../../types/adapter";
 import { Event } from "../../types/event";
 import { Staking__factory, Vault__factory } from "./types";

@@ -1,6 +1,6 @@
 import { Interface } from "@ethersproject/abi";
 
-import { Chain } from "../constant/chains";
+import { Chain } from "../constants/chains";
 import { Event } from "./event";
 
 export type EventHandler = (event: Event<any>) => Promise<void>;

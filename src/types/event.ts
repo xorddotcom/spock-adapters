@@ -1,6 +1,6 @@
 import { BigNumber } from "@ethersproject/bignumber";
 
-import { Chain } from "../constant/chains";
+import { Chain } from "../constants/chains";
 
 export interface Block {
   number: number;
