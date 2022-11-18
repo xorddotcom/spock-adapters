@@ -9,6 +9,7 @@ export interface Transformer {
   address?: string;
   contract: Interface;
   eventHandlers: { [topic: string]: EventHandler };
+  startBlock: number;
 }
 
 export interface Adapter {
