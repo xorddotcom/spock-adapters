@@ -14,7 +14,7 @@ async function burnEvent(event: Event<BurnEventObject>) {}
 async function mintEvent(event: Event<MintEventObject>) {}
 
 const uniswapAdapter: Adapter = {
-  appKey: "abcd",
+  appKey: "70dbe55c4987d9ac9d84605d9edb8e6781bae2d631d649e176656e6bd3642fd9",
   transformers: {
     [Chain.ETHEREUM]: [
       {

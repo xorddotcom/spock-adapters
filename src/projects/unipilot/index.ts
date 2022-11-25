@@ -19,7 +19,7 @@ async function withdrawEvent(event: Event<WithdrawEventObject>) {}
 async function stakeOrUnsatkeEvent(event: Event<StakeOrUnstakeOrClaimEventObject>) {}
 
 const unipilotAdapter: Adapter = {
-  appKey: "12345",
+  appKey: "08019e5ae0b9b6964c2317c26a4b8666d4ac357b0060c3b6e9fb680b4465f693",
   transformers: {
     [Chain.ETHEREUM]: [
       {
