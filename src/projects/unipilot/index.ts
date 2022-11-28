@@ -12,11 +12,17 @@ const DEPOSIT = vault.getEventTopic(vault.getEvent("Deposit"));
 const WITHDRAW = vault.getEventTopic(vault.getEvent("Withdraw"));
 const STAKE_OR_UNSTAKE_OR_CLAIN = staking.getEventTopic(staking.getEvent("StakeOrUnstakeOrClaim"));
 
-async function depositEvent(event: Event<DepositEventObject>) {}
+async function depositEvent(event: Event<DepositEventObject>) {
+  console.log("unipilot depositEvent => ", event);
+}
 
-async function withdrawEvent(event: Event<WithdrawEventObject>) {}
+async function withdrawEvent(event: Event<WithdrawEventObject>) {
+  console.log("unipilot withdrawEvent => ", event);
+}
 
-async function stakeOrUnsatkeEvent(event: Event<StakeOrUnstakeOrClaimEventObject>) {}
+async function stakeOrUnsatkeEvent(event: Event<StakeOrUnstakeOrClaimEventObject>) {
+  console.log("unipilot stakeOrUnsatkeEvent => ", event);
+}
 
 const unipilotAdapter: Adapter = {
   appKey: "08019e5ae0b9b6964c2317c26a4b8666d4ac357b0060c3b6e9fb680b4465f693",
