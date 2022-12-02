@@ -1,33 +1,31 @@
-import { Chain } from "../../constants/chains";
-import { Adapter } from "../../types/adapter";
-import { Event } from "../../types/event";
-import { Staking__factory, Vault__factory } from "./types";
 import { StakeOrUnstakeOrClaimEventObject } from "./types/Staking";
 import { DepositEventObject, WithdrawEventObject } from "./types/Vault";
+import { vault, staking, DEPOSIT, WITHDRAW, STAKE_OR_UNSTAKE_OR_CLAIN, unipilotVault } from "./utils";
+import { formatUnits } from "@ethersproject/units";
+import { constants, types } from "@spockanalytics/base";
 
-const vault = Vault__factory.createInterface();
-const staking = Staking__factory.createInterface();
-
-const DEPOSIT = vault.getEventTopic(vault.getEvent("Deposit"));
-const WITHDRAW = vault.getEventTopic(vault.getEvent("Withdraw"));
-const STAKE_OR_UNSTAKE_OR_CLAIN = staking.getEventTopic(staking.getEvent("StakeOrUnstakeOrClaim"));
-
-async function depositEvent(event: Event<DepositEventObject>) {
+async function depositEvent(event: types.Event<DepositEventObject>) {
   console.log("unipilot depositEvent => ", event);
+  const vaultAddress = event.transaction.to;
+  const vault = await unipilotVault.getPool(vaultAddress, event.chain);
+  if (vault) {
+    const amount0 = formatUnits(event.params.amount0, vault.token0.decimals);
+    const amount1 = formatUnits(event.params.amount1, vault.token1.decimals);
+  }
 }
 
-async function withdrawEvent(event: Event<WithdrawEventObject>) {
+async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
   console.log("unipilot withdrawEvent => ", event);
 }
 
-async function stakeOrUnsatkeEvent(event: Event<StakeOrUnstakeOrClaimEventObject>) {
+async function stakeOrUnsatkeEvent(event: types.Event<StakeOrUnstakeOrClaimEventObject>) {
   console.log("unipilot stakeOrUnsatkeEvent => ", event);
 }
 
-const unipilotAdapter: Adapter = {
+const unipilotAdapter: types.Adapter = {
   appKey: "08019e5ae0b9b6964c2317c26a4b8666d4ac357b0060c3b6e9fb680b4465f693",
   transformers: {
-    [Chain.ETHEREUM]: [
+    [constants.Chain.ETHEREUM]: [
       {
         contract: vault,
         eventHandlers: {
