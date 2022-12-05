@@ -1,25 +1,61 @@
+import { sumBalancesUSD, tokenBalanceUSD } from "../../utils/sumBalances";
 import { StakeOrUnstakeOrClaimEventObject } from "./types/Staking";
 import { DepositEventObject, WithdrawEventObject } from "./types/Vault";
-import { vault, staking, DEPOSIT, WITHDRAW, STAKE_OR_UNSTAKE_OR_CLAIN, unipilotVault } from "./utils";
-import { formatUnits } from "@ethersproject/units";
-import { constants, types } from "@spockanalytics/base";
+import {
+  vault,
+  staking,
+  DEPOSIT,
+  WITHDRAW,
+  STAKE_OR_UNSTAKE_OR_CLAIN,
+  PILOT,
+  STAKING_TXN_TYPE,
+  unipilotVault,
+} from "./utils";
+import { constants, types, utils } from "@spockanalytics/base";
 
-async function depositEvent(event: types.Event<DepositEventObject>) {
+export async function depositEvent(event: types.Event<DepositEventObject>) {
   console.log("unipilot depositEvent => ", event);
   const vaultAddress = event.transaction.to;
   const vault = await unipilotVault.getPool(vaultAddress, event.chain);
   if (vault) {
-    const amount0 = formatUnits(event.params.amount0, vault.token0.decimals);
-    const amount1 = formatUnits(event.params.amount1, vault.token1.decimals);
+    const totalSum = await sumBalancesUSD(
+      [
+        { token: vault.token0, balance: event.params.amount0 },
+        { token: vault.token1, balance: event.params.amount1 },
+      ],
+      event.chain,
+      event.block.number,
+    );
+    return utils.ProtocolValue.contribution("Add Liquidity", parseFloat(totalSum.toString()));
   }
 }
 
-async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
+export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
   console.log("unipilot withdrawEvent => ", event);
+  const vaultAddress = event.transaction.to;
+  const vault = await unipilotVault.getPool(vaultAddress, event.chain);
+  if (vault) {
+    const totalSum = await sumBalancesUSD(
+      [
+        { token: vault.token0, balance: event.params.amount0 },
+        { token: vault.token1, balance: event.params.amount1 },
+      ],
+      event.chain,
+      event.block.number,
+    );
+    return utils.ProtocolValue.extraction("Remove Liquidity", parseFloat(totalSum.toString()));
+  }
 }
 
-async function stakeOrUnsatkeEvent(event: types.Event<StakeOrUnstakeOrClaimEventObject>) {
+export async function stakeOrUnsatkeEvent(event: types.Event<StakeOrUnstakeOrClaimEventObject>) {
   console.log("unipilot stakeOrUnsatkeEvent => ", event);
+  const { txType, amount } = event.params;
+  const pilotAmount = await tokenBalanceUSD({ token: PILOT, balance: amount }, event.chain, event.block.number);
+  if (txType === STAKING_TXN_TYPE.STAKE) {
+    return utils.ProtocolValue.contribution("Stake", parseFloat(pilotAmount.toString()));
+  } else if (txType === STAKING_TXN_TYPE.UNSTAKE) {
+    return utils.ProtocolValue.extraction("UnStake", parseFloat(pilotAmount.toString()));
+  }
 }
 
 const unipilotAdapter: types.Adapter = {

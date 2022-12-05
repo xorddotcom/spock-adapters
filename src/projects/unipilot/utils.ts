@@ -24,3 +24,13 @@ export async function vaultInfo(address: string, chain: constants.Chain): Return
 }
 
 export const unipilotVault = new Pool(vaultInfo);
+
+export const PILOT = {
+  address: "0x37c997b35c619c21323f3518b9357914e8b99525",
+  decimals: 18,
+};
+
+export const STAKING_TXN_TYPE = {
+  STAKE: 0,
+  UNSTAKE: 1,
+};
