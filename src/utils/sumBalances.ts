@@ -10,7 +10,7 @@ export async function sumBalancesUSD(
   blockNumber?: number,
 ) {
   const addresses = inputs.map(({ token }) => token.address);
-  const prices = await new api.Moralis().multipleTokenPrices(addresses, chain, blockNumber);
+  const prices = await api.moralis.multipleTokenPrices(addresses, chain, blockNumber);
 
   return inputs.reduce((accum, { token, balance }) => {
     const formattedBalance = formatUnits(balance, token.decimals);
@@ -25,7 +25,7 @@ export async function tokenBalanceUSD(
   chain: constants.Chain = constants.Chain.ETHEREUM,
   blockNumber?: number,
 ) {
-  const price = await new api.Moralis().tokenPrice(token.address, chain, blockNumber);
+  const price = await api.moralis.tokenPrice(token.address, chain, blockNumber);
   const formattedBalance = formatUnits(balance, token.decimals);
   return utils.BN_Opeartion.mul(formattedBalance, price);
 }
