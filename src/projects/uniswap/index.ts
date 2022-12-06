@@ -1,26 +1,19 @@
-import { Chain } from "../../constants/chains";
-import { Adapter } from "../../types/adapter";
-import { Event } from "../../types/event";
-import { Pool__factory } from "./types";
 import { BurnEventObject, MintEventObject } from "./types/Pool";
+import { pool, BURN, MINT } from "./utils";
+import { constants, types } from "@spockanalytics/base";
 
-const pool = Pool__factory.createInterface();
-
-const BURN = pool.getEventTopic(pool.getEvent("Burn"));
-const MINT = pool.getEventTopic(pool.getEvent("Mint"));
-
-async function burnEvent(event: Event<BurnEventObject>) {
+async function burnEvent(event: types.Event<BurnEventObject>) {
   console.log("uniswap burnEvent => ", event);
 }
 
-async function mintEvent(event: Event<MintEventObject>) {
+async function mintEvent(event: types.Event<MintEventObject>) {
   console.log("uniswap mintEvent => ", event);
 }
 
-const uniswapAdapter: Adapter = {
+const uniswapAdapter: types.Adapter = {
   appKey: "70dbe55c4987d9ac9d84605d9edb8e6781bae2d631d649e176656e6bd3642fd9",
   transformers: {
-    [Chain.ETHEREUM]: [
+    [constants.Chain.ETHEREUM]: [
       {
         contract: pool,
         eventHandlers: {

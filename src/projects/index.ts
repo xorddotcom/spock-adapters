@@ -1,5 +1,5 @@
-import { Adapter } from "../types/adapter";
 import UnipilotAdapter from "./unipilot";
 import UniswapAdapter from "./uniswap";
+import { types } from "@spockanalytics/base";
 
-export const Adapters: Adapter[] = [UnipilotAdapter, UniswapAdapter];
+export const Adapters: types.Adapter[] = [UnipilotAdapter, UniswapAdapter];
