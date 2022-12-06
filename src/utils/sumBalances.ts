@@ -11,12 +11,10 @@ export async function sumBalancesUSD(
 ) {
   const addresses = inputs.map(({ token }) => token.address);
   const prices = await new api.Moralis().multipleTokenPrices(addresses, chain, blockNumber);
-  console.log({ prices });
 
   return inputs.reduce((accum, { token, balance }) => {
     const formattedBalance = formatUnits(balance, token.decimals);
     const ab = utils.BN_Opeartion.mul(formattedBalance, prices[token.address]);
-    // console.log({ ab });
     accum = accum.plus(ab);
     return accum;
   }, utils.BN_Opeartion.ZERO_BN);
