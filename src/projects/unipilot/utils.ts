@@ -12,7 +12,7 @@ export const WITHDRAW = vault.getEventTopic(vault.getEvent("Withdraw"));
 export const STAKE_OR_UNSTAKE_OR_CLAIN = staking.getEventTopic(staking.getEvent("StakeOrUnstakeOrClaim"));
 
 // helper functions
-export async function vaultInfo(address: string, chain: constants.Chain): ReturnType<PoolInfoExtracter> {
+async function vaultInfo(address: string, chain: constants.Chain): ReturnType<PoolInfoExtracter> {
   const result = await abi.Multicall.singleCall<Vault>({
     address,
     chain,

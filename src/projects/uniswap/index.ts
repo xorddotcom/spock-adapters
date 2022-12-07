@@ -1,13 +1,38 @@
+import { sumBalancesUSD } from "../../utils/sumBalances";
 import { BurnEventObject, MintEventObject } from "./types/Pool";
-import { pool, BURN, MINT } from "./utils";
-import { constants, types } from "@spockanalytics/base";
+import { pool, BURN, MINT, uniswapV3Pool } from "./utils";
+import { constants, types, utils } from "@spockanalytics/base";
 
 async function burnEvent(event: types.Event<BurnEventObject>) {
-  // console.log("uniswap burnEvent => ", event);
+  const poolAddress = event.address;
+  const pool = await uniswapV3Pool.getPool(poolAddress, event.chain);
+  if (pool) {
+    const totalSum = await sumBalancesUSD(
+      [
+        { token: pool.token0, balance: event.params.amount0 },
+        { token: pool.token1, balance: event.params.amount1 },
+      ],
+      event.chain,
+      event.block.timestamp,
+    );
+    return utils.ProtocolValue.contribution("Deposit", parseFloat(totalSum.toString()));
+  }
 }
 
 async function mintEvent(event: types.Event<MintEventObject>) {
-  // console.log("uniswap mintEvent => ", event);
+  const poolAddress = event.address;
+  const pool = await uniswapV3Pool.getPool(poolAddress, event.chain);
+  if (pool) {
+    const totalSum = await sumBalancesUSD(
+      [
+        { token: pool.token0, balance: event.params.amount0 },
+        { token: pool.token1, balance: event.params.amount1 },
+      ],
+      event.chain,
+      event.block.timestamp,
+    );
+    return utils.ProtocolValue.extraction("Withdraw", parseFloat(totalSum.toString()));
+  }
 }
 
 const uniswapAdapter: types.Adapter = {

@@ -14,7 +14,7 @@ import {
 import { constants, types, utils } from "@spockanalytics/base";
 
 export async function depositEvent(event: types.Event<DepositEventObject>) {
-  const vaultAddress = event.transaction.to;
+  const vaultAddress = event.address;
   const vault = await unipilotVault.getPool(vaultAddress, event.chain);
   if (vault) {
     const totalSum = await sumBalancesUSD(
@@ -30,7 +30,7 @@ export async function depositEvent(event: types.Event<DepositEventObject>) {
 }
 
 export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
-  const vaultAddress = event.transaction.to;
+  const vaultAddress = event.address;
   const vault = await unipilotVault.getPool(vaultAddress, event.chain);
   if (vault) {
     const totalSum = await sumBalancesUSD(
@@ -74,6 +74,16 @@ const unipilotAdapter: types.Adapter = {
           [STAKE_OR_UNSTAKE_OR_CLAIN]: stakeOrUnsatkeEvent,
         },
         startBlock: 15025220,
+      },
+    ],
+    [constants.Chain.POLYGON]: [
+      {
+        contract: vault,
+        eventHandlers: {
+          [DEPOSIT]: depositEvent,
+          [WITHDRAW]: withdrawEvent,
+        },
+        startBlock: 34288237,
       },
     ],
   },
