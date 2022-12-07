@@ -3,11 +3,11 @@ import { pool, BURN, MINT } from "./utils";
 import { constants, types } from "@spockanalytics/base";
 
 async function burnEvent(event: types.Event<BurnEventObject>) {
-  console.log("uniswap burnEvent => ", event);
+  // console.log("uniswap burnEvent => ", event);
 }
 
 async function mintEvent(event: types.Event<MintEventObject>) {
-  console.log("uniswap mintEvent => ", event);
+  // console.log("uniswap mintEvent => ", event);
 }
 
 const uniswapAdapter: types.Adapter = {

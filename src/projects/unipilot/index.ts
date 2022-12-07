@@ -14,7 +14,6 @@ import {
 import { constants, types, utils } from "@spockanalytics/base";
 
 export async function depositEvent(event: types.Event<DepositEventObject>) {
-  console.log("unipilot depositEvent => ", event);
   const vaultAddress = event.transaction.to;
   const vault = await unipilotVault.getPool(vaultAddress, event.chain);
   if (vault) {
@@ -31,7 +30,6 @@ export async function depositEvent(event: types.Event<DepositEventObject>) {
 }
 
 export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
-  console.log("unipilot withdrawEvent => ", event);
   const vaultAddress = event.transaction.to;
   const vault = await unipilotVault.getPool(vaultAddress, event.chain);
   if (vault) {
@@ -48,7 +46,6 @@ export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
 }
 
 export async function stakeOrUnsatkeEvent(event: types.Event<StakeOrUnstakeOrClaimEventObject>) {
-  console.log("unipilot stakeOrUnsatkeEvent => ", event);
   const { txType, amount } = event.params;
   const pilotAmount = await tokenBalanceUSD({ token: PILOT, balance: amount }, event.chain, event.block.timestamp);
   if (txType === STAKING_TXN_TYPE.STAKE) {
