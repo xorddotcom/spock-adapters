@@ -24,7 +24,7 @@ export async function depositEvent(event: types.Event<DepositEventObject>) {
         { token: vault.token1, balance: event.params.amount1 },
       ],
       event.chain,
-      event.block.number,
+      event.block.timestamp,
     );
     return utils.ProtocolValue.contribution("Add Liquidity", parseFloat(totalSum.toString()));
   }
@@ -41,7 +41,7 @@ export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
         { token: vault.token1, balance: event.params.amount1 },
       ],
       event.chain,
-      event.block.number,
+      event.block.timestamp,
     );
     return utils.ProtocolValue.extraction("Remove Liquidity", parseFloat(totalSum.toString()));
   }
@@ -50,7 +50,7 @@ export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
 export async function stakeOrUnsatkeEvent(event: types.Event<StakeOrUnstakeOrClaimEventObject>) {
   console.log("unipilot stakeOrUnsatkeEvent => ", event);
   const { txType, amount } = event.params;
-  const pilotAmount = await tokenBalanceUSD({ token: PILOT, balance: amount }, event.chain, event.block.number);
+  const pilotAmount = await tokenBalanceUSD({ token: PILOT, balance: amount }, event.chain, event.block.timestamp);
   if (txType === STAKING_TXN_TYPE.STAKE) {
     return utils.ProtocolValue.contribution("Stake", parseFloat(pilotAmount.toString()));
   } else if (txType === STAKING_TXN_TYPE.UNSTAKE) {

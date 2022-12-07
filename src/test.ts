@@ -29,6 +29,10 @@ const data: types.Event<DepositEventObject> = {
     gasPrice: ZERO_BN,
     maxFeePerGas: ZERO_BN,
     maxPriorityFeePerGas: ZERO_BN,
+    receipt: {
+      type: 2,
+      status: 1,
+    },
   },
   params: {
     depositor: "0x8EdD5F3cAD0c1B6B2a5a36f8893C83D3dF352692",

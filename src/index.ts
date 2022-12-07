@@ -1,3 +1,2 @@
-export * from "./projects";
-
-// import "./test";
+// export * from "./projects";
+import "./test";
