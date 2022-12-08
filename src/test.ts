@@ -6,6 +6,7 @@ import { constants, types } from "@spockanalytics/base";
 const ZERO_BN = BigNumber.from(0);
 
 const data: types.Event<DepositEventObject> = {
+  address: "0xab170c6bda86b521c16f83e836f6b4fecb867508",
   signature: "",
   block: {
     number: 16075148,
