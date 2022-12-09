@@ -89,11 +89,51 @@ const data1: types.Event<MintEventObject> = {
   },
 };
 
+const data2: types.Event<DepositEventObject> = {
+  address: "0x1c42bcbc0345ef8d7e9c2fc709f60bba3794d5e3",
+  signature: "",
+  block: {
+    number: 36587313,
+    hash: "",
+    difficulty: 0,
+    miner: "",
+    parentHash: "",
+    gasLimit: ZERO_BN,
+    gasUsed: ZERO_BN,
+    baseFeePerGas: ZERO_BN,
+    timestamp: 1669718867,
+  },
+  transactionLogIndex: 143,
+  logIndex: 10,
+  chain: constants.Chain.POLYGON,
+  transaction: {
+    hash: "0xc1cd7a08188da623886c584182f9139aae5153611841fc8c57f749f5c35a6955",
+    from: "0x612ae819d1e53f3199f06d77b1254a395bfad80d",
+    to: "0x1c42bcbc0345ef8d7e9c2fc709f60bba3794d5e3",
+    value: "0",
+    gasPrice: ZERO_BN,
+    maxFeePerGas: ZERO_BN,
+    maxPriorityFeePerGas: ZERO_BN,
+    receipt: {
+      type: 2,
+      status: 1,
+      gasUsed: ZERO_BN,
+    },
+  },
+  params: {
+    depositor: "0x612ae819d1e53f3199f06d77b1254a395bfad80d",
+    recipient: "0x612ae819d1e53f3199f06d77b1254a395bfad80d",
+    amount0: BigNumber.from("18737776"),
+    amount1: BigNumber.from("11697639483696890"),
+    lpShares: BigNumber.from("11350556935643570"),
+  },
+};
+
 const main = async () => {
   // const res = await depositEvent(data);
   // console.log({ res });
 
-  const res = await mintEvent(data1);
+  const res = await depositEvent(data2);
   console.log({ res });
 };
 

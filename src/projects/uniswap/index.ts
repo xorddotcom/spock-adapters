@@ -26,6 +26,7 @@ async function burnEvent(event: types.Event<BurnEventObject>) {
 export async function mintEvent(event: types.Event<MintEventObject>) {
   const poolAddress = event.address;
   const pool = await uniswapV3Pool.getPool(poolAddress, event.chain);
+
   if (pool) {
     const totalSum = await sumBalancesUSD(
       [

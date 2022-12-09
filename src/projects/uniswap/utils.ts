@@ -17,7 +17,7 @@ async function poolInfo(address: string, chain: constants.Chain): ReturnType<Poo
   ];
   const result = await abi.Multicall.execute(chain, calls);
 
-  return { token0: result[0], token1: result[1] };
+  return { token0: result[0][0], token1: result[1][0] };
 }
 
 export const uniswapV3Pool = new Pool(poolInfo);

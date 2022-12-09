@@ -23,8 +23,8 @@ export class Pool {
       const poolInfo = await this.poolInfoExtracter(address, chain);
       if (poolInfo) {
         const tokens = await Promise.all([
-          new abi.Token(poolInfo.token0).metaData(),
-          new abi.Token(poolInfo.token1).metaData(),
+          new abi.Token(poolInfo.token0, chain).metaData(),
+          new abi.Token(poolInfo.token1, chain).metaData(),
         ]);
         return { address, token0: tokens[0], token1: tokens[1] };
       }
