@@ -54,7 +54,7 @@ const uniswapAdapter: types.Adapter = {
           [MINT]: mintEvent,
         },
         // startBlock: 12369621,
-        startBlock: 12370685,
+        startBlock: 15785296,
       },
     ],
   },

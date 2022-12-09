@@ -74,24 +74,24 @@ async function stakeOrUnsatkeEvent(event: types.Event<StakeOrUnstakeOrClaimEvent
 const unipilotAdapter: types.Adapter = {
   appKey: "08019e5ae0b9b6964c2317c26a4b8666d4ac357b0060c3b6e9fb680b4465f693",
   transformers: {
-    [constants.Chain.ETHEREUM]: [
-      {
-        contract: vault,
-        eventHandlers: {
-          [DEPOSIT]: depositEvent,
-          [WITHDRAW]: withdrawEvent,
-        },
-        startBlock: 14495907,
-      },
-      {
-        address: "0xc9256e6e85ad7ac18cd9bd665327fc2062703628",
-        contract: staking,
-        eventHandlers: {
-          [STAKE_OR_UNSTAKE_OR_CLAIN]: stakeOrUnsatkeEvent,
-        },
-        startBlock: 15025220,
-      },
-    ],
+    // [constants.Chain.ETHEREUM]: [
+    //   {
+    //     contract: vault,
+    //     eventHandlers: {
+    //       [DEPOSIT]: depositEvent,
+    //       [WITHDRAW]: withdrawEvent,
+    //     },
+    //     startBlock: 14495907,
+    //   },
+    //   {
+    //     address: "0xc9256e6e85ad7ac18cd9bd665327fc2062703628",
+    //     contract: staking,
+    //     eventHandlers: {
+    //       [STAKE_OR_UNSTAKE_OR_CLAIN]: stakeOrUnsatkeEvent,
+    //     },
+    //     startBlock: 15025220,
+    //   },
+    // ],
     [constants.Chain.POLYGON]: [
       {
         contract: vault,
