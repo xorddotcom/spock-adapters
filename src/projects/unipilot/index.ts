@@ -25,11 +25,15 @@ export async function depositEvent(event: types.Event<DepositEventObject>) {
       event.chain,
       event.block.timestamp,
     );
-    return utils.ProtocolValue.contribution("Add Liquidity", parseFloat(totalSum.toString()));
+    return utils.ProtocolValue.contribution({
+      label: "Add Liquidity",
+      value: parseFloat(totalSum.toString()),
+      user: event.params.depositor,
+    });
   }
 }
 
-export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
+async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
   const vaultAddress = event.address;
   const vault = await unipilotVault.getPool(vaultAddress, event.chain);
   if (vault) {
@@ -41,17 +45,29 @@ export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
       event.chain,
       event.block.timestamp,
     );
-    return utils.ProtocolValue.extraction("Remove Liquidity", parseFloat(totalSum.toString()));
+    return utils.ProtocolValue.extraction({
+      label: "Remove Liquidity",
+      value: parseFloat(totalSum.toString()),
+      user: event.transaction.from,
+    });
   }
 }
 
-export async function stakeOrUnsatkeEvent(event: types.Event<StakeOrUnstakeOrClaimEventObject>) {
+async function stakeOrUnsatkeEvent(event: types.Event<StakeOrUnstakeOrClaimEventObject>) {
   const { txType, amount } = event.params;
   const pilotAmount = await tokenBalanceUSD({ token: PILOT, balance: amount }, event.chain, event.block.timestamp);
   if (txType === STAKING_TXN_TYPE.STAKE) {
-    return utils.ProtocolValue.contribution("Stake", parseFloat(pilotAmount.toString()));
+    return utils.ProtocolValue.contribution({
+      label: "Stake",
+      value: parseFloat(pilotAmount.toString()),
+      user: event.params.user,
+    });
   } else if (txType === STAKING_TXN_TYPE.UNSTAKE) {
-    return utils.ProtocolValue.extraction("UnStake", parseFloat(pilotAmount.toString()));
+    return utils.ProtocolValue.extraction({
+      label: "Unstake",
+      value: parseFloat(pilotAmount.toString()),
+      user: event.params.user,
+    });
   }
 }
 

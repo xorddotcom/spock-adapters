@@ -15,11 +15,15 @@ async function burnEvent(event: types.Event<BurnEventObject>) {
       event.chain,
       event.block.timestamp,
     );
-    return utils.ProtocolValue.contribution("Deposit", parseFloat(totalSum.toString()));
+    return utils.ProtocolValue.extraction({
+      label: "Withdraw",
+      value: parseFloat(totalSum.toString()),
+      user: event.transaction.from,
+    });
   }
 }
 
-async function mintEvent(event: types.Event<MintEventObject>) {
+export async function mintEvent(event: types.Event<MintEventObject>) {
   const poolAddress = event.address;
   const pool = await uniswapV3Pool.getPool(poolAddress, event.chain);
   if (pool) {
@@ -31,7 +35,11 @@ async function mintEvent(event: types.Event<MintEventObject>) {
       event.chain,
       event.block.timestamp,
     );
-    return utils.ProtocolValue.extraction("Withdraw", parseFloat(totalSum.toString()));
+    return utils.ProtocolValue.contribution({
+      label: "Deposit",
+      value: parseFloat(totalSum.toString()),
+      user: event.transaction.from,
+    });
   }
 }
 
