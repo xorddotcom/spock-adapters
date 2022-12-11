@@ -93,17 +93,17 @@ const unipilotAdapter: types.Adapter = {
         startBlock: 15025220,
       },
     ],
-    // [constants.Chain.POLYGON]: [
-    //   {
-    //     contract: vault,
-    //     eventHandlers: {
-    //       [DEPOSIT]: depositEvent,
-    //       [WITHDRAW]: withdrawEvent,
-    //     },
-    //     // startBlock: 34288237,
-    //     startBlock: 34290850,
-    //   },
-    // ],
+    [constants.Chain.POLYGON]: [
+      {
+        contract: vault,
+        eventHandlers: {
+          [DEPOSIT]: depositEvent,
+          [WITHDRAW]: withdrawEvent,
+        },
+        // startBlock: 34288237,
+        startBlock: 34290850,
+      },
+    ],
   },
 };
 
