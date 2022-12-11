@@ -133,7 +133,7 @@ const main = async () => {
   // const res = await depositEvent(data);
   // console.log({ res });
 
-  const res = await depositEvent(data2);
+  const res = await depositEvent(data);
   console.log({ res });
 };
 
