@@ -34,7 +34,8 @@
     "prettier": "prettier --config \"./.prettierrc.yml\" --ignore-path \"./.prettierignore\" --write \"**/*.{js,json,md,ts,yml}\"",
     "prettier:check": "prettier --check --config \"./.prettierrc.yml\" --ignore-path \"./.prettierignore\" \"**/*.{js,json,md,ts,yml}\"",
     "typecheck": "tsc --noEmit",
-    "generate": "chmod u+x ./src/scripts/generate.sh && ./src/scripts/generate.sh"
+    "generate": "chmod u+x ./src/scripts/generate.sh && ./src/scripts/generate.sh",
+    "prepare": "chmod u+x ./src/scripts/prepare.sh && ./src/scripts/prepare.sh"
   },
   "types": "./dist/index.d.ts",
   "dependencies": {

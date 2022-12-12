@@ -15,6 +15,3 @@ then
 else
     echo "No abis dir found in $PROJECT"
 fi
-
-
-

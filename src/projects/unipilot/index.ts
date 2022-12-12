@@ -73,7 +73,7 @@ async function stakeOrUnsatkeEvent(event: types.Event<StakeOrUnstakeOrClaimEvent
 }
 
 const unipilotAdapter: types.Adapter = {
-  appKey: "08019e5ae0b9b6964c2317c26a4b8666d4ac357b0060c3b6e9fb680b4465f693",
+  appKey: "079f119db037cbe7de4cee7b62b47ade7ad01f8da462b6f421a4681e6e605be7",
   transformers: {
     [constants.Chain.ETHEREUM]: [
       {
