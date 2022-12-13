@@ -40,10 +40,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@ethersproject/experimental": "^5.7.0",
-    "@spockanalytics/base": "^1.0.3",
+    "@spockanalytics/base": "^1.1.0",
     "ethers": "^5.7.2"
-  },
-  "resolutions": {
-    "@spockanalytics/base": "portal:/home/bilal/VoirStudio/spock/spock-base"
   }
 }

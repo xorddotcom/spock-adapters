@@ -1179,19 +1179,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@spockanalytics/base@portal:/home/bilal/VoirStudio/spock/spock-base::locator=spock-adapters%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@spockanalytics/base@portal:/home/bilal/VoirStudio/spock/spock-base::locator=spock-adapters%40workspace%3A."
+"@spockanalytics/base@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@spockanalytics/base@npm:1.1.0"
   dependencies:
     "@ethersproject/experimental": ^5.7.0
     abi: ^0.0.0
     axios: ^1.2.0
     bignumber.js: ^9.1.1
+    limiter: ^2.1.0
     tiny-invariant: ^1.3.1
     typeorm: ^0.3.10
-    zod: 3.1
+  checksum: e22b86b4e97eed8eeaa244b0a0c840ef9f1d6b16588bc12819988c7e9c34558811635cda48e6b8b6696c0cca1ede8d3a59d14f62bfa89f1871f51e2d5066d814
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "@sqltools/formatter@npm:^1.2.2":
   version: 1.2.5
@@ -4140,6 +4141,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"just-performance@npm:4.3.0":
+  version: 4.3.0
+  resolution: "just-performance@npm:4.3.0"
+  checksum: 37e226e308689b27ad7e0cdb2b2181c8be85f28cb0026db4b68c189f4894828a2865ea4a7a5f3488f4e3390bac1f9428fc6e40a554c068b08e5992e26920e376
+  languageName: node
+  linkType: hard
+
 "kind-of@npm:^3.0.2, kind-of@npm:^3.0.3, kind-of@npm:^3.2.0":
   version: 3.2.2
   resolution: "kind-of@npm:3.2.2"
@@ -4186,6 +4194,15 @@ __metadata:
   version: 2.0.5
   resolution: "lilconfig@npm:2.0.5"
   checksum: f7bb9e42656f06930ad04e583026f087508ae408d3526b8b54895e934eb2a966b7aafae569656f2c79a29fe6d779b3ec44ba577e80814734c8655d6f71cdf2d1
+  languageName: node
+  linkType: hard
+
+"limiter@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "limiter@npm:2.1.0"
+  dependencies:
+    just-performance: 4.3.0
+  checksum: 989092bfdafeefb37bd139f6451f165d449a628cd6fbe9308ed5147a9af24631f031e16466a3e48283418e0bea45c06aa1710f8f8945bc56ea7ef01f94ed5c65
   languageName: node
   linkType: hard
 
@@ -5638,7 +5655,7 @@ __metadata:
     "@commitlint/cli": ^17.1.2
     "@commitlint/config-conventional": ^17.1.0
     "@ethersproject/experimental": ^5.7.0
-    "@spockanalytics/base": ^1.0.3
+    "@spockanalytics/base": ^1.1.0
     "@trivago/prettier-plugin-sort-imports": ^3.3.1
     "@typechain/ethers-v5": ^10.1.1
     "@types/node": ^18.11.1
@@ -6581,12 +6598,5 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
-  languageName: node
-  linkType: hard
-
-"zod@npm:3.1":
-  version: 3.1.0
-  resolution: "zod@npm:3.1.0"
-  checksum: 915a284212f11858649b4f2fa46a5c3a485283c2d00061ddc3c8b04e749abc1136d12ebd50315f5a23ae7faeaae5dda5d7b39b0aec29c29a42fdf04c65997ff1
   languageName: node
   linkType: hard
