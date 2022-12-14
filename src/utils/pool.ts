@@ -31,5 +31,3 @@ export class Pool {
     } catch (e) {}
   }
 }
-
-//test comment
