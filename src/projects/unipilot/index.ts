@@ -8,7 +8,8 @@ import {
   WITHDRAW,
   STAKE_OR_UNSTAKE_OR_CLAIN,
   PILOT,
-  STAKING_TXN_TYPE,
+  StakingTxnType,
+  Label,
   unipilotVault,
 } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
@@ -27,14 +28,14 @@ export async function depositEvent(event: types.Event<DepositEventObject>) {
       event.block.timestamp,
     );
     return utils.ProtocolValue.contribution({
-      label: "Add Liquidity",
+      label: Label.ADD_LIQUIDITY,
       value: parseFloat(totalSum.toString()),
       user: event.params.depositor,
     });
   }
 }
 
-async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
+export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
   const vaultAddress = event.address;
   const vault = await unipilotVault.getPool(vaultAddress, event.chain);
   if (vault) {
@@ -47,25 +48,25 @@ async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
       event.block.timestamp,
     );
     return utils.ProtocolValue.extraction({
-      label: "Remove Liquidity",
+      label: Label.REMOVE_LIQUIDITY,
       value: parseFloat(totalSum.toString()),
       user: event.transaction.from,
     });
   }
 }
 
-async function stakeOrUnsatkeEvent(event: types.Event<StakeOrUnstakeOrClaimEventObject>) {
+export async function stakeOrUnsatkeEvent(event: types.Event<StakeOrUnstakeOrClaimEventObject>) {
   const { txType, amount } = event.params;
   const pilotAmount = await tokenBalanceUSD({ token: PILOT, balance: amount }, event.chain, event.block.timestamp);
-  if (txType === STAKING_TXN_TYPE.STAKE) {
+  if (txType === StakingTxnType.STAKE) {
     return utils.ProtocolValue.contribution({
-      label: "Stake",
+      label: Label.STAKE,
       value: parseFloat(pilotAmount.toString()),
       user: event.params.user,
     });
-  } else if (txType === STAKING_TXN_TYPE.UNSTAKE) {
+  } else if (txType === StakingTxnType.UNSTAKE) {
     return utils.ProtocolValue.extraction({
-      label: "Unstake",
+      label: Label.UNSTAKE,
       value: parseFloat(pilotAmount.toString()),
       user: event.params.user,
     });

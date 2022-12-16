@@ -30,7 +30,14 @@ export const PILOT = {
   decimals: 18,
 };
 
-export const STAKING_TXN_TYPE = {
+export const StakingTxnType = {
   STAKE: 0,
   UNSTAKE: 1,
 };
+
+export enum Label {
+  ADD_LIQUIDITY = "Add Liquidity",
+  REMOVE_LIQUIDITY = "Remove Liquidity",
+  STAKE = "Stake",
+  UNSTAKE = "Unstale",
+}
