@@ -28,6 +28,8 @@ export class Pool {
         ]);
         return { address, token0: tokens[0], token1: tokens[1] };
       }
-    } catch (e) {}
+    } catch (e) {
+      return undefined;
+    }
   }
 }
