@@ -14,7 +14,7 @@ import {
 } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
 
-console.log("unipilot adapter");
+console.log("unipilot adapter 2");
 
 export async function depositEvent(event: types.Event<DepositEventObject>) {
   console.log("depositEvent => ", event);
