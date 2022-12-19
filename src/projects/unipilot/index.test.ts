@@ -21,7 +21,8 @@ describe("unipilot", () => {
             user: "0x8edd5f3cad0c1b6b2a5a36f8893c83d3df352692",
           }),
         );
-        expect(protocolValue?.value).toBeGreaterThan(0);
+        const value = protocolValue ? protocolValue.value : undefined;
+        expect(value).toBeGreaterThan(0);
       });
       it("should return extraction on withdraw", async () => {
         const protocolValue = await extractEvent({
@@ -38,7 +39,8 @@ describe("unipilot", () => {
             user: "0x8edd5f3cad0c1b6b2a5a36f8893c83d3df352692",
           }),
         );
-        expect(protocolValue?.value).toBeGreaterThan(0);
+        const value = protocolValue ? protocolValue.value : undefined;
+        expect(value).toBeGreaterThan(0);
       });
     });
     describe("staking", () => {
@@ -57,7 +59,8 @@ describe("unipilot", () => {
             user: "0xbfd62552f91aa7df5080f1e8c8c03c1ec7f99f6d",
           }),
         );
-        expect(protocolValue?.value).toBeGreaterThan(0);
+        const value = protocolValue ? protocolValue.value : undefined;
+        expect(value).toBeGreaterThan(0);
       });
       it("should return extraction on unstaking", async () => {
         const protocolValue = await extractEvent({
@@ -74,7 +77,8 @@ describe("unipilot", () => {
             user: "0x3c42c9df2bb1bb114f404ae16fdad203b48f4199",
           }),
         );
-        expect(protocolValue?.value).toBeGreaterThan(0);
+        const value = protocolValue ? protocolValue.value : undefined;
+        expect(value).toBeGreaterThan(0);
       });
     });
   });
@@ -96,7 +100,8 @@ describe("unipilot", () => {
             user: "0x4c16f507ab1264014cef4c7f703dcae0f9bf34c7",
           }),
         );
-        expect(protocolValue?.value).toBeGreaterThan(0);
+        const value = protocolValue ? protocolValue.value : undefined;
+        expect(value).toBeGreaterThan(0);
       });
       it("should return extraction on withdraw", async () => {
         const protocolValue = await extractEvent({
@@ -113,7 +118,8 @@ describe("unipilot", () => {
             user: "0x35ed2d8a163d1b1aacd11891baea6cd0ce8812fc",
           }),
         );
-        expect(protocolValue?.value).toBeGreaterThan(0);
+        const value = protocolValue ? protocolValue.value : undefined;
+        expect(value).toBeGreaterThan(0);
       });
     });
   });
