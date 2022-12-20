@@ -8,7 +8,7 @@ Spock adapters are basically a module that transforms raw on-chain data for the 
 ```js
 type Adapter = {
   appKey: string,
-  transformers: Record<Chain, Tranformer>,
+  transformers: Record<Chain, Transformer>,
 };
 ```
 
@@ -28,7 +28,7 @@ type Transformer = {
 ```
 
 - `address`: of contract which has to sync, it's optional so in the case when no address will given, the transformer
-  will sync all the possilbe events of the given contract interface.
+  will sync all the possible events of the given contract interface.
 
 - `interface`: obtained from contract ABI.
 
