@@ -60,6 +60,17 @@ const dafiAdapter: types.Adapter = {
         startBlock: 21121034,
       },
     ],
+    [constants.Chain.BSC]: [
+      {
+        address: "0x6a4b3fe069b69c0a2094ce711b0cdca9c9c844bf",
+        contract: staking,
+        eventHandlers: {
+          [STAKE]: stakeEvent,
+          [UNSTAKE]: unstakeEvent,
+        },
+        startBlock: 15161796,
+      },
+    ],
   },
 };
 

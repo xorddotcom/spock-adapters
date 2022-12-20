@@ -21,7 +21,8 @@ describe("dafi", () => {
             user: "0x4cc98a94c1abe80a0e141b857f9024048f084267",
           }),
         );
-        expect(protocolValue?.value).toBeGreaterThan(0);
+        const value = protocolValue ? protocolValue.value : undefined;
+        expect(value).toBeGreaterThan(0);
       });
       it("should return extraction on unstaking", async () => {
         const protocolValue = await extractEvent({
@@ -38,7 +39,8 @@ describe("dafi", () => {
             user: "0x4a8796a79bab19291922e6fe6a8fa60691716b74",
           }),
         );
-        expect(protocolValue?.value).toBeGreaterThan(0);
+        const value = protocolValue ? protocolValue.value : undefined;
+        expect(value).toBeGreaterThan(0);
       });
     });
   });
@@ -60,7 +62,8 @@ describe("dafi", () => {
             user: "0x5a3546ef0467333d5f2176a2d13970032886139c",
           }),
         );
-        expect(protocolValue?.value).toBeGreaterThan(0);
+        const value = protocolValue ? protocolValue.value : undefined;
+        expect(value).toBeGreaterThan(0);
       });
       it("should return extraction on unstaking", async () => {
         const protocolValue = await extractEvent({
@@ -77,7 +80,49 @@ describe("dafi", () => {
             user: "0x129f5a7f6fcafe11f4f91cdaf4ba8c68d080309b",
           }),
         );
-        expect(protocolValue?.value).toBeGreaterThan(0);
+        const value = protocolValue ? protocolValue.value : undefined;
+        expect(value).toBeGreaterThan(0);
+      });
+    });
+  });
+
+  describe("chain => BSC", () => {
+    describe("staking", () => {
+      it("should return contribution on staking", async () => {
+        const protocolValue = await extractEvent({
+          chain: constants.Chain.BSC,
+          contractInterface: staking,
+          hanlder: stakeEvent,
+          hash: "0x2aa02017f97bbc5ae971c0f5bd3a80e7887f7593366093e219b6c4cf81d272a1",
+          signature: STAKE,
+        });
+        expect(protocolValue).toEqual(
+          expect.objectContaining({
+            type: types.ProtocolValueType.CONTRIBUTION,
+            label: Label.STAKE,
+            user: "0x2c6c2b1a1f2b0739a2457a46d43fdf06c07e30c4",
+          }),
+        );
+        const value = protocolValue ? protocolValue.value : undefined;
+        expect(value).toBeGreaterThan(0);
+      });
+      it("should return extraction on unstaking", async () => {
+        const protocolValue = await extractEvent({
+          chain: constants.Chain.BSC,
+          contractInterface: staking,
+          hanlder: unstakeEvent,
+          hash: "0x284539804a1c779337da6754387b1896ffe82b4b29b41fb74e0dab6031916b12",
+          signature: UNSTAKE,
+        });
+        expect(protocolValue).toEqual(
+          expect.objectContaining({
+            type: types.ProtocolValueType.EXTRACTION,
+            label: Label.UNSTAKE,
+            user: "0x86f386ed20c58ea66b21c32432ccc8329ead773b",
+          }),
+        );
+        const value = protocolValue ? protocolValue.value : undefined;
+        expect(value).toBeGreaterThan(0);
       });
     });
   });
