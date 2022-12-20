@@ -20,6 +20,10 @@ export const DAFI: PartialChainRecord<PartialTokenDecimals> = {
     address: "0x638df98ad8069a15569da5a6b01181804c47e34c",
     decimals: 18,
   },
+  [constants.Chain.BSC]: {
+    address: "0x4e0fe270b856eebb91fb4b4364312be59f499a3f",
+    decimals: 18,
+  },
 };
 
 export enum Label {
