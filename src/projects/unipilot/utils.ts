@@ -1,3 +1,4 @@
+import { PartialTokenDecimals } from "../../types/token";
 import { Pool, PoolInfoExtracter } from "../../utils/pool";
 import { Staking__factory, Vault__factory, Vault } from "./types";
 import { abi, constants } from "@spockanalytics/base";
@@ -25,15 +26,15 @@ async function vaultInfo(address: string, chain: constants.Chain): ReturnType<Po
 
 export const unipilotVault = new Pool(vaultInfo);
 
-export const PILOT = {
+export const PILOT: PartialTokenDecimals = {
   address: "0x37c997b35c619c21323f3518b9357914e8b99525",
   decimals: 18,
 };
 
-export const StakingTxnType = {
-  STAKE: 0,
-  UNSTAKE: 1,
-};
+export enum StakingTxnType {
+  STAKE = 0,
+  UNSTAKE = 1,
+}
 
 export enum Label {
   ADD_LIQUIDITY = "Add Liquidity",

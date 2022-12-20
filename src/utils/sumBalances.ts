@@ -1,8 +1,9 @@
+import { PartialTokenDecimals } from "../types/token";
 import { BigNumberish } from "@ethersproject/bignumber";
 import { formatUnits } from "@ethersproject/units";
 import { api, constants, types, utils } from "@spockanalytics/base";
 
-type BalanceInput = { token: types.IToken | { address: string; decimals: number }; balance: BigNumberish };
+type BalanceInput = { token: types.IToken | PartialTokenDecimals; balance: BigNumberish };
 
 export async function sumBalancesUSD(
   inputs: BalanceInput[],
