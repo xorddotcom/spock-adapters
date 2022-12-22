@@ -40,5 +40,5 @@ export enum Label {
   ADD_LIQUIDITY = "Add Liquidity",
   REMOVE_LIQUIDITY = "Remove Liquidity",
   STAKE = "Stake",
-  UNSTAKE = "Unstale",
+  UNSTAKE = "Unstake",
 }
