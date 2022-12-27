@@ -41,7 +41,7 @@ const tetuEarnAdapter: types.Adapter = {
           [DEPOSIT]: depositEvent,
           [WITHDRAW]: withdrawEvent,
         },
-        startBlock: 17462310,
+        startBlock: 17463433,
       },
     ],
     [constants.Chain.BSC]: [
@@ -51,7 +51,7 @@ const tetuEarnAdapter: types.Adapter = {
           [DEPOSIT]: depositEvent,
           [WITHDRAW]: withdrawEvent,
         },
-        startBlock: 20580131,
+        startBlock: 20581239,
       },
     ],
     [constants.Chain.ETHEREUM]: [
@@ -61,7 +61,7 @@ const tetuEarnAdapter: types.Adapter = {
           [DEPOSIT]: depositEvent,
           [WITHDRAW]: withdrawEvent,
         },
-        startBlock: 14507915,
+        startBlock: 15845380,
       },
     ],
   },
