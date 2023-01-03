@@ -19,13 +19,14 @@ export async function depositEvent(event: types.Event<DepositEventObject>) {
   const vault = await unipilotVault.getPool(vaultAddress, event.chain);
 
   if (vault) {
+    const block = await Promise.resolve(event.block);
     const totalSum = await sumBalancesUSD(
       [
         { token: vault.token0, balance: event.params.amount0 },
         { token: vault.token1, balance: event.params.amount1 },
       ],
       event.chain,
-      event.block.timestamp,
+      block.timestamp,
     );
     return utils.ProtocolValue.contribution({
       label: Label.ADD_LIQUIDITY,
@@ -39,25 +40,27 @@ export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
   const vaultAddress = event.address;
   const vault = await unipilotVault.getPool(vaultAddress, event.chain);
   if (vault) {
+    const [block, transaction] = await Promise.all([event.block, event.transaction]);
     const totalSum = await sumBalancesUSD(
       [
         { token: vault.token0, balance: event.params.amount0 },
         { token: vault.token1, balance: event.params.amount1 },
       ],
       event.chain,
-      event.block.timestamp,
+      block.timestamp,
     );
     return utils.ProtocolValue.extraction({
       label: Label.REMOVE_LIQUIDITY,
       value: parseFloat(totalSum.toString()),
-      user: event.transaction.from,
+      user: transaction.from,
     });
   }
 }
 
 export async function stakeOrUnsatkeEvent(event: types.Event<StakeOrUnstakeOrClaimEventObject>) {
   const { txType, amount } = event.params;
-  const pilotAmount = await tokenBalanceUSD({ token: PILOT, balance: amount }, event.chain, event.block.timestamp);
+  const block = await Promise.resolve(event.block);
+  const pilotAmount = await tokenBalanceUSD({ token: PILOT, balance: amount }, event.chain, block.timestamp);
   if (txType === StakingTxnType.STAKE) {
     return utils.ProtocolValue.contribution({
       label: Label.STAKE,

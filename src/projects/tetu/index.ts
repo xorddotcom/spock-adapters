@@ -4,7 +4,7 @@ import { formatUnits } from "@ethersproject/units";
 import { constants, types, utils } from "@spockanalytics/base";
 
 export async function depositEvent(event: types.Event<DepositEventObject>) {
-  const vault = await vaultInfo(event.address, event.block.number, event.chain);
+  const vault = await vaultInfo(event.address, event.blockNumber, event.chain);
   if (vault) {
     const amount = formatUnits(event.params.amount, vault.token.decimals);
     const amountInUSD = parseFloat(amount) * vault.price;
@@ -18,7 +18,7 @@ export async function depositEvent(event: types.Event<DepositEventObject>) {
 }
 
 export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
-  const vault = await vaultInfo(event.address, event.block.number, event.chain);
+  const vault = await vaultInfo(event.address, event.blockNumber, event.chain);
   if (vault) {
     const amount = formatUnits(event.params.amount, vault.token.decimals);
     const amountInUSD = parseFloat(amount) * vault.price;

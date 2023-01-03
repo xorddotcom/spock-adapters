@@ -6,10 +6,11 @@ import { constants, types, utils } from "@spockanalytics/base";
 export async function stakeEvent(event: types.Event<STAKEDEventObject>) {
   const dafiToken = DAFI[event.chain];
   if (dafiToken) {
+    const block = await Promise.resolve(event.block);
     const dafiAmount = await tokenBalanceUSD(
       { token: dafiToken, balance: event.params.amount },
       event.chain,
-      event.block.timestamp,
+      block.timestamp,
     );
     return utils.ProtocolValue.contribution({
       label: Label.STAKE,
@@ -22,10 +23,11 @@ export async function stakeEvent(event: types.Event<STAKEDEventObject>) {
 export async function unstakeEvent(event: types.Event<UNSTAKEDEventObject>) {
   const dafiToken = DAFI[event.chain];
   if (dafiToken) {
+    const block = await Promise.resolve(event.block);
     const dafiAmount = await tokenBalanceUSD(
       { token: dafiToken, balance: event.params.amount },
       event.chain,
-      event.block.timestamp,
+      block.timestamp,
     );
     return utils.ProtocolValue.extraction({
       label: Label.UNSTAKE,
