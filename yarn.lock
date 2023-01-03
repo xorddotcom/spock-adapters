@@ -1823,9 +1823,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@spockanalytics/base@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "@spockanalytics/base@npm:1.3.0"
+"@spockanalytics/base@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "@spockanalytics/base@npm:1.3.1"
   dependencies:
     "@ethersproject/experimental": ^5.7.0
     abi: ^0.0.0
@@ -1834,7 +1834,7 @@ __metadata:
     limiter: ^2.1.0
     tiny-invariant: ^1.3.1
     typeorm: ^0.3.10
-  checksum: 8f0244fe4d293af31eb26f51eb7a7971660fec0709df5dde99f0bd23b6405b269034148af74d4fdc9416da061488fe0c7fbd918a8157b74bfff58b8e2ae3e796
+  checksum: 4c7876d7bda63301069da45e4f1aa4f2671f4dc8b3a2a709f82797729f4a0b935ec5dbd7fd439831f0bff025b8fe18179c6c28dfecae9640f6ad8200e474151c
   languageName: node
   linkType: hard
 
@@ -7900,7 +7900,7 @@ __metadata:
     "@commitlint/cli": ^17.1.2
     "@commitlint/config-conventional": ^17.1.0
     "@ethersproject/experimental": ^5.7.0
-    "@spockanalytics/base": ^1.3.0
+    "@spockanalytics/base": ^1.3.1
     "@trivago/prettier-plugin-sort-imports": ^3.3.1
     "@typechain/ethers-v5": ^10.1.1
     "@types/jest": ^29.2.4

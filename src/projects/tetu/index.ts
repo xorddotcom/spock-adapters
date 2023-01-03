@@ -1,5 +1,5 @@
 import { DepositEventObject, WithdrawEventObject } from "./types/SmartVault";
-import { DEPOSIT, WITHDRAW, smartVault, vaultInfo, Label } from "./utils";
+import { DEPOSIT, WITHDRAW, smartVault, vaultInfo, Label, vaultAddresses } from "./utils";
 import { formatUnits } from "@ethersproject/units";
 import { constants, types, utils } from "@spockanalytics/base";
 
@@ -36,6 +36,7 @@ const tetuEarnAdapter: types.Adapter = {
   transformers: {
     [constants.Chain.POLYGON]: [
       {
+        getAddresses: vaultAddresses,
         contract: smartVault,
         eventHandlers: {
           [DEPOSIT]: depositEvent,
@@ -46,6 +47,7 @@ const tetuEarnAdapter: types.Adapter = {
     ],
     [constants.Chain.BSC]: [
       {
+        getAddresses: vaultAddresses,
         contract: smartVault,
         eventHandlers: {
           [DEPOSIT]: depositEvent,
@@ -56,6 +58,7 @@ const tetuEarnAdapter: types.Adapter = {
     ],
     [constants.Chain.ETHEREUM]: [
       {
+        getAddresses: vaultAddresses,
         contract: smartVault,
         eventHandlers: {
           [DEPOSIT]: depositEvent,
