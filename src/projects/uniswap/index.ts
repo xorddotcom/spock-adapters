@@ -7,18 +7,19 @@ async function burnEvent(event: types.Event<BurnEventObject>) {
   const poolAddress = event.address;
   const pool = await uniswapV3Pool.getPool(poolAddress, event.chain);
   if (pool) {
+    const [block, transaction] = await Promise.all([event.block, event.transaction]);
     const totalSum = await sumBalancesUSD(
       [
         { token: pool.token0, balance: event.params.amount0 },
         { token: pool.token1, balance: event.params.amount1 },
       ],
       event.chain,
-      event.block.timestamp,
+      block.timestamp,
     );
     return utils.ProtocolValue.extraction({
       label: "Withdraw",
       value: parseFloat(totalSum.toString()),
-      user: event.transaction.from,
+      user: transaction.from,
     });
   }
 }
@@ -28,18 +29,19 @@ export async function mintEvent(event: types.Event<MintEventObject>) {
   const pool = await uniswapV3Pool.getPool(poolAddress, event.chain);
 
   if (pool) {
+    const [block, transaction] = await Promise.all([event.block, event.transaction]);
     const totalSum = await sumBalancesUSD(
       [
         { token: pool.token0, balance: event.params.amount0 },
         { token: pool.token1, balance: event.params.amount1 },
       ],
       event.chain,
-      event.block.timestamp,
+      block.timestamp,
     );
     return utils.ProtocolValue.contribution({
       label: "Deposit",
       value: parseFloat(totalSum.toString()),
-      user: event.transaction.from,
+      user: transaction.from,
     });
   }
 }
