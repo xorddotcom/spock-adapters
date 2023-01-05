@@ -6,7 +6,7 @@ import { constants, types } from "@spockanalytics/base";
 describe("tetu", () => {
   describe("chain => Polygon", () => {
     describe("smart vault", () => {
-      it.only("should return contribution on deposit", async () => {
+      it("should return contribution on deposit", async () => {
         const protocolValue = await extractEvent({
           chain: constants.Chain.POLYGON,
           contractInterface: smartVault,
