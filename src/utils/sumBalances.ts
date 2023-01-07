@@ -11,6 +11,7 @@ export async function sumBalancesUSD(
   timestamp?: number,
 ) {
   const addresses = inputs.map(({ token }) => token.address);
+  console.log("multipleTokenPrices => ", { addresses, chain, timestamp });
   const prices = await api.ankr.multipleTokenPrices(addresses, chain, timestamp);
 
   return inputs.reduce((accum, { token, balance }) => {
@@ -25,6 +26,7 @@ export async function tokenBalanceUSD(
   chain: constants.Chain = constants.Chain.ETHEREUM,
   timestamp?: number,
 ) {
+  console.log("tokenPrice => ", { address: token.address, chain, timestamp });
   const price = await api.ankr.tokenPrice(token.address, chain, timestamp);
   const formattedBalance = formatUnits(balance, token.decimals);
   return utils.BN_Opeartion.mul(formattedBalance, price);
