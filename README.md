@@ -21,6 +21,7 @@ type Adapter = {
 ```js
 type Transformer = {
  address?:string;
+ getAddresses?:(chain:Chain) => Promise<string[]>
  contract: Interface;
  eventHandlers: Record<Signature,Handler>
  startBlock:number;
@@ -29,6 +30,9 @@ type Transformer = {
 
 - `address`: of contract which has to sync, it's optional so in the case when no address will given, the transformer
   will sync all the possible events of the given contract interface.
+
+- `getAddresses`: a funcion to get all addresses of contract used in transformer. It's useful when you have more than
+  one contracts of same interface and you want to sync them universally.
 
 - `interface`: obtained from contract ABI.
 

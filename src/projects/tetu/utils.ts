@@ -87,7 +87,6 @@ export async function vaultAddresses(chain: constants.Chain): Promise<string[] |
 
     return vaultAddresses.map((address) => address[0].toLowerCase());
   } catch (e) {
-    console.log({ e });
     return undefined;
   }
 }
