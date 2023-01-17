@@ -1,3 +1,4 @@
+import { BaseContract } from "@ethersproject/contracts";
 import { abi, constants, types } from "@spockanalytics/base";
 
 export type PoolInfoExtracter = (
@@ -32,4 +33,18 @@ export class Pool {
       return undefined;
     }
   }
+}
+
+export function uniswapV2_Pair<T extends BaseContract>(
+  contractInterface: abi.CallContractInterface<T>,
+): PoolInfoExtracter {
+  return async (address: string, chain: constants.Chain): ReturnType<PoolInfoExtracter> => {
+    const calls = [
+      new abi.Call<T>({ address, contractInterface, fragment: "token0" }),
+      new abi.Call<T>({ address, contractInterface, fragment: "token1" }),
+    ];
+    const result = await abi.Multicall.execute(chain, calls);
+
+    return { token0: result[0][0], token1: result[1][0] };
+  };
 }

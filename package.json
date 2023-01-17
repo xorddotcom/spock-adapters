@@ -44,7 +44,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@ethersproject/experimental": "^5.7.0",
-    "@spockanalytics/base": "^1.5.1",
+    "@spockanalytics/base": "^1.7.0",
     "ethers": "^5.7.2"
   }
 }

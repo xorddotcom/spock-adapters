@@ -1,33 +1,10 @@
 import { sumBalancesUSD } from "../../utils/sumBalances";
 import { BurnEventObject, MintEventObject } from "./types/Pool";
-import { pool, BURN, MINT, uniswapV3Pool } from "./utils";
+import { pool, BURN, MINT, uniswapV3Pool, Label } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
 
-async function burnEvent(event: types.Event<BurnEventObject>) {
-  const poolAddress = event.address;
-  const pool = await uniswapV3Pool.getPool(poolAddress, event.chain);
-  if (pool) {
-    const [block, transaction] = await Promise.all([event.block, event.transaction]);
-    const totalSum = await sumBalancesUSD(
-      [
-        { token: pool.token0, balance: event.params.amount0 },
-        { token: pool.token1, balance: event.params.amount1 },
-      ],
-      event.chain,
-      block.timestamp,
-    );
-    return utils.ProtocolValue.extraction({
-      label: "Withdraw",
-      value: parseFloat(totalSum.toString()),
-      user: transaction.from,
-    });
-  }
-}
-
 export async function mintEvent(event: types.Event<MintEventObject>) {
-  const poolAddress = event.address;
-  const pool = await uniswapV3Pool.getPool(poolAddress, event.chain);
-
+  const pool = await uniswapV3Pool.getPool(event.address, event.chain);
   if (pool) {
     const [block, transaction] = await Promise.all([event.block, event.transaction]);
     const totalSum = await sumBalancesUSD(
@@ -39,7 +16,27 @@ export async function mintEvent(event: types.Event<MintEventObject>) {
       block.timestamp,
     );
     return utils.ProtocolValue.contribution({
-      label: "Deposit",
+      label: Label.DEPOSIT,
+      value: parseFloat(totalSum.toString()),
+      user: transaction.from,
+    });
+  }
+}
+
+export async function burnEvent(event: types.Event<BurnEventObject>) {
+  const pool = await uniswapV3Pool.getPool(event.address, event.chain);
+  if (pool) {
+    const [block, transaction] = await Promise.all([event.block, event.transaction]);
+    const totalSum = await sumBalancesUSD(
+      [
+        { token: pool.token0, balance: event.params.amount0 },
+        { token: pool.token1, balance: event.params.amount1 },
+      ],
+      event.chain,
+      block.timestamp,
+    );
+    return utils.ProtocolValue.extraction({
+      label: Label.WITHDRAW,
       value: parseFloat(totalSum.toString()),
       user: transaction.from,
     });
@@ -53,11 +50,11 @@ const uniswapAdapter: types.Adapter = {
       {
         contract: pool,
         eventHandlers: {
-          [BURN]: burnEvent,
           [MINT]: mintEvent,
+          [BURN]: burnEvent,
         },
-        // startBlock: 12369621,
-        startBlock: 15785296,
+        startBlock: 12369621,
+        // startBlock: 15785296,
       },
     ],
   },
