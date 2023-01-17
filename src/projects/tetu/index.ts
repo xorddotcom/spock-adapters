@@ -6,12 +6,13 @@ import { constants, types, utils } from "@spockanalytics/base";
 export async function depositEvent(event: types.Event<DepositEventObject>) {
   const vault = await vaultInfo(event.address, event.blockNumber, event.chain);
   if (vault) {
+    const txn = await Promise.resolve(event.transaction);
     const amount = formatUnits(event.params.amount, vault.token.decimals);
     const amountInUSD = parseFloat(amount) * vault.price;
     const contribution = utils.ProtocolValue.contribution({
       label: Label.DEPOSIT,
       value: amountInUSD,
-      user: event.params.beneficiary,
+      user: txn.from,
     });
     return contribution;
   }
@@ -20,12 +21,13 @@ export async function depositEvent(event: types.Event<DepositEventObject>) {
 export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
   const vault = await vaultInfo(event.address, event.blockNumber, event.chain);
   if (vault) {
+    const txn = await Promise.resolve(event.transaction);
     const amount = formatUnits(event.params.amount, vault.token.decimals);
     const amountInUSD = parseFloat(amount) * vault.price;
     const extraction = utils.ProtocolValue.extraction({
       label: Label.WITHDRAW,
       value: amountInUSD,
-      user: event.params.beneficiary,
+      user: txn.from,
     });
     return extraction;
   }
