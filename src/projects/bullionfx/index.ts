@@ -6,7 +6,7 @@ import { constants, types, utils } from "@spockanalytics/base";
 export async function mintEvent(event: types.Event<MintEventObject>) {
   const pair = await bull_Pair.getPool(event.address, event.chain);
   if (pair) {
-    const block = await Promise.resolve(event.block);
+    const [block, transaction] = await Promise.all([event.block, event.transaction]);
     const totalSum = await sumBalancesUSD(
       [
         { token: pair.token0, balance: event.params.amount0 },
@@ -16,9 +16,9 @@ export async function mintEvent(event: types.Event<MintEventObject>) {
       block.timestamp,
     );
     return utils.ProtocolValue.contribution({
-      label: Label.DEPOSIT,
+      label: Label.ADD_LIQUIDITY,
       value: parseFloat(totalSum.toString()),
-      user: event.params.sender,
+      user: transaction.from,
     });
   }
 }
@@ -26,7 +26,7 @@ export async function mintEvent(event: types.Event<MintEventObject>) {
 export async function burnEvent(event: types.Event<BurnEventObject>) {
   const pair = await bull_Pair.getPool(event.address, event.chain);
   if (pair) {
-    const block = await Promise.resolve(event.block);
+    const [block, transaction] = await Promise.all([event.block, event.transaction]);
     const totalSum = await sumBalancesUSD(
       [
         { token: pair.token0, balance: event.params.amount0 },
@@ -36,9 +36,9 @@ export async function burnEvent(event: types.Event<BurnEventObject>) {
       block.timestamp,
     );
     return utils.ProtocolValue.extraction({
-      label: Label.WITHDRAW,
+      label: Label.REMOVE_LIQUIDITY,
       value: parseFloat(totalSum.toString()),
-      user: event.params.sender,
+      user: transaction.from,
     });
   }
 }

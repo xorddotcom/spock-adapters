@@ -18,8 +18,8 @@ const BULL_FACTORY: AddressMap = {
 };
 
 export enum Label {
-  DEPOSIT = "Deposit",
-  WITHDRAW = "Withdraw",
+  ADD_LIQUIDITY = "Add Liquidity",
+  REMOVE_LIQUIDITY = "Remove Liquidity",
 }
 
 export const bull_Pair = new Pool(uniswapV2_Pair<BullPair>(bullPair));
