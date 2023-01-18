@@ -44,7 +44,7 @@ export async function burnEvent(event: types.Event<BurnEventObject>) {
 }
 
 const bullionfxAdapter: types.Adapter = {
-  appKey: "",
+  appKey: "2dc573cf9a7b7f866bbc8e8af187bef148a23f3e56e04f99f53cd09ee2798f7a",
   transformers: {
     [constants.Chain.ETHEREUM]: [
       {
