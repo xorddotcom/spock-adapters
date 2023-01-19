@@ -1,22 +1,22 @@
 import { sumBalancesUSD } from "../../utils/sumBalances";
-import { BurnEventObject, MintEventObject } from "./types/Pool";
-import { pool, BURN, MINT, uniswapV3Pool, Label } from "./utils";
+import { BurnEventObject, MintEventObject } from "./types/BullPair";
+import { BURN, MINT, bullPair, pairAddresses, bull_Pair, Label } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
 
 export async function mintEvent(event: types.Event<MintEventObject>) {
-  const pool = await uniswapV3Pool.getPool(event.address, event.chain);
-  if (pool) {
+  const pair = await bull_Pair.getPool(event.address, event.chain);
+  if (pair) {
     const [block, transaction] = await Promise.all([event.block, event.transaction]);
     const totalSum = await sumBalancesUSD(
       [
-        { token: pool.token0, balance: event.params.amount0 },
-        { token: pool.token1, balance: event.params.amount1 },
+        { token: pair.token0, balance: event.params.amount0 },
+        { token: pair.token1, balance: event.params.amount1 },
       ],
       event.chain,
       block.timestamp,
     );
     return utils.ProtocolValue.contribution({
-      label: Label.DEPOSIT,
+      label: Label.ADD_LIQUIDITY,
       value: parseFloat(totalSum.toString()),
       user: transaction.from,
     });
@@ -24,40 +24,40 @@ export async function mintEvent(event: types.Event<MintEventObject>) {
 }
 
 export async function burnEvent(event: types.Event<BurnEventObject>) {
-  const pool = await uniswapV3Pool.getPool(event.address, event.chain);
-  if (pool) {
+  const pair = await bull_Pair.getPool(event.address, event.chain);
+  if (pair) {
     const [block, transaction] = await Promise.all([event.block, event.transaction]);
     const totalSum = await sumBalancesUSD(
       [
-        { token: pool.token0, balance: event.params.amount0 },
-        { token: pool.token1, balance: event.params.amount1 },
+        { token: pair.token0, balance: event.params.amount0 },
+        { token: pair.token1, balance: event.params.amount1 },
       ],
       event.chain,
       block.timestamp,
     );
     return utils.ProtocolValue.extraction({
-      label: Label.WITHDRAW,
+      label: Label.REMOVE_LIQUIDITY,
       value: parseFloat(totalSum.toString()),
       user: transaction.from,
     });
   }
 }
 
-const uniswapAdapter: types.Adapter = {
-  appKey: "70dbe55c4987d9ac9d84605d9edb8e6781bae2d631d649e176656e6bd3642fd9",
+const bullionfxAdapter: types.Adapter = {
+  appKey: "11c528680d8e5a5039b30e8bd9ba8ea67a085fea2a39946a552b6e6fa2c6621b",
   transformers: {
     [constants.Chain.ETHEREUM]: [
       {
-        contract: pool,
+        contract: bullPair,
+        getAddresses: pairAddresses,
         eventHandlers: {
           [MINT]: mintEvent,
           [BURN]: burnEvent,
         },
-        startBlock: 12369621,
-        // startBlock: 15785296,
+        startBlock: 16326700,
       },
     ],
   },
 };
 
-export default uniswapAdapter;
+export default bullionfxAdapter;

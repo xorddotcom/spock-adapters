@@ -11,7 +11,7 @@
     "@typescript-eslint/eslint-plugin": "^5.40.1",
     "@typescript-eslint/parser": "^5.40.1",
     "commitizen": "^4.2.5",
-    "cz-conventional-changelog": "^3.3.0",
+    "cz-conventional-changelog": "3.3.0",
     "eslint": "^8.25.0",
     "eslint-config-prettier": "^8.5.0",
     "husky": "^8.0.1",
@@ -31,6 +31,7 @@
     "build": "tsc --build \"tsconfig.prod.json\"",
     "dev": "yarn build && tsc --project './tsconfig.json' & NODE_ENV=development node dist",
     "clean": "shx rm -rf ./dist",
+    "commit": "git cz",
     "test": "jest",
     "lint": "yarn lint:ts && yarn prettier:check && yarn typecheck",
     "lint:ts": "eslint --config \"./.eslintrc.yml\" --ignore-path \"./.eslintignore\" --ext .js,.ts .",
@@ -44,7 +45,12 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@ethersproject/experimental": "^5.7.0",
-    "@spockanalytics/base": "^1.5.1",
+    "@spockanalytics/base": "^1.7.0",
     "ethers": "^5.7.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
