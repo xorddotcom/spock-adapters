@@ -29,9 +29,12 @@ export async function withdrawalEvent(event: types.Event<WithdrawalEventObject>)
 export async function loanCreatedEvent(event: types.Event<LoanCreatedEventObject>) {
   const walletAddress = event.params.wallet;
   const loanId = event.params.loanId;
-  const loanInfo = await getLoan("0x5Be916Cff5f07870e9Aef205960e07d9e287eF27", event.chain, [walletAddress, loanId.toNumber()]);
+  const loanInfo = await getLoan("0x5Be916Cff5f07870e9Aef205960e07d9e287eF27", event.chain, [
+    walletAddress,
+    loanId.toNumber(),
+  ]);
 
-  if(loanInfo) {
+  if (loanInfo) {
     return utils.ProtocolValue.contribution({
       label: Label.LOAN_CREATED,
       value: Number(parseUnits(loanInfo.amount.toString(), 18)),
@@ -43,9 +46,12 @@ export async function loanCreatedEvent(event: types.Event<LoanCreatedEventObject
 export async function loanPaidEvent(event: types.Event<LoanPaidEventObject>) {
   const walletAddress = event.params.wallet;
   const loanId = event.params.loanId;
-  const loanInfo = await getLoan("0x5Be916Cff5f07870e9Aef205960e07d9e287eF27", event.chain, [walletAddress, loanId.toNumber()]);
+  const loanInfo = await getLoan("0x5Be916Cff5f07870e9Aef205960e07d9e287eF27", event.chain, [
+    walletAddress,
+    loanId.toNumber(),
+  ]);
 
-  if(loanInfo) {
+  if (loanInfo) {
     return utils.ProtocolValue.contribution({
       label: Label.LOAN_PAID,
       value: Number(parseUnits(loanInfo.amount.toString(), 18)),

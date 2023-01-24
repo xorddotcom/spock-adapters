@@ -18,29 +18,32 @@ export enum Label {
   WITHDRAWAL = "Withdrawal",
   LOAN_CREATED = "Loan Created",
   LOAN_PAID = "Loan Paid",
-  LOAN_DEFAULTED = "Loan Defaulted"
+  LOAN_DEFAULTED = "Loan Defaulted",
 }
 
-export type LoanInfoExtracter = (
+type LoanInfoExtractor = (
   address: string,
   chain: constants.Chain,
-  callInput: [string, number]
+  callInput: [string, number],
 ) => Promise<{
-  walletAddress: string,
-  loanId: number,
-  amount: BigNumber,
-}>;
-
+  walletAddress: string;
+  loanId: number;
+  amount: BigNumber;
+} | null>;
 
 // helper functions
-export const getLoan: LoanInfoExtracter = async (address, chain, callInput) => {
-  const result = await abi.Multicall.singleCall<LoansCore>({
-    address,
-    chain,
-    contractInterface: loansCoreInterface,
-    fragment: "getLoan",
-    callInput: callInput
-  });
+export const getLoan: LoanInfoExtractor = async (address, chain, callInput) => {
+  try {
+    const result = await abi.Multicall.singleCall<LoansCore>({
+      address,
+      chain,
+      contractInterface: loansCoreInterface,
+      fragment: "getLoan",
+      callInput,
+    });
 
-  return { walletAddress: result[0][0], loanId: result[0][1], amount: result[0][2] };
-}
+    return { walletAddress: result[0][0], loanId: result[0][1], amount: result[0][2] };
+  } catch (e) {
+    return null;
+  }
+};
