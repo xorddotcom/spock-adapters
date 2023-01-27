@@ -1,6 +1,7 @@
+import { AddressMap } from "../../types/chain";
 import { Loans__factory, LoansCore__factory, Pool__factory, LoansCore } from "./types";
+import { BigNumber } from "@ethersproject/bignumber";
 import { abi, constants } from "@spockanalytics/base";
-import { BigNumber } from "ethers";
 
 // contract interfaces
 export const loansCoreInterface = LoansCore__factory.createInterface();
@@ -21,28 +22,32 @@ export enum Label {
   LOAN_DEFAULTED = "Loan Defaulted",
 }
 
+const LOANS_CORE: AddressMap = {
+  [constants.Chain.ETHEREUM]: "0x5Be916Cff5f07870e9Aef205960e07d9e287eF27",
+};
+
 type LoanInfoExtractor = (
-  address: string,
   chain: constants.Chain,
   callInput: [string, number],
+  blockNumber: number,
 ) => Promise<{
-  walletAddress: string;
   loanId: number;
   amount: BigNumber;
 } | null>;
 
 // helper functions
-export const getLoan: LoanInfoExtractor = async (address, chain, callInput) => {
+export const getLoan: LoanInfoExtractor = async (chain, callInput, blockNumber) => {
   try {
     const result = await abi.Multicall.singleCall<LoansCore>({
-      address,
+      address: LOANS_CORE[chain] ?? "",
       chain,
       contractInterface: loansCoreInterface,
       fragment: "getLoan",
       callInput,
+      blockNumber,
     });
 
-    return { walletAddress: result[0][0], loanId: result[0][1], amount: result[0][2] };
+    return { loanId: result[0].id.toNumber(), amount: result[0].amount };
   } catch (e) {
     return null;
   }

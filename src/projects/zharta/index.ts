@@ -1,43 +1,55 @@
+import { tokenBalanceUSD } from "../../utils/sumBalances";
 import { LoanCreatedEventObject, LoanPaidEventObject } from "./types/Loans";
 import { DepositEventObject, WithdrawalEventObject } from "./types/Pool";
 import { Label, loansInterface, poolInterface, DEPOSIT, WITHDRAWAL, LOAN_CREATED, LOAN_PAID, getLoan } from "./utils";
-import { constants, types, utils } from "@spockanalytics/base";
-import { parseUnits } from "ethers/lib/utils";
+import { constants, types, utils, abi } from "@spockanalytics/base";
 
 export async function depositEvent(event: types.Event<DepositEventObject>) {
   const walletAddress = event.params.wallet;
-  const amount = parseUnits(event.params.amount.toString(), 18);
+  const token = await new abi.Token(event.params.erc20TokenContract, event.chain).metaData();
 
-  return utils.ProtocolValue.contribution({
-    label: Label.DEPOSIT,
-    value: Number(amount),
-    user: walletAddress,
-  });
+  if (token) {
+    const block = await Promise.resolve(event.block);
+    const amount = await tokenBalanceUSD({ token, balance: event.params.amount }, event.chain, block.timestamp);
+
+    return utils.ProtocolValue.contribution({
+      label: Label.DEPOSIT,
+      value: parseFloat(amount.toString()),
+      user: walletAddress,
+    });
+  }
 }
 
 export async function withdrawalEvent(event: types.Event<WithdrawalEventObject>) {
   const walletAddress = event.params.wallet;
-  const amount = parseUnits(event.params.amount.toString(), 18);
+  const token = await new abi.Token(event.params.erc20TokenContract, event.chain).metaData();
 
-  return utils.ProtocolValue.extraction({
-    label: Label.WITHDRAWAL,
-    value: Number(amount),
-    user: walletAddress,
-  });
+  if (token) {
+    const block = await Promise.resolve(event.block);
+    const amount = await tokenBalanceUSD({ token, balance: event.params.amount }, event.chain, block.timestamp);
+
+    return utils.ProtocolValue.extraction({
+      label: Label.WITHDRAWAL,
+      value: parseFloat(amount.toString()),
+      user: walletAddress,
+    });
+  }
 }
 
 export async function loanCreatedEvent(event: types.Event<LoanCreatedEventObject>) {
   const walletAddress = event.params.wallet;
   const loanId = event.params.loanId;
-  const loanInfo = await getLoan("0x5Be916Cff5f07870e9Aef205960e07d9e287eF27", event.chain, [
-    walletAddress,
-    loanId.toNumber(),
-  ]);
+
+  const loanInfo = await getLoan(event.chain, [walletAddress, loanId.toNumber()], event.blockNumber);
+  const token = await new abi.Token(event.params.erc20TokenContract, event.chain).metaData();
 
   if (loanInfo) {
+    const block = await Promise.resolve(event.block);
+    const amount = await tokenBalanceUSD({ token, balance: loanInfo.amount }, event.chain, block.timestamp);
+
     return utils.ProtocolValue.contribution({
       label: Label.LOAN_CREATED,
-      value: Number(parseUnits(loanInfo.amount.toString(), 18)),
+      value: parseFloat(amount.toString()),
       user: walletAddress,
     });
   }
@@ -46,15 +58,17 @@ export async function loanCreatedEvent(event: types.Event<LoanCreatedEventObject
 export async function loanPaidEvent(event: types.Event<LoanPaidEventObject>) {
   const walletAddress = event.params.wallet;
   const loanId = event.params.loanId;
-  const loanInfo = await getLoan("0x5Be916Cff5f07870e9Aef205960e07d9e287eF27", event.chain, [
-    walletAddress,
-    loanId.toNumber(),
-  ]);
+
+  const loanInfo = await getLoan(event.chain, [walletAddress, loanId.toNumber()], event.blockNumber);
+  const token = await new abi.Token(event.params.erc20TokenContract, event.chain).metaData();
 
   if (loanInfo) {
+    const block = await Promise.resolve(event.block);
+    const amount = await tokenBalanceUSD({ token, balance: loanInfo.amount }, event.chain, block.timestamp);
+
     return utils.ProtocolValue.contribution({
       label: Label.LOAN_PAID,
-      value: Number(parseUnits(loanInfo.amount.toString(), 18)),
+      value: parseFloat(amount.toString()),
       user: walletAddress,
     });
   }
