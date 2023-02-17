@@ -45,12 +45,15 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@ethersproject/experimental": "^5.7.0",
-    "@spockanalytics/base": "^1.7.0",
+    "@spockanalytics/base": "^1.8.10",
     "ethers": "^5.7.2"
   },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "resolutions": {
+    "@spockanalytics/base": "portal:/home/bilal/VoirStudio/spock/spock-base"
   }
 }

@@ -1,4 +1,5 @@
 import { sumBalancesUSD, tokenBalanceUSD } from "../../utils/sumBalances";
+import { computeTVL } from "./tvl";
 import { StakeOrUnstakeOrClaimEventObject } from "./types/Staking";
 import { DepositEventObject, WithdrawEventObject } from "./types/Vault";
 import {
@@ -105,6 +106,15 @@ const unipilotAdapter: types.Adapter = {
           [WITHDRAW]: withdrawEvent,
         },
         startBlock: 34288237,
+      },
+    ],
+  },
+  valueLocked: {
+    [constants.Chain.ETHEREUM]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        startBlock: 14495907,
       },
     ],
   },
