@@ -109,7 +109,7 @@ const unipilotAdapter: types.Adapter = {
       },
     ],
   },
-  valueLocked: {
+  tvlExtractors: {
     [constants.Chain.ETHEREUM]: [
       {
         category: types.TVL_Category.TVL,

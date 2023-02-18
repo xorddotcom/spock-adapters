@@ -1,18 +1,17 @@
 import { Erc20, Erc20__factory } from "../contracts/types";
+import { Block } from "@ethersproject/providers";
 import { formatUnits } from "@ethersproject/units";
 import { abi, api, constants, types, utils } from "@spockanalytics/base";
 
-export async function calculateTVL(block: number, chain: constants.Chain, extractor: types.TvlExtractor["extractor"]) {
-  const blockData = await abi.Web3Node.provider(chain).getBlock(block);
-
-  const balances = await extractor(chain, block, blockData.timestamp);
+export async function calculateTVL(block: Block, chain: constants.Chain, extractor: types.TvlExtractor["extractor"]) {
+  const balances = await extractor(chain, block.number, block.timestamp);
   console.log({ balances });
 
   const tokenAddresses = Object.keys(balances);
   const prices = await api.ankr.multipleTokenPrices({
     addresses: tokenAddresses,
     chain,
-    toTimestamp: blockData.timestamp,
+    toTimestamp: block.timestamp,
   });
 
   console.log({ prices });
@@ -24,17 +23,17 @@ export async function calculateTVL(block: number, chain: constants.Chain, extrac
     fragment: "decimals",
   });
 
-  const { tvl, tokensInUSD } = tokenAddresses.reduce<{ tvl: string; tokensInUSD: Record<string, string> }>(
+  const { tvl, tokensInUSD } = tokenAddresses.reduce<{ tvl: number; tokensInUSD: Record<string, number> }>(
     (accum, tokenAddress, index) => {
       const formattedBalance = formatUnits(balances[tokenAddress], decimals[index]);
       const price = prices[tokenAddress];
-      const balanceUSD = utils.BN_Opeartion.mul(formattedBalance, price).toString();
+      const balanceUSD = parseFloat(utils.BN_Opeartion.mul(formattedBalance, price).toString());
 
-      accum["tvl"] = utils.BN_Opeartion.add(balanceUSD, accum["tvl"]).toString();
+      accum["tvl"] = parseFloat(utils.BN_Opeartion.add(balanceUSD, accum["tvl"]).toString());
       accum["tokensInUSD"][tokenAddress] = balanceUSD;
       return accum;
     },
-    { tvl: "0", tokensInUSD: {} },
+    { tvl: 0, tokensInUSD: {} },
   );
 
   console.log({ tvl, tokensInUSD });
@@ -43,6 +42,6 @@ export async function calculateTVL(block: number, chain: constants.Chain, extrac
 }
 
 export async function testTvl(chain: constants.Chain, extractor: types.TvlExtractor["extractor"]) {
-  const currentBlock = await abi.Web3Node.currentBlock(chain);
+  const currentBlock = await abi.Web3Node.getBlock(chain, "latest");
   await calculateTVL(currentBlock, chain, extractor);
 }
