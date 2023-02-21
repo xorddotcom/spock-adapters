@@ -3,8 +3,13 @@ import { Block } from "@ethersproject/providers";
 import { formatUnits } from "@ethersproject/units";
 import { abi, api, constants, types, utils } from "@spockanalytics/base";
 
-export async function calculateTVL(block: Block, chain: constants.Chain, extractor: types.TvlExtractor["extractor"]) {
-  const balances = await extractor(chain, block.number, block.timestamp);
+export async function calculateTVL(
+  block: Block,
+  chain: constants.Chain,
+  extractor: types.TvlExtractor["extractor"],
+  cache?: types.LogsCache,
+) {
+  const balances = await extractor(chain, block.number, block.timestamp, cache);
   console.log({ balances });
 
   const tokenAddresses = Object.keys(balances);

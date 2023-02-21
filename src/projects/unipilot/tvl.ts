@@ -1,23 +1,32 @@
 import { topicToAddress } from "../../utils/formatters";
+import { getLogs } from "../../utils/logs";
 import { sumSingleBalance, sumMultipleBalance, SummedBalances } from "../../utils/sumBalances";
 import { Vault } from "./types";
 import { vault, FACTORY_INFO, Factory, VAULT_CREATION_TOPIC } from "./utils";
-import { abi, constants } from "@spockanalytics/base";
+import { abi, constants, types } from "@spockanalytics/base";
 
 type Vaults = Record<string, { token0Address: string; token1Address: string }>;
 
-async function getVaults(chain: constants.Chain, toBlock: number, factory: Factory) {
+async function getVaults(
+  chain: constants.Chain,
+  toBlock: number,
+  factory: Factory,
+  timestamp: number,
+  cache?: types.LogsCache,
+) {
   const fromBlock = FACTORY_INFO[chain]?.[factory].startBlock ?? 0;
 
-  const logs = await abi.getBatchLogs({
-    address: FACTORY_INFO[chain]?.[factory].address ?? "",
-    chain,
-    topics: VAULT_CREATION_TOPIC[chain] ?? "",
-    // toBlock: fromBlock + 10000,
-    toBlock,
-    fromBlock,
-    batchSpread: 10,
-  });
+  const logs = await getLogs(
+    {
+      address: FACTORY_INFO[chain]?.[factory].address ?? "",
+      chain,
+      topics: VAULT_CREATION_TOPIC[chain] ?? "",
+      toBlock,
+      fromBlock,
+      timestamp,
+    },
+    cache,
+  );
 
   return logs.reduce<Vaults>((accum, { topics }) => {
     accum[topicToAddress(topics[3])] = {
@@ -28,11 +37,11 @@ async function getVaults(chain: constants.Chain, toBlock: number, factory: Facto
   }, {});
 }
 
-export async function computeTVL(chain: constants.Chain, block: number, timestamp: number) {
+export async function computeTVL(chain: constants.Chain, block: number, timestamp: number, cache?: types.LogsCache) {
   const balances: SummedBalances = {};
 
-  const activeVaults = await getVaults(chain, block, Factory.ACTIVE);
-  const passiveVaults = await getVaults(chain, block, Factory.PASSIVE);
+  const activeVaults = await getVaults(chain, block, Factory.ACTIVE, timestamp, cache);
+  const passiveVaults = await getVaults(chain, block, Factory.PASSIVE, timestamp, cache);
 
   const valuts = { ...activeVaults, ...passiveVaults };
   const vaultAddresses = Object.keys(valuts);
