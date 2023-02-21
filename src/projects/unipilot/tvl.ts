@@ -15,10 +15,11 @@ async function getVaults(
   cache?: types.LogsCache,
 ) {
   const fromBlock = FACTORY_INFO[chain]?.[factory].startBlock ?? 0;
+  const factoryAddress = FACTORY_INFO[chain]?.[factory].address ?? "";
 
   const logs = await getLogs(
     {
-      address: FACTORY_INFO[chain]?.[factory].address ?? "",
+      address: factoryAddress,
       chain,
       topics: VAULT_CREATION_TOPIC[chain] ?? "",
       toBlock,
@@ -26,6 +27,7 @@ async function getVaults(
       timestamp,
     },
     cache,
+    factoryAddress,
   );
 
   return logs.reduce<Vaults>((accum, { topics }) => {
