@@ -7,7 +7,7 @@ export async function getLogs(params: abi.LogParams, cache?: types.LogsCache, ad
     console.log({ cachedData });
     const newParams = cachedData ? { ...params, fromBlock: cachedData.block + 1 } : params;
     let logs = await abi.getBatchLogs(newParams);
-    logs = [...cachedData.logs, ...logs];
+    logs = [...(cachedData?.logs ?? []), ...logs];
     await cache.setCache({ address, block: params.toBlock, logs, timestamp: params.timestamp ?? 0 });
     return logs;
   } else {
