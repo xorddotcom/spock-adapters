@@ -37,6 +37,8 @@ export const PILOT: PartialTokenDecimals = {
   decimals: 18,
 };
 
+export const PILOT_STAKING = "0xc9256e6e85ad7ac18cd9bd665327fc2062703628";
+
 export const VAULT_CREATION_TOPIC: PartialChainRecord<string> = {
   [constants.Chain.ETHEREUM]: "VaultCreated(address,address,uint24,address)",
   [constants.Chain.POLYGON]: "VaultCreated(address,address,uint16,uint24,address)",
@@ -67,12 +69,14 @@ export const FACTORY_INFO: PartialChainRecord<Record<Factory, { address: string;
 
 // helper functions
 async function vaultInfo(address: string, chain: constants.Chain): ReturnType<PoolInfoExtracter> {
-  const result = await abi.Multicall.singleCall<Vault>({
-    address,
-    chain,
-    contractInterface: vault,
-    fragment: "getVaultInfo",
-  });
+  const result = (
+    await abi.Multicall.singleCall<Vault>({
+      address,
+      chain,
+      contractInterface: vault,
+      fragment: "getVaultInfo",
+    })
+  ).output;
 
   return { token0: result[0], token1: result[1] };
 }

@@ -38,16 +38,18 @@ type LoanInfoExtractor = (
 // helper functions
 export const getLoan: LoanInfoExtractor = async (chain, callInput, blockNumber) => {
   try {
-    const result = await abi.Multicall.singleCall<LoansCore>({
-      address: LOANS_CORE[chain] ?? "",
-      chain,
-      contractInterface: loansCoreInterface,
-      fragment: "getLoan",
-      callInput,
-      blockNumber,
-    });
+    const result = (
+      await abi.Multicall.singleCall<LoansCore>({
+        address: LOANS_CORE[chain] ?? "",
+        chain,
+        contractInterface: loansCoreInterface,
+        fragment: "getLoan",
+        callInput,
+        blockNumber,
+      })
+    ).output;
 
-    return { loanId: result[0].id.toNumber(), amount: result[0].amount };
+    return { loanId: result.id.toNumber(), amount: result.amount };
   } catch (e) {
     return null;
   }

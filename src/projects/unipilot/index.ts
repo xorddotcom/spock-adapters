@@ -1,3 +1,4 @@
+import { stakingTvl } from "../../utils/staking";
 import { sumBalancesUSD, tokenBalanceUSD } from "../../utils/sumBalances";
 import { computeTVL } from "./tvl";
 import { StakeOrUnstakeOrClaimEventObject } from "./types/Staking";
@@ -12,6 +13,7 @@ import {
   StakingTxnType,
   Label,
   unipilotVault,
+  PILOT_STAKING,
 } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
 
@@ -115,6 +117,18 @@ const unipilotAdapter: types.Adapter = {
         category: types.TVL_Category.TVL,
         extractor: computeTVL,
         startBlock: 14495907,
+      },
+      {
+        category: types.TVL_Category.STAKING,
+        extractor: stakingTvl(PILOT_STAKING, PILOT.address),
+        startBlock: 15025220,
+      },
+    ],
+    [constants.Chain.POLYGON]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        startBlock: 34371363,
       },
     ],
   },

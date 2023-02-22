@@ -30,7 +30,7 @@ export async function calculateTVL(
 
   const { tvl, tokensInUSD } = tokenAddresses.reduce<{ tvl: number; tokensInUSD: Record<string, number> }>(
     (accum, tokenAddress, index) => {
-      const formattedBalance = formatUnits(balances[tokenAddress], decimals[index]);
+      const formattedBalance = formatUnits(balances[tokenAddress], decimals[index].output);
       const price = prices[tokenAddress];
       const balanceUSD = parseFloat(utils.BN_Opeartion.mul(formattedBalance, price).toString());
 

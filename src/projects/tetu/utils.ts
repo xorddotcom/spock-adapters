@@ -47,17 +47,19 @@ export async function vaultInfo(
     ];
 
     const result = await abi.Multicall.execute(chain, calls);
-    const underlying: string = result[0][0];
-    const underlyingUnit: number = result[1][0].toString().length - 1;
+    const underlying: string = result[0].output;
+    const underlyingUnit: number = result[1].output.toString().length - 1;
 
-    const price: BigNumber = await abi.Multicall.singleCall<ContractReader>({
-      address: CONTRACT_READER[chain] ?? "",
-      chain,
-      contractInterface: contractReader,
-      fragment: "getPrice",
-      callInput: [underlying],
-      blockNumber,
-    });
+    const price: BigNumber = (
+      await abi.Multicall.singleCall<ContractReader>({
+        address: CONTRACT_READER[chain] ?? "",
+        chain,
+        contractInterface: contractReader,
+        fragment: "getPrice",
+        callInput: [underlying],
+        blockNumber,
+      })
+    ).output;
 
     return {
       token: { address: underlying, decimals: underlyingUnit },

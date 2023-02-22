@@ -54,10 +54,11 @@ export async function computeTVL(chain: constants.Chain, block: number, timestam
     chain,
     contractInterface: vault,
     fragment: "getPositionDetails",
+    blockNumber: block,
   });
 
   vaultAddresses.forEach((address, index) => {
-    const reserve = reserves[index];
+    const reserve = reserves[index].output;
 
     if (reserve) {
       sumSingleBalance(balances, valuts[address].token0Address, reserve.amount0);
@@ -76,7 +77,7 @@ export async function computeTVL(chain: constants.Chain, block: number, timestam
     ];
   });
 
-  const vaultBalances = await abi.erc20MultiBalanceOf(balanceOfInput, chain);
+  const vaultBalances = await abi.erc20MultiBalanceOf(balanceOfInput, chain, block);
 
   sumMultipleBalance(balances, vaultBalances);
 
