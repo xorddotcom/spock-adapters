@@ -1,3 +1,4 @@
+import { computeTVL } from "./tvl";
 import { DepositEventObject, WithdrawEventObject } from "./types/SmartVault";
 import { DEPOSIT, WITHDRAW, smartVault, vaultInfo, Label, vaultAddresses } from "./utils";
 import { formatUnits } from "@ethersproject/units";
@@ -67,6 +68,29 @@ const tetuEarnAdapter: types.Adapter = {
           [WITHDRAW]: withdrawEvent,
         },
         startBlock: 15845380,
+      },
+    ],
+  },
+  tvlExtractors: {
+    [constants.Chain.POLYGON]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        startBlock: 17463433,
+      },
+    ],
+    [constants.Chain.ETHEREUM]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        startBlock: 15845380,
+      },
+    ],
+    [constants.Chain.BSC]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        startBlock: 20581239,
       },
     ],
   },

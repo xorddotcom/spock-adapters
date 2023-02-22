@@ -44,6 +44,6 @@ export async function factoryAddressMapping<T extends BaseContract>({
 
     return addresses.map((address) => address.output.toLowerCase());
   } catch {
-    return undefined;
+    throw new Error("factoryAddressMapping");
   }
 }

@@ -13,6 +13,11 @@ export async function calculateTVL(
   console.log({ balances });
 
   const tokenAddresses = Object.keys(balances);
+
+  if (tokenAddresses.length === 1 && tokenAddresses[0] === "usd") {
+    return { tvl: parseFloat(balances["usd"]) };
+  }
+
   const prices = await api.ankr.multipleTokenPrices({
     addresses: tokenAddresses,
     chain,
