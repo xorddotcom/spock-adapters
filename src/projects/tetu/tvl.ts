@@ -81,7 +81,7 @@ async function vestedTETU(chain: constants.Chain, block: number) {
 export async function computeTVL(chain: constants.Chain, block: number, timestamp: number) {
   const balances: SummedBalances = {};
 
-  const vaults = await vaultAddresses(chain);
+  const vaults = await vaultAddresses(chain, block);
 
   if (vaults) {
     const strategies = await abi.Multicall.multipleContractSingleData<SmartVault>({
@@ -123,7 +123,7 @@ export async function computeTVL(chain: constants.Chain, block: number, timestam
 
   await v2VaultsTvl(balances, chain, block);
 
-  balances["usd"] = formatEther(balances["usd"]);
+  balances["usd"] = formatEther(balances["usd"] ?? 0);
 
   const vTetuUsd = await vestedTETU(chain, block);
   if (vTetuUsd) {
