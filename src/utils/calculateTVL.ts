@@ -10,7 +10,6 @@ export async function calculateTVL(
   cache?: types.LogsCache,
 ) {
   const balances = await extractor(chain, block.number, block.timestamp, cache);
-  console.log({ balances });
 
   const tokenAddresses = Object.keys(balances);
 
@@ -24,8 +23,6 @@ export async function calculateTVL(
     toTimestamp: block.timestamp,
   });
 
-  console.log({ prices });
-
   const decimals = await abi.Multicall.multipleContractSingleData<Erc20>({
     address: tokenAddresses,
     chain,
@@ -33,22 +30,27 @@ export async function calculateTVL(
     fragment: "decimals",
   });
 
-  const { tvl, tokensInUSD } = tokenAddresses.reduce<{ tvl: number; tokensInUSD: Record<string, number> }>(
+  const { tvl, tokens, tokensInUSD } = tokenAddresses.reduce<{
+    tvl: number;
+    tokens: Record<string, number>;
+    tokensInUSD: Record<string, number>;
+  }>(
     (accum, tokenAddress, index) => {
       const formattedBalance = formatUnits(balances[tokenAddress], decimals[index].output);
       const price = prices[tokenAddress];
       const balanceUSD = parseFloat(utils.BN_Opeartion.mul(formattedBalance, price).toString());
 
       accum["tvl"] = parseFloat(utils.BN_Opeartion.add(balanceUSD, accum["tvl"]).toString());
+      accum["tokens"][tokenAddress] = parseFloat(formattedBalance);
       accum["tokensInUSD"][tokenAddress] = balanceUSD;
       return accum;
     },
-    { tvl: 0, tokensInUSD: {} },
+    { tvl: 0, tokens: {}, tokensInUSD: {} },
   );
 
-  console.log({ tvl, tokensInUSD });
+  console.log({ tvl, tokens, tokensInUSD });
 
-  return { tvl, tokens: balances, tokensInUSD };
+  return { tvl, tokens, tokensInUSD };
 }
 
 export async function testTvl(chain: constants.Chain, extractor: types.TvlExtractor["extractor"]) {
