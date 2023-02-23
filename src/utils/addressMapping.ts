@@ -23,6 +23,8 @@ export async function factoryAddressMapping<T extends BaseContract>({
   blockNumber,
 }: FactoryAddressMapping<T>): AddressMappingResult {
   try {
+    console.log({ address, blockNumber });
+
     const addressesLength: BigNumber = (
       await abi.Multicall.singleCall<T>({
         address,
@@ -44,6 +46,6 @@ export async function factoryAddressMapping<T extends BaseContract>({
 
     return addresses.map((address) => address.output.toLowerCase());
   } catch (e) {
-    throw new Error("factoryAddressMapping");
+    throw e;
   }
 }
