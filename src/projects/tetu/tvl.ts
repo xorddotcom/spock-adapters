@@ -21,7 +21,7 @@ import { abi, constants } from "@spockanalytics/base";
 async function v2VaultsTvl(balances: SummedBalances, chain: constants.Chain, block: number) {
   const controllerV2Address = CONTROLLER_V2[chain];
 
-  if (controllerV2Address) {
+  if (controllerV2Address && block > 36865497) {
     const v2Vaults = await abi.Multicall.singleCall<ControllerV2>({
       address: controllerV2Address,
       blockNumber: block,
@@ -45,7 +45,7 @@ async function v2VaultsTvl(balances: SummedBalances, chain: constants.Chain, blo
 
 async function vestedTETU(chain: constants.Chain, block: number) {
   const vTetuContract = V_TETU_CONTRACT[chain];
-  if (vTetuContract) {
+  if (vTetuContract && block > 36865815) {
     const tokens =
       (await factoryAddressMapping<VestedTetu>({
         address: vTetuContract,
@@ -109,16 +109,18 @@ export async function computeTVL(chain: constants.Chain, block: number, timestam
         ),
     );
 
-    const vaultUsdcs = await abi.Multicall.singleContractMultipleData<ContractReader>({
-      address: CONTRACT_READER[chain] ?? "",
-      blockNumber: block,
-      chain,
-      contractInterface: contractReader,
-      fragment: "vaultTvlUsdc",
-      callInput: vaultCalls,
-    });
+    try {
+      const vaultUsdcs = await abi.Multicall.singleContractMultipleData<ContractReader>({
+        address: CONTRACT_READER[chain] ?? "",
+        blockNumber: block,
+        chain,
+        contractInterface: contractReader,
+        fragment: "vaultTvlUsdc",
+        callInput: vaultCalls,
+      });
 
-    vaultUsdcs.forEach((vaultUsdc) => vaultUsdc.success && sumSingleBalance(balances, "usd", vaultUsdc.output));
+      vaultUsdcs.forEach((vaultUsdc) => vaultUsdc.success && sumSingleBalance(balances, "usd", vaultUsdc.output));
+    } catch (e) {}
   }
 
   await v2VaultsTvl(balances, chain, block);
