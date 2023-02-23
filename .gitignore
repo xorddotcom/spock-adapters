@@ -9,6 +9,7 @@
 **/dist
 **/node_modules
 **/src/projects/*/types
+**/src/contracts/types
 
 # files
 *.env

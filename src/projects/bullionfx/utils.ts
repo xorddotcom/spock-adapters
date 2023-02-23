@@ -24,12 +24,13 @@ export enum Label {
 
 export const bull_Pair = new Pool(uniswapV2_Pair<BullPair>(bullPair));
 
-export async function pairAddresses(chain: constants.Chain): AddressMappingResult {
+export async function pairAddresses(chain: constants.Chain, blockNumber?: number): AddressMappingResult {
   return await factoryAddressMapping<BullFactory>({
     address: BULL_FACTORY[chain] ?? "",
     chain,
     contractInterface: bullFactory,
     lengthFragment: "allPairsLength",
     addressFragment: "allPairs",
+    blockNumber,
   });
 }

@@ -70,7 +70,8 @@ const dafiAdapter: types.Adapter = {
           [STAKE]: stakeEvent,
           [UNSTAKE]: unstakeEvent,
         },
-        startBlock: 15161796,
+        // startBlock: 15161796, //multicall limitation
+        startBlock: 16627877,
       },
     ],
   },

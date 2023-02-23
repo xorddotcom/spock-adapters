@@ -1,4 +1,6 @@
+import { stakingTvl } from "../../utils/staking";
 import { sumBalancesUSD, tokenBalanceUSD } from "../../utils/sumBalances";
+import { computeTVL } from "./tvl";
 import { StakeOrUnstakeOrClaimEventObject } from "./types/Staking";
 import { DepositEventObject, WithdrawEventObject } from "./types/Vault";
 import {
@@ -11,6 +13,7 @@ import {
   StakingTxnType,
   Label,
   unipilotVault,
+  PILOT_STAKING,
 } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
 
@@ -105,6 +108,27 @@ const unipilotAdapter: types.Adapter = {
           [WITHDRAW]: withdrawEvent,
         },
         startBlock: 34288237,
+      },
+    ],
+  },
+  tvlExtractors: {
+    [constants.Chain.ETHEREUM]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        startBlock: 14495907,
+      },
+      {
+        category: types.TVL_Category.STAKING,
+        extractor: stakingTvl(PILOT_STAKING, PILOT.address),
+        startBlock: 15025220,
+      },
+    ],
+    [constants.Chain.POLYGON]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        startBlock: 34371363,
       },
     ],
   },

@@ -1,3 +1,4 @@
+import { computeTVL } from "./tvl";
 import { DepositEventObject, WithdrawEventObject } from "./types/SmartVault";
 import { DEPOSIT, WITHDRAW, smartVault, vaultInfo, Label, vaultAddresses } from "./utils";
 import { formatUnits } from "@ethersproject/units";
@@ -44,7 +45,9 @@ const tetuEarnAdapter: types.Adapter = {
           [DEPOSIT]: depositEvent,
           [WITHDRAW]: withdrawEvent,
         },
-        startBlock: 17463433,
+
+        // startBlock: 17463433,
+        startBlock: 22757601, //multicall limitation
       },
     ],
     [constants.Chain.BSC]: [
@@ -67,6 +70,30 @@ const tetuEarnAdapter: types.Adapter = {
           [WITHDRAW]: withdrawEvent,
         },
         startBlock: 15845380,
+      },
+    ],
+  },
+  tvlExtractors: {
+    [constants.Chain.POLYGON]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        // startBlock: 17463433,
+        startBlock: 22757601, //multicall limitation
+      },
+    ],
+    [constants.Chain.ETHEREUM]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        startBlock: 15845380,
+      },
+    ],
+    [constants.Chain.BSC]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        startBlock: 20581239,
       },
     ],
   },
