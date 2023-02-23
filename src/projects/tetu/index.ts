@@ -45,7 +45,9 @@ const tetuEarnAdapter: types.Adapter = {
           [DEPOSIT]: depositEvent,
           [WITHDRAW]: withdrawEvent,
         },
-        startBlock: 17463433,
+
+        // startBlock: 17463433,
+        startBlock: 22757600, //multicall limitation
       },
     ],
     [constants.Chain.BSC]: [
@@ -76,7 +78,8 @@ const tetuEarnAdapter: types.Adapter = {
       {
         category: types.TVL_Category.TVL,
         extractor: computeTVL,
-        startBlock: 17463433,
+        // startBlock: 17463433,
+        startBlock: 22757600, //multicall limitation
       },
     ],
     [constants.Chain.ETHEREUM]: [
