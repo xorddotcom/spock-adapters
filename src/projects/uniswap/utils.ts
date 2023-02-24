@@ -8,10 +8,11 @@ export const pool = Pool__factory.createInterface();
 export const MINT = pool.getEventTopic(pool.getEvent("Mint"));
 export const BURN = pool.getEventTopic(pool.getEvent("Burn"));
 
-// helper functions
+// types
 export enum Label {
   DEPOSIT = "Deposit",
   WITHDRAW = "Withdraw",
 }
 
+// helper functions
 export const uniswapV3Pool = new Pool(uniswapV2_Pair<UniswapV3Pool>(pool));

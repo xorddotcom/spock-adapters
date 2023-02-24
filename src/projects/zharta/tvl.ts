@@ -14,7 +14,7 @@ export async function computeTVL(chain: constants.Chain, block: number, timestam
     new abi.Call<Pool>({ address: WETH_POOL, contractInterface: poolInterface, fragment: "erc20TokenContract" }),
   ];
 
-  const result = await abi.Multicall.execute(chain, calls, block);
+  const result = await abi.Multicall.execute({ chain, calls, blockNumber: block });
 
   const owner: string = result[0].output;
   const token: string = result[1].output;

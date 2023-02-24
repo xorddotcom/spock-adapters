@@ -78,7 +78,7 @@ export async function vaultInfo(
       new abi.Call<SmartVault>({ address, contractInterface: smartVault, fragment: "underlyingUnit" }),
     ];
 
-    const result = await abi.Multicall.execute(chain, calls);
+    const result = await abi.Multicall.execute({ chain, calls });
     const underlying: string = result[0].output;
     const underlyingUnit: number = result[1].output.toString().length - 1;
 

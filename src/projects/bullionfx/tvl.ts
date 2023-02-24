@@ -14,7 +14,7 @@ export async function computeTVL(chain: constants.Chain, block: number, timestam
       new abi.Call<BullPair>({ address: pair, contractInterface: bullPair, fragment: "getReserves" }),
     ]);
 
-    const results = await abi.Multicall.execute(chain, calls, block);
+    const results = await abi.Multicall.execute({ chain, calls, blockNumber: block });
 
     utils.chunk(results, 3).forEach((result) => {
       sumSingleBalance(balances, result[0].output, result[2].output[0]);

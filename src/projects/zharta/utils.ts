@@ -14,6 +14,7 @@ export const WITHDRAWAL = poolInterface.getEventTopic(poolInterface.getEvent("Wi
 export const LOAN_CREATED = loansInterface.getEventTopic(loansInterface.getEvent("LoanCreated"));
 export const LOAN_PAID = loansInterface.getEventTopic(loansInterface.getEvent("LoanPaid"));
 
+// types
 export enum Label {
   DEPOSIT = "Deposit",
   WITHDRAWAL = "Withdrawal",
@@ -21,10 +22,6 @@ export enum Label {
   LOAN_PAID = "Loan Paid",
   LOAN_DEFAULTED = "Loan Defaulted",
 }
-
-const LOANS_CORE: AddressMap = {
-  [constants.Chain.ETHEREUM]: "0x5Be916Cff5f07870e9Aef205960e07d9e287eF27",
-};
 
 type LoanInfoExtractor = (
   chain: constants.Chain,
@@ -34,6 +31,11 @@ type LoanInfoExtractor = (
   loanId: number;
   amount: BigNumber;
 } | null>;
+
+// constants
+const LOANS_CORE: AddressMap = {
+  [constants.Chain.ETHEREUM]: "0x5Be916Cff5f07870e9Aef205960e07d9e287eF27",
+};
 
 // helper functions
 export const getLoan: LoanInfoExtractor = async (chain, callInput, blockNumber) => {

@@ -56,6 +56,7 @@ export async function calculateTVL(
 }
 
 export async function testTvl(chain: constants.Chain, extractor: types.TvlExtractor["extractor"]) {
-  const currentBlock = await abi.Web3Node.getBlock(chain, "latest");
+  // const currentBlock = await abi.Web3Node.getBlock(chain, "latest");
+  const currentBlock = await abi.Web3Node.getBlock(chain, 22757601);
   await calculateTVL(currentBlock, chain, extractor);
 }

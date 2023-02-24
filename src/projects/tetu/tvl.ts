@@ -109,18 +109,16 @@ export async function computeTVL(chain: constants.Chain, block: number, timestam
         ),
     );
 
-    try {
-      const vaultUsdcs = await abi.Multicall.singleContractMultipleData<ContractReader>({
-        address: CONTRACT_READER[chain] ?? "",
-        blockNumber: block,
-        chain,
-        contractInterface: contractReader,
-        fragment: "vaultTvlUsdc",
-        callInput: vaultCalls,
-      });
+    const vaultUsdcs = await abi.Multicall.singleContractMultipleData<ContractReader>({
+      address: CONTRACT_READER[chain] ?? "",
+      blockNumber: block,
+      chain,
+      contractInterface: contractReader,
+      fragment: "vaultTvlUsdc",
+      callInput: vaultCalls,
+    });
 
-      vaultUsdcs.forEach((vaultUsdc) => vaultUsdc.success && sumSingleBalance(balances, "usd", vaultUsdc.output));
-    } catch (e) {}
+    vaultUsdcs.forEach((vaultUsdc) => vaultUsdc.success && sumSingleBalance(balances, "usd", vaultUsdc.output));
   }
 
   await v2VaultsTvl(balances, chain, block);
