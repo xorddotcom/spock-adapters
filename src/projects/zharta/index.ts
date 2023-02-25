@@ -1,4 +1,5 @@
 import { tokenBalanceUSD } from "../../utils/sumBalances";
+import { computeTVL } from "./tvl";
 import { LoanCreatedEventObject, LoanPaidEventObject } from "./types/Loans";
 import { DepositEventObject, WithdrawalEventObject } from "./types/Pool";
 import { Label, loansInterface, poolInterface, DEPOSIT, WITHDRAWAL, LOAN_CREATED, LOAN_PAID, getLoan } from "./utils";
@@ -92,6 +93,15 @@ const zhartaAdapter: types.Adapter = {
           [DEPOSIT]: depositEvent,
           [WITHDRAWAL]: withdrawalEvent,
         },
+        startBlock: 16422124,
+      },
+    ],
+  },
+  tvlExtractors: {
+    [constants.Chain.ETHEREUM]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
         startBlock: 16422124,
       },
     ],

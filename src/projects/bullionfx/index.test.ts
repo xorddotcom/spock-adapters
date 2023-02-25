@@ -1,7 +1,9 @@
 import { extractEvent } from "../../utils/extraction";
+import { testTvl, expectContribution, expectExtraction } from "../../utils/testing";
 import { mintEvent, burnEvent } from "./index";
+import bullionFxAdapter from "./index";
 import { MINT, BURN, Label, bullPair } from "./utils";
-import { constants, types } from "@spockanalytics/base";
+import { constants } from "@spockanalytics/base";
 
 describe("bullionfx", () => {
   describe("chain => Ethereum", () => {
@@ -15,15 +17,7 @@ describe("bullionfx", () => {
           signature: MINT,
         });
 
-        expect(protocolValue).toEqual(
-          expect.objectContaining({
-            type: types.ProtocolValueType.CONTRIBUTION,
-            label: Label.ADD_LIQUIDITY,
-            user: "0xc424c43e934e80332db5ef6d32a1fa2c03c1da6b",
-          }),
-        );
-        const value = protocolValue ? protocolValue.value : undefined;
-        expect(value).toBeGreaterThan(0);
+        expectContribution(protocolValue, Label.ADD_LIQUIDITY, "0xc424c43e934e80332db5ef6d32a1fa2c03c1da6b");
       });
 
       it("should return extraction on burn", async () => {
@@ -34,16 +28,10 @@ describe("bullionfx", () => {
           hash: "",
           signature: BURN,
         });
-        expect(protocolValue).toEqual(
-          expect.objectContaining({
-            type: types.ProtocolValueType.EXTRACTION,
-            label: Label.REMOVE_LIQUIDITY,
-            user: "",
-          }),
-        );
-        const value = protocolValue ? protocolValue.value : undefined;
-        expect(value).toBeGreaterThan(0);
+        expectExtraction(protocolValue, Label.REMOVE_LIQUIDITY, "");
       });
     });
   });
+
+  testTvl(bullionFxAdapter);
 });

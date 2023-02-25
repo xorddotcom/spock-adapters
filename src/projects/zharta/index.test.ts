@@ -1,7 +1,9 @@
 import { extractEvent } from "../../utils/extraction";
+import { testTvl, expectContribution, expectExtraction } from "../../utils/testing";
 import { depositEvent, withdrawalEvent, loanCreatedEvent, loanPaidEvent } from "./index";
+import zhartaAdapter from "./index";
 import { Label, poolInterface, DEPOSIT, WITHDRAWAL, loansInterface, LOAN_CREATED, LOAN_PAID } from "./utils";
-import { constants, types } from "@spockanalytics/base";
+import { constants } from "@spockanalytics/base";
 
 describe("zharta", () => {
   describe("chain => Ethereum", () => {
@@ -15,17 +17,7 @@ describe("zharta", () => {
           signature: DEPOSIT,
         });
 
-        expect(protocolValue).toEqual(
-          expect.objectContaining({
-            type: types.ProtocolValueType.CONTRIBUTION,
-            label: Label.DEPOSIT,
-            user: "0x24fd699168a4f4b5f38b555985df600533339f66",
-          }),
-        );
-
-        const value = protocolValue ? protocolValue.value : undefined;
-
-        expect(value).toBeGreaterThan(0);
+        expectContribution(protocolValue, Label.DEPOSIT, "0x24fd699168a4f4b5f38b555985df600533339f66");
       });
 
       it("should return extraction on withdraw", async () => {
@@ -37,17 +29,7 @@ describe("zharta", () => {
           signature: WITHDRAWAL,
         });
 
-        expect(protocolValue).toEqual(
-          expect.objectContaining({
-            type: types.ProtocolValueType.EXTRACTION,
-            label: Label.WITHDRAWAL,
-            user: "0x24fd699168a4f4b5f38b555985df600533339f66",
-          }),
-        );
-
-        const value = protocolValue ? protocolValue.value : undefined;
-
-        expect(value).toBeGreaterThan(0);
+        expectExtraction(protocolValue, Label.WITHDRAWAL, "0x24fd699168a4f4b5f38b555985df600533339f66");
       });
     });
 
@@ -61,17 +43,7 @@ describe("zharta", () => {
           signature: LOAN_CREATED,
         });
 
-        expect(protocolValue).toEqual(
-          expect.objectContaining({
-            type: types.ProtocolValueType.CONTRIBUTION,
-            label: Label.LOAN_CREATED,
-            user: "0x6a6177790d52b37294a4ad6f09fac561fd90f260",
-          }),
-        );
-
-        const value = protocolValue ? protocolValue.value : undefined;
-
-        expect(value).toBeGreaterThan(0);
+        expectContribution(protocolValue, Label.LOAN_CREATED, "0x6a6177790d52b37294a4ad6f09fac561fd90f260");
       });
 
       it("should return amount of paid loan", async () => {
@@ -83,18 +55,10 @@ describe("zharta", () => {
           signature: LOAN_PAID,
         });
 
-        expect(protocolValue).toEqual(
-          expect.objectContaining({
-            type: types.ProtocolValueType.CONTRIBUTION,
-            label: Label.LOAN_PAID,
-            user: "0x6a6177790d52b37294a4ad6f09fac561fd90f260",
-          }),
-        );
-
-        const value = protocolValue ? protocolValue.value : undefined;
-
-        expect(value).toBeGreaterThan(0);
+        expectContribution(protocolValue, Label.LOAN_PAID, "0x6a6177790d52b37294a4ad6f09fac561fd90f260");
       });
     });
   });
+
+  testTvl(zhartaAdapter);
 });

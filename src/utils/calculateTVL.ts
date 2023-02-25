@@ -15,7 +15,6 @@ export async function calculateTVL(
 
   if (tokenAddresses.length === 1 && tokenAddresses[0] === "usd") {
     const tvl = parseFloat(balances["usd"]);
-    console.log({ tvl });
     return { tvl };
   }
 
@@ -50,13 +49,14 @@ export async function calculateTVL(
     { tvl: 0, tokens: {}, tokensInUSD: {} },
   );
 
-  console.log({ tvl, tokens, tokensInUSD });
-
   return { tvl, tokens, tokensInUSD };
 }
 
-export async function testTvl(chain: constants.Chain, extractor: types.TvlExtractor["extractor"]) {
-  // const currentBlock = await abi.Web3Node.getBlock(chain, "latest");
-  const currentBlock = await abi.Web3Node.getBlock(chain, 22757601);
-  await calculateTVL(currentBlock, chain, extractor);
+export async function testTvlAdapter(
+  chain: constants.Chain,
+  extractor: types.TvlExtractor["extractor"],
+  block?: number,
+) {
+  const blockData = await abi.Web3Node.getBlock(chain, block ?? "latest");
+  return await calculateTVL(blockData, chain, extractor);
 }
