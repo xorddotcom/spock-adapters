@@ -44,7 +44,8 @@ function expectProtocolValue(
 ) {
   expect(protocolValue).toBeDefined();
   expect(protocolValue).toEqual(expect.objectContaining({ type, label, user }));
-  expect(protocolValue?.value).toBeGreaterThan(0);
+  const value = protocolValue ? protocolValue.value : undefined;
+  expect(value).toBeGreaterThan(0);
 }
 
 export function expectContribution(protocolValue: types.ProtocolValueReturnType | void, label: string, user: string) {
