@@ -62,7 +62,7 @@ type TvlExtractor = {
 
 ### Repo setup
 
-1.  Clone the repo.
+1.  Fork the repo.
 2.  Install dependencies by `yarn install`.
 3.  Prepare adapters through `yarn prepare`.
 4.  Create new branch like `PROJECT_NAME/feat or fix/message`.
