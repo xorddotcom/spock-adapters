@@ -43,8 +43,8 @@ export function uniswapV2_Pair<T extends BaseContract>(
       new abi.Call<T>({ address, contractInterface, fragment: "token0" }),
       new abi.Call<T>({ address, contractInterface, fragment: "token1" }),
     ];
-    const result = await abi.Multicall.execute(chain, calls);
+    const result = await abi.Multicall.execute({ chain, calls });
 
-    return { token0: result[0][0], token1: result[1][0] };
+    return { token0: result[0].output, token1: result[1].output };
   };
 }

@@ -10,7 +10,13 @@ export const staking = Staking__factory.createInterface();
 export const STAKE = staking.getEventTopic(staking.getEvent("STAKED"));
 export const UNSTAKE = staking.getEventTopic(staking.getEvent("UNSTAKED"));
 
-// helper functions
+//types
+export enum Label {
+  STAKE = "Stake",
+  UNSTAKE = "Unstake",
+}
+
+// constants
 export const DAFI: PartialChainRecord<PartialTokenDecimals> = {
   [constants.Chain.ETHEREUM]: {
     address: "0xfc979087305a826c2b2a0056cfaba50aad3e6439",
@@ -25,8 +31,3 @@ export const DAFI: PartialChainRecord<PartialTokenDecimals> = {
     decimals: 18,
   },
 };
-
-export enum Label {
-  STAKE = "Stake",
-  UNSTAKE = "Unstake",
-}

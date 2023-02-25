@@ -7,29 +7,31 @@ Spock adapters are basically a module that transforms raw on-chain data for the 
 
 ```js
 type Adapter = {
-  appKey: string,
-  transformers: Record<Chain, Transformer>,
+  appKey: string;
+  transformers?: Record<Chain, Transformer[]>;
+  tvlExtractors?: Record<Chain, TvlExtractor[]>;
 };
 ```
 
-- `appKey`: unique identity is given to each application created in `Spock Analytics`.
+- `appKey`: unique identity is given to each application created on `Spock Analytics`.
 - `transformers`: are contracts with events through which Spock extracts on-chain data. So each transformer basically
   belongs to a contract.
+- `tvlExtractors`: are functions that extract tvl from contracts.
 
 ## Transformer Structure
 
 ```js
 type Transformer = {
  address?:string;
- getAddresses?:(chain:Chain) => Promise<string[]>
+ getAddresses?:(chain:Chain) => Promise<string[]>;
  contract: Interface;
- eventHandlers: Record<Signature,Handler>
+ eventHandlers: Record<Signature,Handler>;
  startBlock:number;
 }
 ```
 
 - `address`: of contract which has to sync, it's optional so in the case when no address will given, the transformer
-  will sync all the possible events of the given contract interface.
+  will sync all the possible events of the given event signature.
 
 - `getAddresses`: a funcion to get all addresses of contract used in transformer. It's useful when you have more than
   one contracts of same interface and you want to sync them universally.
@@ -40,11 +42,27 @@ type Transformer = {
 
 - `startBlock`: from which the syncing of that contract should start.
 
+## TvlExtractor Structure
+
+```js
+type TvlExtractor = {
+  category: TVL_Category;
+  startBlock: number;
+  extractor: (chain: Chain, block: number, timestamp: number, cache?: LogsCache) => Promise<Record<string, string>>;
+};
+```
+
+- `category`: used for TVL classification.
+
+- `startBlock`: from which the syncing of tvl should start.
+
+- `extractor`: is a function used to extract values in terms of token for tvl calculation.
+
 ## How to create an adapter
 
 ### Repo setup
 
-1.  Clone the repo.
+1.  Fork the repo.
 2.  Install dependencies by `yarn install`.
 3.  Prepare adapters through `yarn prepare`.
 4.  Create new branch like `PROJECT_NAME/feat or fix/message`.
@@ -65,8 +83,9 @@ projects
 │   │   ├── contract1.json
 │   │   └── contract2.json
 │   ├── types
-│   ├── index.ts
 │   ├── index.test.ts
+│   ├── index.ts
+|   ├── tvl.ts
 │   └── utils.ts
 └── index.ts
 ```
@@ -75,9 +94,10 @@ projects
 
 1. Write handlers for all the events that are responsible for the `contribution` and `extraction` of value from protocol
    inside index.ts and return that adapter.
-2. Write all the helping code inside utils of your project.
+2. Write all the helping code inside `utils` of your project.
 3. In case need to create some helper functions that are not specific to your project and can also be used by other
    projects should be placed inside main `utils` directory.
+4. Write tvl computation code in `tvl.ts`.
 
 ### Test adapter
 

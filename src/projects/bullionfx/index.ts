@@ -1,4 +1,5 @@
 import { sumBalancesUSD } from "../../utils/sumBalances";
+import { computeTVL } from "./tvl";
 import { BurnEventObject, MintEventObject } from "./types/BullPair";
 import { BURN, MINT, bullPair, pairAddresses, bull_Pair, Label } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
@@ -54,6 +55,15 @@ const bullionfxAdapter: types.Adapter = {
           [MINT]: mintEvent,
           [BURN]: burnEvent,
         },
+        startBlock: 16326700,
+      },
+    ],
+  },
+  tvlExtractors: {
+    [constants.Chain.ETHEREUM]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
         startBlock: 16326700,
       },
     ],
