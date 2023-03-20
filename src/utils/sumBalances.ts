@@ -1,4 +1,5 @@
 import { PartialTokenDecimals } from "../types/token";
+import { tokenDecimals } from "./erc20";
 import { BigNumberish, BigNumber } from "@ethersproject/bignumber";
 import { formatUnits } from "@ethersproject/units";
 import { abi, api, constants, types, utils } from "@spockanalytics/base";
@@ -22,12 +23,15 @@ export async function sumBalancesUSD(
 }
 
 export async function tokenBalanceUSD(
-  { token, balance }: USDBalanceInput,
+  { token, balance }: USDBalanceInput | { token: string; balance: BigNumberish },
   chain: constants.Chain = constants.Chain.ETHEREUM,
   timestamp?: number,
 ) {
-  const price = await api.ankr.tokenPrice(token.address, chain, timestamp);
-  const formattedBalance = formatUnits(balance, token.decimals);
+  const address = typeof token === "string" ? token : token.address;
+  const decimals = typeof token === "string" ? await tokenDecimals(address, chain) : token.decimals;
+
+  const price = await api.ankr.tokenPrice(address, chain, timestamp);
+  const formattedBalance = formatUnits(balance, decimals);
   return utils.BN_Opeartion.mul(formattedBalance, price);
 }
 
