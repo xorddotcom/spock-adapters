@@ -31,7 +31,7 @@ describe("tenderize", () => {
         expectContribution(protocolValue, Label.DEPOSIT, "0x7e98781f250a166a89215a1426b962108b9c38f6");
       });
 
-      it("should return contribution on withdraw", async () => {
+      it("should return extraction on withdraw", async () => {
         const protocolValue = await extractEvent({
           chain: constants.Chain.ETHEREUM,
           contractInterface: tenderizerInterface,
