@@ -73,7 +73,7 @@ export async function repayEvent(event: types.Event<RepayBorrowEventObject>) {
 }
 
 const paxoAdapter: types.Adapter = {
-  appKey: "",
+  appKey: "fdcfc764a3b13348d49bee86a17057920aefdce5496a1ee79629305a05e42571",
   transformers: {
     [constants.Chain.POLYGON]: [
       {
