@@ -42,6 +42,7 @@ export const PILOT_STAKING = "0xc9256e6e85ad7ac18cd9bd665327fc2062703628";
 export const VAULT_CREATION_TOPIC: PartialChainRecord<string> = {
   [constants.Chain.ETHEREUM]: "VaultCreated(address,address,uint24,address)",
   [constants.Chain.POLYGON]: "VaultCreated(address,address,uint16,uint24,address)",
+  [constants.Chain.BSC]: "VaultCreated(address,address,uint16,uint24,address)",
 };
 
 export const FACTORY_INFO: PartialChainRecord<Record<Factory, { address: string; startBlock: number }>> = {
@@ -63,6 +64,16 @@ export const FACTORY_INFO: PartialChainRecord<Record<Factory, { address: string;
     [Factory.PASSIVE]: {
       address: "0x2536527121fc1048ae5d45327a34241a355a6a95",
       startBlock: 34371363,
+    },
+  },
+  [constants.Chain.BSC]: {
+    [Factory.ACTIVE]: {
+      address: "0x9c7cb0bb03044d6c1c472b26058bfa61b9956d22",
+      startBlock: 27139991,
+    },
+    [Factory.PASSIVE]: {
+      address: "0x6900c436cf15d6d0016dc71a5ce5ade843031efd",
+      startBlock: 27140068,
     },
   },
 };
