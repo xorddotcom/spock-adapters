@@ -110,25 +110,42 @@ const unipilotAdapter: types.Adapter = {
         startBlock: 34288237,
       },
     ],
-  },
-  tvlExtractors: {
-    [constants.Chain.ETHEREUM]: [
+    [constants.Chain.BSC]: [
       {
-        category: types.TVL_Category.TVL,
-        extractor: computeTVL,
-        startBlock: 14495907,
-      },
-      {
-        category: types.TVL_Category.STAKING,
-        extractor: stakingTvl(PILOT_STAKING, PILOT.address),
-        startBlock: 15025220,
+        contract: vault,
+        eventHandlers: {
+          [DEPOSIT]: depositEvent,
+          [WITHDRAW]: withdrawEvent,
+        },
+        startBlock: 27139991,
       },
     ],
-    [constants.Chain.POLYGON]: [
+  },
+  tvlExtractors: {
+    // [constants.Chain.ETHEREUM]: [
+    //   {
+    //     category: types.TVL_Category.TVL,
+    //     extractor: computeTVL,
+    //     startBlock: 14495907,
+    //   },
+    //   {
+    //     category: types.TVL_Category.STAKING,
+    //     extractor: stakingTvl(PILOT_STAKING, PILOT.address),
+    //     startBlock: 15025220,
+    //   },
+    // ],
+    // [constants.Chain.POLYGON]: [
+    //   {
+    //     category: types.TVL_Category.TVL,
+    //     extractor: computeTVL,
+    //     startBlock: 34371363,
+    //   },
+    // ],
+    [constants.Chain.BSC]: [
       {
         category: types.TVL_Category.TVL,
         extractor: computeTVL,
-        startBlock: 34371363,
+        startBlock: 27139991,
       },
     ],
   },

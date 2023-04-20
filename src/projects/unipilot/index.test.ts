@@ -78,5 +78,30 @@ describe("unipilot", () => {
     });
   });
 
+  describe("chain => BSC", () => {
+    describe("vault", () => {
+      it("should return contribution on deposit", async () => {
+        const protocolValue = await extractEvent({
+          chain: constants.Chain.BSC,
+          contractInterface: vault,
+          hanlder: depositEvent,
+          hash: "0x34b1e32385a12175a489d08c7574600ff447aadc07788d9a18eb4e918ed5f78f",
+          signature: DEPOSIT,
+        });
+        expectContribution(protocolValue, Label.ADD_LIQUIDITY, "0x3a4961a71be671f2b19a9156441586865cfeee53");
+      });
+      it("should return extraction on withdraw", async () => {
+        const protocolValue = await extractEvent({
+          chain: constants.Chain.BSC,
+          contractInterface: vault,
+          hanlder: withdrawEvent,
+          hash: "0xe96f7b9f7916a35589b4d0029db1977f05283bd7ac8390a89f9fbbbd05214ed0",
+          signature: WITHDRAW,
+        });
+        expectExtraction(protocolValue, Label.REMOVE_LIQUIDITY, "0x1e13e5b5acbb0c3f0fde50fe7661fdf75df8f932");
+      });
+    });
+  });
+
   testTvl(unipilotAdapter);
 });
