@@ -122,25 +122,25 @@ const unipilotAdapter: types.Adapter = {
     ],
   },
   tvlExtractors: {
-    // [constants.Chain.ETHEREUM]: [
-    //   {
-    //     category: types.TVL_Category.TVL,
-    //     extractor: computeTVL,
-    //     startBlock: 14495907,
-    //   },
-    //   {
-    //     category: types.TVL_Category.STAKING,
-    //     extractor: stakingTvl(PILOT_STAKING, PILOT.address),
-    //     startBlock: 15025220,
-    //   },
-    // ],
-    // [constants.Chain.POLYGON]: [
-    //   {
-    //     category: types.TVL_Category.TVL,
-    //     extractor: computeTVL,
-    //     startBlock: 34371363,
-    //   },
-    // ],
+    [constants.Chain.ETHEREUM]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        startBlock: 14495907,
+      },
+      {
+        category: types.TVL_Category.STAKING,
+        extractor: stakingTvl(PILOT_STAKING, PILOT.address),
+        startBlock: 15025220,
+      },
+    ],
+    [constants.Chain.POLYGON]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        startBlock: 34371363,
+      },
+    ],
     [constants.Chain.BSC]: [
       {
         category: types.TVL_Category.TVL,
