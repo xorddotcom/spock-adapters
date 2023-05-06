@@ -45,7 +45,7 @@ export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
 }
 
 const pStakeAdapter: types.Adapter = {
-  appKey: "",
+  appKey: "0a4aaaf3b04216bb84ab40edef9fceb452bcd1a47d88ee0579635e385334837e",
   transformers: {
     [constants.Chain.BSC]: [
       {
