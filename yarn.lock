@@ -600,11 +600,11 @@ __metadata:
   linkType: hard
 
 "@babel/runtime@npm:^7.21.0":
-  version: 7.21.5
-  resolution: "@babel/runtime@npm:7.21.5"
+  version: 7.22.5
+  resolution: "@babel/runtime@npm:7.22.5"
   dependencies:
     regenerator-runtime: ^0.13.11
-  checksum: 358f2779d3187f5c67ad302e8f8d435412925d0b991d133c7d4a7b1ddd5a3fda1b6f34537cb64628dfd96a27ae46df105bed3895b8d754b88cacdded8d1129dd
+  checksum: 12a50b7de2531beef38840d17af50c55a094253697600cee255311222390c68eed704829308d4fd305e1b3dfbce113272e428e9d9d45b1730e0fede997eaceb1
   languageName: node
   linkType: hard
 
@@ -1832,9 +1832,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@spockanalytics/base@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@spockanalytics/base@npm:3.0.0"
+"@spockanalytics/base@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "@spockanalytics/base@npm:3.1.0"
   dependencies:
     "@ethersproject/experimental": ^5.7.0
     abi: ^0.0.0
@@ -1844,8 +1844,8 @@ __metadata:
     node-abort-controller: ^3.1.1
     node-fetch: ^2.6.9
     tiny-invariant: ^1.3.1
-    typeorm: ^0.3.10
-  checksum: c411d098de7d5eeb4dee18310ed51615476c72890389a818939b072343abf828c39ef41752b0bef53d434830f4657c491842632cc7be2a795b7e3641177e2756
+    typeorm: ^0.3.12
+  checksum: 7bab4eb7e86e00c348d8d4ed0e069a55f2388f590de68af99d290f8186b63aa0adecf6d2fbf24640ca8072e176a319ae53af99a6dfae47b48275a41cb18475c8
   languageName: node
   linkType: hard
 
@@ -3752,9 +3752,9 @@ __metadata:
   linkType: hard
 
 "dotenv@npm:^16.0.3":
-  version: 16.0.3
-  resolution: "dotenv@npm:16.0.3"
-  checksum: afcf03f373d7a6d62c7e9afea6328e62851d627a4e73f2e12d0a8deae1cd375892004f3021883f8aec85932cd2834b091f568ced92b4774625b321db83b827f8
+  version: 16.1.4
+  resolution: "dotenv@npm:16.1.4"
+  checksum: c1b2e13df4d374a6a29e134c56c7b040ba20500677fe8b9939ea654f3b3badb9aaa0b172e40e4dfa1233a4177dbb8fb79d84cc79a50ac9c9641fe2ad98c14876
   languageName: node
   linkType: hard
 
@@ -7956,7 +7956,7 @@ __metadata:
     "@commitlint/cli": ^17.1.2
     "@commitlint/config-conventional": ^17.1.0
     "@ethersproject/experimental": ^5.7.0
-    "@spockanalytics/base": ^3.0.0
+    "@spockanalytics/base": ^3.1.0
     "@trivago/prettier-plugin-sort-imports": ^3.3.1
     "@typechain/ethers-v5": ^10.1.1
     "@types/jest": ^29.2.4
@@ -8486,9 +8486,9 @@ __metadata:
   linkType: hard
 
 "tslib@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "tslib@npm:2.5.0"
-  checksum: ae3ed5f9ce29932d049908ebfdf21b3a003a85653a9a140d614da6b767a93ef94f460e52c3d787f0e4f383546981713f165037dc2274df212ea9f8a4541004e1
+  version: 2.5.3
+  resolution: "tslib@npm:2.5.3"
+  checksum: 88902b309afaf83259131c1e13da1dceb0ad1682a213143a1346a649143924d78cf3760c448b84d796938fd76127183894f8d85cbb3bf9c4fddbfcc140c0003c
   languageName: node
   linkType: hard
 
@@ -8576,7 +8576,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typeorm@npm:^0.3.10":
+"typeorm@npm:^0.3.12":
   version: 0.3.16
   resolution: "typeorm@npm:0.3.16"
   dependencies:
