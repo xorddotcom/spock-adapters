@@ -1,3 +1,4 @@
+import AlpacaAdapter from "./alpaca";
 import BullionFxAdapter from "./bullionfx";
 import DafiAdapter from "./dafi";
 import PStakeAdapter from "./pStake";
@@ -10,6 +11,7 @@ import ZhartaAdapter from "./zharta";
 import { types } from "@spockanalytics/base";
 
 export const Adapters: types.Adapter[] = [
+  AlpacaAdapter,
   BullionFxAdapter,
   DafiAdapter,
   PStakeAdapter,
