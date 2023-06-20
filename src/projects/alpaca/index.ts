@@ -73,7 +73,7 @@ const alpacaAdapter: types.Adapter = {
           [LEND]: lendEvent,
           [REDEEM]: redeemEvent,
         },
-        startBlock: 27685587,
+        startBlock: 27686778,
       },
       {
         contract: BorrowFacetInterface,
@@ -90,7 +90,7 @@ const alpacaAdapter: types.Adapter = {
       {
         category: types.TVL_Category.TVL,
         extractor: computeTVL,
-        startBlock: 27685587,
+        startBlock: 27686778,
       },
     ],
   },
