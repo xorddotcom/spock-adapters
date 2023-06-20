@@ -68,20 +68,20 @@ const alpacaAdapter: types.Adapter = {
     [constants.Chain.BSC]: [
       {
         contract: LendFacetInterface,
-        address: "0xD20B887654dB8dC476007bdca83d22Fa51e93407",
+        address: "0x7389aaf2e32872cabd766d0ceb384220e8f2a590",
         eventHandlers: {
           [LEND]: lendEvent,
           [REDEEM]: redeemEvent,
         },
-        startBlock: 27686778,
+        startBlock: 27685587,
       },
       {
         contract: BorrowFacetInterface,
-        address: "0xD20B887654dB8dC476007bdca83d22Fa51e93407",
+        address: "0x7389aaf2e32872cabd766d0ceb384220e8f2a590",
         eventHandlers: {
           [REPAY]: repayEvent,
         },
-        startBlock: 27686778,
+        startBlock: 27685587,
       },
     ],
   },
