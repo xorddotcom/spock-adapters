@@ -1,0 +1,99 @@
+[
+  { "inputs": [], "name": "BorrowFacet_BorrowLessThanMinDebtSize", "type": "error" },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_totalBorrowingPower", "type": "uint256" },
+      { "internalType": "uint256", "name": "_totalUsedBorrowingPower", "type": "uint256" },
+      { "internalType": "uint256", "name": "_borrowingUSDValue", "type": "uint256" }
+    ],
+    "name": "BorrowFacet_BorrowingValueTooHigh",
+    "type": "error"
+  },
+  { "inputs": [], "name": "BorrowFacet_ExceedBorrowLimit", "type": "error" },
+  { "inputs": [], "name": "BorrowFacet_InvalidAssetTier", "type": "error" },
+  {
+    "inputs": [{ "internalType": "address", "name": "_token", "type": "address" }],
+    "name": "BorrowFacet_InvalidToken",
+    "type": "error"
+  },
+  { "inputs": [], "name": "BorrowFacet_NoDebtToRepay", "type": "error" },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_borrowAmount", "type": "uint256" }],
+    "name": "BorrowFacet_NotEnoughToken",
+    "type": "error"
+  },
+  { "inputs": [], "name": "BorrowFacet_TooManyCollateralRemoved", "type": "error" },
+  { "inputs": [], "name": "LibDoublyLinkedList_NotExisted", "type": "error" },
+  { "inputs": [], "name": "LibMoneyMarket01_BadSubAccountId", "type": "error" },
+  { "inputs": [], "name": "LibMoneyMarket01_EmergencyPaused", "type": "error" },
+  { "inputs": [], "name": "LibMoneyMarket01_NumberOfTokenExceedLimit", "type": "error" },
+  { "inputs": [], "name": "LibMoneyMarket01_TooManyCollateralRemoved", "type": "error" },
+  { "inputs": [], "name": "LibMoneyMarket01_UnAuthorized", "type": "error" },
+  { "inputs": [], "name": "LibReentrancyGuard_ReentrantCall", "type": "error" },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "_account", "type": "address" },
+      { "indexed": true, "internalType": "uint256", "name": "_subAccountId", "type": "uint256" },
+      { "indexed": false, "internalType": "address", "name": "_token", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_caller", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "_actualRepayAmount", "type": "uint256" }
+    ],
+    "name": "LogRepay",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "_account", "type": "address" },
+      { "indexed": true, "internalType": "uint256", "name": "_subAccountId", "type": "uint256" },
+      { "indexed": false, "internalType": "address", "name": "_token", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "_actualRepayAmount", "type": "uint256" }
+    ],
+    "name": "LogRepayWithCollat",
+    "type": "event"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_token", "type": "address" }],
+    "name": "accrueInterest",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_account", "type": "address" },
+      { "internalType": "uint256", "name": "_subAccountId", "type": "uint256" },
+      { "internalType": "address", "name": "_token", "type": "address" },
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+    ],
+    "name": "borrow",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_account", "type": "address" },
+      { "internalType": "uint256", "name": "_subAccountId", "type": "uint256" },
+      { "internalType": "address", "name": "_token", "type": "address" },
+      { "internalType": "uint256", "name": "_debtShareToRepay", "type": "uint256" }
+    ],
+    "name": "repay",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_account", "type": "address" },
+      { "internalType": "uint256", "name": "_subAccountId", "type": "uint256" },
+      { "internalType": "address", "name": "_token", "type": "address" },
+      { "internalType": "uint256", "name": "_debtShareToRepay", "type": "uint256" }
+    ],
+    "name": "repayWithCollat",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
