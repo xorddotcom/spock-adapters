@@ -81,7 +81,7 @@ const alpacaAdapter: types.Adapter = {
         eventHandlers: {
           [REPAY]: repayEvent,
         },
-        startBlock: 27685587,
+        startBlock: 27686778,
       },
     ],
   },
