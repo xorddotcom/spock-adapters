@@ -1,57 +1,85 @@
 import { tokenBalanceUSD } from "../../utils/sumBalances";
 import { computeTVL } from "./tvl";
-import { DepositEventObject, WithdrawEventObject } from "./types/InterestBearingToken";
-import { DEPOSIT, InterestBearingTokenInterface, Label, WITHDRAW, getIBTokens, getUnderlyingAsset } from "./utils";
+import { LogRepayEventObject } from "./types/BorrowFacet";
+import { LogDepositEventObject, LogWithdrawEventObject } from "./types/LendFacet";
+import { BorrowFacetInterface, LendFacetInterface, Label, REPAY, LEND, REDEEM } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
 
-export async function depositEvent(event: types.Event<DepositEventObject>) {
-  const asset = await getUnderlyingAsset(event.address, event.chain);
+export async function lendEvent(event: types.Event<LogDepositEventObject>) {
+  const asset = event.params._token;
 
   if (asset) {
     const block = await Promise.resolve(event.block);
     const assetValue = await tokenBalanceUSD(
-      { token: asset, balance: event.params.assets },
+      { token: asset, balance: event.params._amountIn },
       event.chain,
       block.timestamp,
     );
 
     return utils.ProtocolValue.contribution({
-      label: Label.DEPOSIT,
+      label: Label.LEND,
       value: parseFloat(assetValue.toString()),
-      user: event.params.owner,
+      user: event.params._for,
     });
   }
 }
 
-export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
-  const asset = await getUnderlyingAsset(event.address, event.chain);
+export async function redeemEvent(event: types.Event<LogWithdrawEventObject>) {
+  const asset = event.params._token;
 
   if (asset) {
     const block = await Promise.resolve(event.block);
     const assetValue = await tokenBalanceUSD(
-      { token: asset, balance: event.params.assets },
+      { token: asset, balance: event.params._amountIn },
       event.chain,
       block.timestamp,
     );
 
     return utils.ProtocolValue.extraction({
-      label: Label.WITHDRAW,
+      label: Label.REDEEM,
       value: parseFloat(assetValue.toString()),
-      user: event.params.owner,
+      user: event.params._for,
+    });
+  }
+}
+
+export async function repayEvent(event: types.Event<LogRepayEventObject>) {
+  const asset = event.params._token;
+
+  if (asset) {
+    const block = await Promise.resolve(event.block);
+    const assetValue = await tokenBalanceUSD(
+      { token: asset, balance: event.params._actualRepayAmount },
+      event.chain,
+      block.timestamp,
+    );
+
+    return utils.ProtocolValue.contribution({
+      label: Label.REPAY,
+      value: parseFloat(assetValue.toString()),
+      user: event.params._account,
     });
   }
 }
 
 const alpacaAdapter: types.Adapter = {
-  appKey: "---",
+  appKey: "f6f171d44b0eda21a845383f949db87a7ed72f9397ae2043fb2244e926ea3258",
   transformers: {
     [constants.Chain.BSC]: [
       {
-        contract: InterestBearingTokenInterface,
-        getAddresses: getIBTokens,
+        contract: LendFacetInterface,
+        address: "0xD20B887654dB8dC476007bdca83d22Fa51e93407",
         eventHandlers: {
-          [DEPOSIT]: depositEvent,
-          [WITHDRAW]: withdrawEvent,
+          [LEND]: lendEvent,
+          [REDEEM]: redeemEvent,
+        },
+        startBlock: 27685587,
+      },
+      {
+        contract: BorrowFacetInterface,
+        address: "0xD20B887654dB8dC476007bdca83d22Fa51e93407",
+        eventHandlers: {
+          [REPAY]: repayEvent,
         },
         startBlock: 27685587,
       },
