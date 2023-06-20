@@ -1,42 +1,61 @@
-import { RubicTransferStartedEventObject } from "./types/BridgeFacet";
-import { Label, RUBIC_TRANSFER_STARTED, bridgeInterface } from "./utils";
-import { constants, types, utils, abi } from "@spockanalytics/base";
-import { tokenBalanceUSD } from "utils/sumBalances";
+import { tokenBalanceUSD } from "../../utils/sumBalances";
+import { RubicSwappedGenericEventObject, RubicTransferStartedEventObject } from "./types/GeneraicSwapFacet";
+import {
+  Label,
+  RUBIC_SWAPPED_GENERIC,
+  RUBIC_TRANSFER_STARTED,
+  generaicSwapFacetInterface,
+  assetAddress,
+} from "./utils";
+import { constants, types, utils } from "@spockanalytics/base";
 
-export async function swapEvent(event: types.Event<RubicTransferStartedEventObject>) {
-  //TODO change the wallet address
-  const walletAddress = "some wallet";
-  const fromToken = await new abi.Token(event.params.bridgeData.sendingAssetId, event.chain).metaData();
+export async function rubicTransferStartedEvent(event: types.Event<RubicTransferStartedEventObject>) {
+  const token = assetAddress(event.params.bridgeData.sendingAssetId);
 
-  (await event.transaction).from;
-  if (fromToken) {
+  if (token) {
     const block = await Promise.resolve(event.block);
 
     const amount = await tokenBalanceUSD(
-      { token: fromToken, balance: event.params.bridgeData.minAmount },
+      { token, balance: event.params.bridgeData.minAmount },
       event.chain,
       block.timestamp,
     );
 
     return utils.ProtocolValue.contribution({
-      label: Label.SWAP,
+      label: Label.CROSS_CHAIN_SWAP,
       value: parseFloat(amount.toString()),
-      user: walletAddress,
+      user: event.params.bridgeData.receiver,
+    });
+  }
+}
+
+export async function rubicSwappedGenericEvent(event: types.Event<RubicSwappedGenericEventObject>) {
+  const token = assetAddress(event.params.fromAssetId);
+
+  if (token) {
+    const [block, transaction] = await Promise.all([event.block, event.transaction]);
+    const amount = await tokenBalanceUSD({ token, balance: event.params.fromAmount }, event.chain, block.timestamp);
+    return utils.ProtocolValue.contribution({
+      label: Label.ON_CHAIN_SWAP,
+      value: parseFloat(amount.toString()),
+      user: transaction.from,
     });
   }
 }
 
 const rubicAdapter: types.Adapter = {
-  //TODO change the appKey
-  appKey: "8b25dbb191f57942bd8c8cf470ae34b845b2c0a9c84daed81abd03f917e46c23",
+  appKey: "9f189b0cb0d35fec1007bd9084c3b4671a0384fe728235c4b7cdfb549f6ff9cf",
   transformers: {
     [constants.Chain.ETHEREUM]: [
       {
-        contract: bridgeInterface,
+        address: "0x6aa981bff95edfea36bdae98c26b274ffcafe8d3", //RubicMultiProxy
+        contract: generaicSwapFacetInterface,
         eventHandlers: {
-          [RUBIC_TRANSFER_STARTED]: swapEvent,
+          [RUBIC_TRANSFER_STARTED]: rubicTransferStartedEvent,
+          [RUBIC_SWAPPED_GENERIC]: rubicSwappedGenericEvent,
         },
-        startBlock: 16422125,
+        // startBlock: 16422125,
+        startBlock: 16895784,
       },
     ],
   },

@@ -2,6 +2,7 @@ import BullionFxAdapter from "./bullionfx";
 import DafiAdapter from "./dafi";
 import PStakeAdapter from "./pStake";
 import PaxoAdapter from "./paxo";
+import RubicAdapter from "./rubic";
 import TenderizeAdapter from "./tenderize";
 import TetuEarnAdapter from "./tetu";
 import UnipilotAdapter from "./unipilot";
@@ -15,6 +16,7 @@ export const Adapters: types.Adapter[] = [
   PaxoAdapter,
   TenderizeAdapter,
   TetuEarnAdapter,
+  RubicAdapter,
   UnipilotAdapter,
   ZhartaAdapter,
 ];
