@@ -33,29 +33,29 @@ const MetamaskAdapter: types.Adapter = {
         eventHandlers: {
           [SWAP]: swapEvent,
         },
-        startBlock: 11041725,
+        startBlock: 17522372,
       },
     ],
-    [constants.Chain.POLYGON]: [
-      {
-        contract: MetaSwapInterface,
-        address: "0x1a1ec25dc08e98e5e93f1104b5e5cdd298707d31",
-        eventHandlers: {
-          [SWAP]: swapEvent,
-        },
-        startBlock: 16792570,
-      },
-    ],
-    [constants.Chain.BSC]: [
-      {
-        contract: MetaSwapInterface,
-        address: "0x1a1ec25dc08e98e5e93f1104b5e5cdd298707d31",
-        eventHandlers: {
-          [SWAP]: swapEvent,
-        },
-        startBlock: 5387949,
-      },
-    ],
+    // [constants.Chain.POLYGON]: [
+    //   {
+    //     contract: MetaSwapInterface,
+    //     address: "0x1a1ec25dc08e98e5e93f1104b5e5cdd298707d31",
+    //     eventHandlers: {
+    //       [SWAP]: swapEvent,
+    //     },
+    //     startBlock: 16792570,
+    //   },
+    // ],
+    // [constants.Chain.BSC]: [
+    //   {
+    //     contract: MetaSwapInterface,
+    //     address: "0x1a1ec25dc08e98e5e93f1104b5e5cdd298707d31",
+    //     eventHandlers: {
+    //       [SWAP]: swapEvent,
+    //     },
+    //     startBlock: 5387949,
+    //   },
+    // ],
   },
 };
 export default MetamaskAdapter;
