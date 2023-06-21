@@ -17,19 +17,19 @@ describe("alpaca", () => {
       });
 
       expectContribution(protocolValue, Label.LEND, "0xaa119df55b9aac2d6f108a95bed24944bc8c7c42");
-    });
+    }, 30000);
 
     it("should return extraction on redeem", async () => {
       const protocolValue = await extractEvent({
         chain: constants.Chain.BSC,
         contractInterface: LendFacetInterface,
         hanlder: redeemEvent,
-        hash: "0x499dc8cbfd870825ffa6d2d46773de056399190909d8c800cde1c292cf84bb41",
+        hash: "0x182a044178d3cb373bdf8dc18d0a858f3216758c927db4cd7cde0c0bed01a2f5",
         signature: REDEEM,
       });
 
-      expectExtraction(protocolValue, Label.REDEEM, "0x6f087ea26685e56ac942b1f453a0990c35d4f321");
-    });
+      expectExtraction(protocolValue, Label.REDEEM, "0x26eb86225c7e2b21f0a2b77ac732b5a6b1ef85ff");
+    }, 30000);
 
     it("should return contribution on repay", async () => {
       const protocolValue = await extractEvent({
