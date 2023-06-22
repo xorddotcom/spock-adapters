@@ -15,11 +15,10 @@ import {
 import { constants, types, utils } from "@spockanalytics/base";
 
 export async function stakeLidoEvent(event: types.Event<SubmittedEventObject>) {
-  if (event.params.sender.toLowerCase() === MetamaskStakingAggregator[event.chain]) {
-    const tx = await Promise.resolve(event.transaction);
-    const block = await Promise.resolve(event.block);
+  if (utils.isSameAddress(event.params.sender, MetamaskStakingAggregator[event.chain])) {
+    const [block, transaction] = await Promise.all([event.block, event.transaction]);
 
-    const token = NativeToken[event.chain];
+    const token = NativeToken[event.chain] ?? "";
 
     const assetValue = await tokenBalanceUSD(
       { token: token, balance: event.params.amount },
@@ -30,17 +29,16 @@ export async function stakeLidoEvent(event: types.Event<SubmittedEventObject>) {
     return utils.ProtocolValue.contribution({
       label: Label.STAKE_LIDO,
       value: parseFloat(assetValue.toString()),
-      user: tx.from,
+      user: transaction.from,
     });
   }
 }
 
 export async function stakeRocketEvent(event: types.Event<DepositReceivedEventObject>) {
-  if (event.params.from.toLowerCase() === MetamaskStakingAggregator[event.chain]) {
-    const tx = await Promise.resolve(event.transaction);
-    const block = await Promise.resolve(event.block);
+  if (utils.isSameAddress(event.params.from, MetamaskStakingAggregator[event.chain])) {
+    const [block, transaction] = await Promise.all([event.block, event.transaction]);
 
-    const token = NativeToken[event.chain];
+    const token = NativeToken[event.chain] ?? "";
 
     const assetValue = await tokenBalanceUSD(
       { token: token, balance: event.params.amount },
@@ -51,16 +49,16 @@ export async function stakeRocketEvent(event: types.Event<DepositReceivedEventOb
     return utils.ProtocolValue.contribution({
       label: Label.STAKE_ROCKET,
       value: parseFloat(assetValue.toString()),
-      user: tx.from,
+      user: transaction.from,
     });
   }
 }
 
 export async function swapEvent(event: types.Event<SwapEventObject>) {
-  const tx = await Promise.resolve(event.transaction);
+  const transaction = await Promise.resolve(event.transaction);
 
-  const { amount } = MetaSwapInterface.decodeFunctionData("swap", tx.data);
-  let { tokenFrom } = MetaSwapInterface.decodeFunctionData("swap", tx.data);
+  const { amount } = MetaSwapInterface.decodeFunctionData("swap", transaction.data);
+  let { tokenFrom } = MetaSwapInterface.decodeFunctionData("swap", transaction.data);
 
   if (tokenFrom && amount) {
     if (tokenFrom === constants.ZERO_ADDRESS) tokenFrom = NativeToken[event.chain];
@@ -71,7 +69,7 @@ export async function swapEvent(event: types.Event<SwapEventObject>) {
     return utils.ProtocolValue.contribution({
       label: Label.SWAP,
       value: parseFloat(assetValue.toString()),
-      user: tx.from,
+      user: transaction.from,
     });
   }
 }
