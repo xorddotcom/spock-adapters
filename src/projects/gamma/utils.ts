@@ -1,7 +1,7 @@
+import { getParamCalls } from "../../utils/helper";
 import { Pool, uniswapV2_Pair } from "../../utils/pool";
 import { HypeRegistry__factory, Hypervisor__factory, Hypervisor } from "./types";
 import { abi, constants } from "@spockanalytics/base";
-import { Erc20 } from "contracts/types";
 import { PartialChainRecord } from "types/chain";
 
 // contract interfaces
@@ -20,6 +20,13 @@ export enum Label {
 export enum Dex {
   UNISWAP_V3 = "Uniswap V3",
 }
+
+export type VisorsInfo = {
+  [visorAddress: string]: {
+    token0: { address: string; amount: number };
+    token1: { address: string; amount: number };
+  };
+};
 
 export const HYPERVISOR_CREATION_TOPIC: PartialChainRecord<{ [dex: string]: string }> = {
   [constants.Chain.ETHEREUM]: {
@@ -53,43 +60,25 @@ export async function getHypervisors(chain: constants.Chain, dex: Dex, block: nu
     })
   ).output;
 
-  const calls = [];
-
-  for (let i = 0; i <= hypervisorsCount; i++) {
-    calls.push(
-      new abi.Call({
-        contractInterface: hypeRegistryInterface,
-        address: hypeRegistryAddress,
-        fragment: "hypeByIndex",
-        callInput: [i],
-      }),
-    );
-  }
-
   return (
-    await abi.Multicall.execute({
-      chain: chain,
+    await abi.Multicall.singleContractMultipleData({
+      address: hypeRegistryAddress,
+      chain,
+      contractInterface: hypeRegistryInterface,
+      fragment: "hypeByIndex",
+      callInput: getParamCalls(Number(hypervisorsCount.toString())),
       blockNumber: block,
-      calls: calls,
     })
   )
     .map((e) => e.output)
     .filter((e) => e[1] > 0)
-    .map((e) => e[0]);
+    .map((e) => e[0].toLowerCase());
 }
 
-export async function getHypervisorsInfo(addresses: string[], chain: constants.Chain, includeDecimals: boolean) {
+export async function getHypervisorsInfo(addresses: string[], chain: constants.Chain) {
   const visorsInfoCalls: abi.Call<Hypervisor>[] = [];
-  const tokensDecimalsCalls: abi.Call<Erc20>[] = [];
 
-  const visorsInfo: {
-    [visorAddress: string]: {
-      token0: { address: string; decimals: number; amount: number };
-      token1: { address: string; decimals: number; amount: number };
-    };
-  } = {};
-
-  let tokensDecimals: { [address: string]: number | string } = {};
+  const visorsInfo: VisorsInfo = {};
 
   addresses.forEach((e) => {
     visorsInfoCalls.push(
@@ -98,8 +87,6 @@ export async function getHypervisorsInfo(addresses: string[], chain: constants.C
         address: e,
         fragment: "token0",
       }),
-    );
-    visorsInfoCalls.push(
       new abi.Call({
         contractInterface: hypervisorInterface,
         address: e,
@@ -108,92 +95,48 @@ export async function getHypervisorsInfo(addresses: string[], chain: constants.C
     );
   });
 
-  const visorsRes = await abi.Multicall.execute({ chain, calls: visorsInfoCalls });
+  const visorsRes = (await abi.Multicall.execute({ chain, calls: visorsInfoCalls })).map((e) => e?.output);
 
   for (let i = 0; i < visorsRes.length; i += 2) {
-    const address0 = visorsRes[i].output;
-    const address1 = visorsRes[i + 1].output;
+    const address0 = visorsRes[i]?.toLowerCase();
+    const address1 = visorsRes[i + 1]?.toLowerCase();
 
     if (!address0 || !address1) continue;
 
     visorsInfo[addresses[i / 2]] = {
-      token0: { address: address0, decimals: 1, amount: 0 },
-      token1: { address: address1, decimals: 1, amount: 0 },
+      token0: { address: address0, amount: 0 },
+      token1: { address: address1, amount: 0 },
     };
-
-    if (includeDecimals) {
-      tokensDecimals = {
-        ...tokensDecimals,
-        [address0]: 1,
-        [address1]: 1,
-      };
-    }
-  }
-
-  if (includeDecimals) {
-    Object.keys(tokensDecimals).forEach((e) => {
-      tokensDecimalsCalls.push(
-        new abi.Call({
-          contractInterface: abi.erc20Interface,
-          address: e,
-          fragment: "decimals",
-        }),
-      );
-    });
-
-    const decimalsRes = await abi.Multicall.execute({ chain, calls: tokensDecimalsCalls });
-
-    decimalsRes.forEach((e, i) => (tokensDecimals[i] = e.output));
-
-    addresses.forEach((e) => {
-      const token0 = visorsInfo[e].token0;
-      const token1 = visorsInfo[e].token1;
-
-      visorsInfo[e] = {
-        token0: { ...token0, decimals: Number(tokensDecimals[token0.address]) },
-        token1: { ...token1, decimals: Number(tokensDecimals[token1.address]) },
-      };
-    });
   }
 
   return visorsInfo;
 }
 
-export async function getHypervisorsAmounts(
-  visorsInfo: {
-    [visorAddress: string]: {
-      token0: { address: string; decimals: number; amount: number };
-      token1: { address: string; decimals: number; amount: number };
-    };
-  },
-  chain: constants.Chain,
-) {
-  const amountsCalls: abi.Call<Hypervisor>[] = [];
+export async function getHypervisorsAmounts(visorsInfo: VisorsInfo, chain: constants.Chain, block: number) {
+  const hypervisors = Object.keys(visorsInfo);
 
-  Object.keys(visorsInfo).forEach((e) => {
-    amountsCalls.push(
-      new abi.Call({
-        contractInterface: hypervisorInterface,
-        address: e,
-        fragment: "getTotalAmounts",
-      }),
-    );
-  });
+  const amounts = (
+    await abi.Multicall.multipleContractSingleData({
+      contractInterface: hypervisorInterface,
+      address: hypervisors,
+      fragment: "getTotalAmounts",
+      blockNumber: block,
+      chain,
+    })
+  ).map((e) => e.output);
 
-  const amounts = await abi.Multicall.execute({ chain, calls: amountsCalls });
-
-  Object.keys(visorsInfo).forEach((e, i) => {
+  hypervisors.forEach((e, i) => {
     const token0 = visorsInfo[e].token0;
     const token1 = visorsInfo[e].token1;
 
     visorsInfo[e] = {
       token0: {
         ...token0,
-        amount: amounts[i].output?.[0] || 0,
+        amount: amounts[i][0] || 0,
       },
       token1: {
         ...token1,
-        amount: amounts[i].output?.[1] || 0,
+        amount: amounts[i][1] || 0,
       },
     };
   });

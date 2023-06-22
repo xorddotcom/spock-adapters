@@ -49,7 +49,7 @@ export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
 }
 
 const gammaAdapter: types.Adapter = {
-  appKey: "079f119db037cbe7de4cee7b62b47ade7ad01f8da462b6f421a4681e6e605be7",
+  appKey: "a36dba2c16c6e33139265d6350e70129036088b0780c0291bcccf9a84b15fe69",
   transformers: {
     [constants.Chain.ETHEREUM]: [
       {

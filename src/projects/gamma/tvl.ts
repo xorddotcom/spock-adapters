@@ -7,9 +7,9 @@ export async function computeTVL(chain: constants.Chain, block: number) {
 
   const hypervisors = await getHypervisors(chain, Dex.UNISWAP_V3, block);
 
-  let hypervisorsInfo = await getHypervisorsInfo(hypervisors, chain, false);
+  let hypervisorsInfo = await getHypervisorsInfo(hypervisors, chain);
 
-  hypervisorsInfo = await getHypervisorsAmounts(hypervisorsInfo, chain);
+  hypervisorsInfo = await getHypervisorsAmounts(hypervisorsInfo, chain, block);
 
   hypervisors.forEach((address) => {
     if (hypervisorsInfo[address]) {
