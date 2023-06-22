@@ -1,7 +1,60 @@
 import { tokenBalanceUSD } from "../../utils/sumBalances";
+import { SubmittedEventObject } from "./types/LidoEthStaking";
 import { SwapEventObject } from "./types/MetaSwap";
-import { Label, MetaSwapInterface, NativeToken, SWAP } from "./utils";
+import { DepositReceivedEventObject } from "./types/RockedEthStaking";
+import {
+  MetamaskStakingAggregator,
+  LidoEthStakingInterface,
+  RockedEthStakingInterface,
+  MetaSwapInterface,
+  STAKE_LIDO,
+  STAKE_ROCKET,
+  NativeToken,
+  Label,
+} from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
+
+export async function stakeLidoEvent(event: types.Event<SubmittedEventObject>) {
+  if (event.params.sender.toLowerCase() === MetamaskStakingAggregator[event.chain]) {
+    const tx = await Promise.resolve(event.transaction);
+    const block = await Promise.resolve(event.block);
+
+    const token = NativeToken[event.chain];
+
+    const assetValue = await tokenBalanceUSD(
+      { token: token, balance: event.params.amount },
+      event.chain,
+      block.timestamp,
+    );
+
+    return utils.ProtocolValue.contribution({
+      label: Label.STAKE_LIDO,
+      value: parseFloat(assetValue.toString()),
+      user: tx.from,
+    });
+  }
+}
+
+export async function stakeRocketEvent(event: types.Event<DepositReceivedEventObject>) {
+  if (event.params.from.toLowerCase() === MetamaskStakingAggregator[event.chain]) {
+    const tx = await Promise.resolve(event.transaction);
+    const block = await Promise.resolve(event.block);
+
+    const token = NativeToken[event.chain];
+
+    const assetValue = await tokenBalanceUSD(
+      { token: token, balance: event.params.amount },
+      event.chain,
+      block.timestamp,
+    );
+
+    return utils.ProtocolValue.contribution({
+      label: Label.STAKE_ROCKET,
+      value: parseFloat(assetValue.toString()),
+      user: tx.from,
+    });
+  }
+}
 
 export async function swapEvent(event: types.Event<SwapEventObject>) {
   const tx = await Promise.resolve(event.transaction);
@@ -28,13 +81,29 @@ const MetamaskAdapter: types.Adapter = {
   transformers: {
     [constants.Chain.ETHEREUM]: [
       {
-        contract: MetaSwapInterface,
-        address: "0x881d40237659c251811cec9c364ef91dc08d300c",
+        contract: LidoEthStakingInterface,
+        address: "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
         eventHandlers: {
-          [SWAP]: swapEvent,
+          [STAKE_LIDO]: stakeLidoEvent,
         },
-        startBlock: 17522372,
+        startBlock: 16528964,
       },
+      {
+        contract: RockedEthStakingInterface,
+        address: "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
+        eventHandlers: {
+          [STAKE_ROCKET]: stakeRocketEvent,
+        },
+        startBlock: 16528964,
+      },
+      // {
+      //   contract: MetaSwapInterface,
+      //   address: "0x881d40237659c251811cec9c364ef91dc08d300c",
+      //   eventHandlers: {
+      //     [SWAP]: swapEvent,
+      //   },
+      //   startBlock: 17522372,
+      // },
     ],
     // [constants.Chain.POLYGON]: [
     //   {
