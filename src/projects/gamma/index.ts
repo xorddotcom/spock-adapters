@@ -1,21 +1,23 @@
 import { sumBalancesUSD } from "../../utils/sumBalances";
+import { computeTVL } from "./tvl";
 import { DepositEventObject, WithdrawEventObject } from "./types/Hypervisor";
-import { DEPOSIT, WITHDRAW, Label, getHypervisorInfo, hypervisorInterface } from "./utils";
+import { DEPOSIT, WITHDRAW, Label, getHypervisorsInfo, hypervisorInterface } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
 
 export async function depositEvent(event: types.Event<DepositEventObject>) {
-  const hypervisorInfo = await getHypervisorInfo(event.address, event.chain);
+  const hypervisorInfo = await getHypervisorsInfo([event.address], event.chain, true);
 
   if (hypervisorInfo) {
     const block = await Promise.resolve(event.block);
     const totalSum = await sumBalancesUSD(
       [
-        { token: hypervisorInfo.token0, balance: event.params.amount0 },
-        { token: hypervisorInfo.token1, balance: event.params.amount1 },
+        { token: hypervisorInfo[event.address].token0, balance: event.params.amount0 },
+        { token: hypervisorInfo[event.address].token1, balance: event.params.amount1 },
       ],
       event.chain,
       block.timestamp,
     );
+
     return utils.ProtocolValue.contribution({
       label: Label.ADD_LIQUIDITY,
       value: parseFloat(totalSum.toString()),
@@ -25,18 +27,19 @@ export async function depositEvent(event: types.Event<DepositEventObject>) {
 }
 
 export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
-  const hypervisorInfo = await getHypervisorInfo(event.address, event.chain);
+  const hypervisorInfo = await getHypervisorsInfo([event.address], event.chain, true);
 
   if (hypervisorInfo) {
     const block = await Promise.resolve(event.block);
     const totalSum = await sumBalancesUSD(
       [
-        { token: hypervisorInfo.token0, balance: event.params.amount0 },
-        { token: hypervisorInfo.token1, balance: event.params.amount1 },
+        { token: hypervisorInfo[event.address].token0, balance: event.params.amount0 },
+        { token: hypervisorInfo[event.address].token1, balance: event.params.amount1 },
       ],
       event.chain,
       block.timestamp,
     );
+
     return utils.ProtocolValue.extraction({
       label: Label.REMOVE_LIQUIDITY,
       value: parseFloat(totalSum.toString()),
@@ -60,7 +63,13 @@ const gammaAdapter: types.Adapter = {
     ],
   },
   tvlExtractors: {
-    [constants.Chain.ETHEREUM]: [],
+    [constants.Chain.ETHEREUM]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        startBlock: 14495907,
+      },
+    ],
   },
 };
 

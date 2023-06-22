@@ -36,7 +36,7 @@ export async function tokenBalanceUSD(
 }
 
 export function sumSingleBalance(balances: SummedBalances, address: string, amount: BigNumber | string | number) {
-  if (!amount) throw new Error("Amount not be undefined");
+  if (!amount) throw new Error("Amount not be undefined" + address);
 
   if (typeof amount === "number" || typeof amount === "string") {
     amount = BigNumber.from(amount);

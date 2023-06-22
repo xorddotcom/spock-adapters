@@ -1,51 +1,22 @@
-import { SummedBalances } from "../../utils/sumBalances";
-import { HYPE_REGISTRY_INFO, Dex, hypervisorInterface, hypeRegistryInterface } from "./utils";
-import { abi, constants } from "@spockanalytics/base";
+import { SummedBalances, sumSingleBalance } from "../../utils/sumBalances";
+import { Dex, getHypervisorsInfo, getHypervisors, getHypervisorsAmounts } from "./utils";
+import { constants } from "@spockanalytics/base";
 
-async function getHypervisors(chain: constants.Chain, dex: Dex, block: number) {
-  const hypeRegistryAddress = HYPE_REGISTRY_INFO[chain]?.[dex].address ?? "";
-
-  const hypervisorsCount = (
-    await abi.Multicall.singleCall({
-      address: hypeRegistryAddress,
-      blockNumber: block,
-      chain,
-      contractInterface: hypervisorInterface,
-      fragment: "counter",
-    })
-  ).output;
-
-  const calls = [];
-
-  for (let i = 0; i <= hypervisorsCount; i++) {
-    calls.push(
-      new abi.Call({
-        contractInterface: hypeRegistryInterface,
-        address: hypeRegistryAddress,
-        fragment: "hypeByIndex",
-        callInput: [i],
-      }),
-    );
-  }
-
-  return (
-    await abi.Multicall.execute({
-      chain: chain,
-      blockNumber: block,
-      calls: calls,
-    })
-  )
-    .map((e) => e.output)
-    .filter((e) => e[1] > 0)
-    .map((e) => e[0]);
-}
-
-export async function computeTVL(chain: constants.Chain, block: number, dex: Dex) {
+export async function computeTVL(chain: constants.Chain, block: number) {
   const balances: SummedBalances = {};
 
-  const hypervisors = await getHypervisors(chain, dex, block);
+  const hypervisors = await getHypervisors(chain, Dex.UNISWAP_V3, block);
 
-  //TODO: complete implementation
+  let hypervisorsInfo = await getHypervisorsInfo(hypervisors, chain, false);
+
+  hypervisorsInfo = await getHypervisorsAmounts(hypervisorsInfo, chain);
+
+  hypervisors.forEach((address) => {
+    if (hypervisorsInfo[address]) {
+      sumSingleBalance(balances, hypervisorsInfo[address].token0.address, hypervisorsInfo[address].token0.amount);
+      sumSingleBalance(balances, hypervisorsInfo[address].token1.address, hypervisorsInfo[address].token1.amount);
+    }
+  });
 
   return balances;
 }
