@@ -1,18 +1,18 @@
 import { sumBalancesUSD } from "../../utils/sumBalances";
 import { computeTVL } from "./tvl";
 import { DepositEventObject, WithdrawEventObject } from "./types/Hypervisor";
-import { DEPOSIT, WITHDRAW, Label, getHypervisorsInfo, hypervisorInterface } from "./utils";
+import { DEPOSIT, WITHDRAW, Label, hypervisorInterface, gamma_Hypervisor } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
 
 export async function depositEvent(event: types.Event<DepositEventObject>) {
-  const hypervisorInfo = await getHypervisorsInfo([event.address], event.chain, true);
+  const hypervisorInfo = await gamma_Hypervisor.getPool(event.address, event.chain);
 
   if (hypervisorInfo) {
     const block = await Promise.resolve(event.block);
     const totalSum = await sumBalancesUSD(
       [
-        { token: hypervisorInfo[event.address].token0, balance: event.params.amount0 },
-        { token: hypervisorInfo[event.address].token1, balance: event.params.amount1 },
+        { token: hypervisorInfo.token0, balance: event.params.amount0 },
+        { token: hypervisorInfo.token1, balance: event.params.amount1 },
       ],
       event.chain,
       block.timestamp,
@@ -27,14 +27,14 @@ export async function depositEvent(event: types.Event<DepositEventObject>) {
 }
 
 export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
-  const hypervisorInfo = await getHypervisorsInfo([event.address], event.chain, true);
+  const hypervisorInfo = await gamma_Hypervisor.getPool(event.address, event.chain);
 
   if (hypervisorInfo) {
     const block = await Promise.resolve(event.block);
     const totalSum = await sumBalancesUSD(
       [
-        { token: hypervisorInfo[event.address].token0, balance: event.params.amount0 },
-        { token: hypervisorInfo[event.address].token1, balance: event.params.amount1 },
+        { token: hypervisorInfo.token0, balance: event.params.amount0 },
+        { token: hypervisorInfo.token1, balance: event.params.amount1 },
       ],
       event.chain,
       block.timestamp,
@@ -67,7 +67,7 @@ const gammaAdapter: types.Adapter = {
       {
         category: types.TVL_Category.TVL,
         extractor: computeTVL,
-        startBlock: 14495907,
+        startBlock: 13659998,
       },
     ],
   },

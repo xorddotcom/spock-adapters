@@ -1,3 +1,4 @@
+import { Pool, uniswapV2_Pair } from "../../utils/pool";
 import { HypeRegistry__factory, Hypervisor__factory, Hypervisor } from "./types";
 import { abi, constants } from "@spockanalytics/base";
 import { Erc20 } from "contracts/types";
@@ -36,6 +37,8 @@ export const HYPE_REGISTRY_INFO: PartialChainRecord<{ [dex: string]: { address: 
 };
 
 // helper functions
+
+export const gamma_Hypervisor = new Pool(uniswapV2_Pair<Hypervisor>(hypervisorInterface));
 
 export async function getHypervisors(chain: constants.Chain, dex: Dex, block: number) {
   const hypeRegistryAddress = HYPE_REGISTRY_INFO[chain]?.[dex].address ?? "";
