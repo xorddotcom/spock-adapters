@@ -77,7 +77,7 @@ export async function swapEvent(event: types.Event<SwapEventObject>) {
 }
 
 const MetamaskAdapter: types.Adapter = {
-  appKey: "f6f171d44b0eda21a845383f949db87a7ed72f9397ae2043fb2244e926ea3258",
+  appKey: "73c2f54b80de6c98f999b9a351b2a66add2c9e51c338351926405dd0bd5e9a08",
   transformers: {
     [constants.Chain.ETHEREUM]: [
       {
