@@ -1,15 +1,9 @@
 import { tokenBalanceUSD } from "../../utils/sumBalances";
-import { RubicSwappedGenericEventObject, RubicTransferStartedEventObject } from "./types/GeneraicSwapFacet";
-import {
-  Label,
-  RUBIC_SWAPPED_GENERIC,
-  RUBIC_TRANSFER_STARTED,
-  generaicSwapFacetInterface,
-  assetAddress,
-} from "./utils";
+import { LiFiSwappedGenericEventObject, LiFiTransferStartedEventObject } from "./types/AcrossFacet";
+import { Label, LIFI_SWAPPED_GENERIC, LIFI_TRANSFER_STARTED, acrossFacetInterface, assetAddress } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
 
-export async function rubicTransferStartedEvent(event: types.Event<RubicTransferStartedEventObject>) {
+export async function lifiTransferStartedEvent(event: types.Event<LiFiTransferStartedEventObject>) {
   const token = assetAddress(event.params.bridgeData.sendingAssetId, event.chain);
 
   if (token) {
@@ -29,7 +23,7 @@ export async function rubicTransferStartedEvent(event: types.Event<RubicTransfer
   }
 }
 
-export async function rubicSwappedGenericEvent(event: types.Event<RubicSwappedGenericEventObject>) {
+export async function lifiSwappedGenericEvent(event: types.Event<LiFiSwappedGenericEventObject>) {
   const token = assetAddress(event.params.fromAssetId, event.chain);
 
   if (token) {
@@ -48,14 +42,13 @@ const rubicAdapter: types.Adapter = {
   transformers: {
     [constants.Chain.ETHEREUM]: [
       {
-        address: "0x6aa981bff95edfea36bdae98c26b274ffcafe8d3", //RubicMultiProxy
-        contract: generaicSwapFacetInterface,
+        address: "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae", //LifiDiamond
+        contract: acrossFacetInterface,
         eventHandlers: {
-          [RUBIC_TRANSFER_STARTED]: rubicTransferStartedEvent,
-          [RUBIC_SWAPPED_GENERIC]: rubicSwappedGenericEvent,
+          [LIFI_TRANSFER_STARTED]: lifiTransferStartedEvent,
+          [LIFI_SWAPPED_GENERIC]: lifiSwappedGenericEvent,
         },
-        // startBlock: 16422125,
-        startBlock: 16895784,
+        startBlock: 15788692,
       },
     ],
   },
