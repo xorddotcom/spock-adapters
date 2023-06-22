@@ -46,6 +46,7 @@
   "dependencies": {
     "@ethersproject/experimental": "^5.7.0",
     "@spockanalytics/base": "^3.1.0",
+    "axios": "^1.4.0",
     "ethers": "^5.7.2"
   },
   "config": {
