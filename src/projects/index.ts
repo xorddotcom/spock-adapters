@@ -1,6 +1,7 @@
 import AlpacaAdapter from "./alpaca";
 import BullionFxAdapter from "./bullionfx";
 import DafiAdapter from "./dafi";
+import GammaAdapter from "./gamma";
 import PStakeAdapter from "./pStake";
 import PaxoAdapter from "./paxo";
 import RubicAdapter from "./rubic";
@@ -21,4 +22,5 @@ export const Adapters: types.Adapter[] = [
   RubicAdapter,
   UnipilotAdapter,
   ZhartaAdapter,
+  GammaAdapter,
 ];

@@ -48,29 +48,29 @@ export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
   }
 }
 
-const gammaAdapter: types.Adapter = {
+const GammaAdapter: types.Adapter = {
   appKey: "a36dba2c16c6e33139265d6350e70129036088b0780c0291bcccf9a84b15fe69",
   transformers: {
-    [constants.Chain.ETHEREUM]: [
+    [constants.Chain.BSC]: [
       {
         contract: hypervisorInterface,
         eventHandlers: {
           [DEPOSIT]: depositEvent,
           [WITHDRAW]: withdrawEvent,
         },
-        startBlock: 13659998,
+        startBlock: 26097149,
       },
     ],
   },
   tvlExtractors: {
-    [constants.Chain.ETHEREUM]: [
+    [constants.Chain.BSC]: [
       {
         category: types.TVL_Category.TVL,
         extractor: computeTVL,
-        startBlock: 13659998,
+        startBlock: 26097149,
       },
     ],
   },
 };
 
-export default gammaAdapter;
+export default GammaAdapter;

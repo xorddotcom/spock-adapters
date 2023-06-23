@@ -19,6 +19,7 @@ export enum Label {
 
 export enum Dex {
   UNISWAP_V3 = "Uniswap V3",
+  THENA = "Thena",
 }
 
 export type VisorsInfo = {
@@ -28,17 +29,21 @@ export type VisorsInfo = {
   };
 };
 
-export const HYPERVISOR_CREATION_TOPIC: PartialChainRecord<{ [dex: string]: string }> = {
-  [constants.Chain.ETHEREUM]: {
-    [Dex.UNISWAP_V3]: "0xfd73610dd51217377ee8fbb2a8afed164757d1aefb01f51caaf9d0b9be54613c",
-  },
-};
-
 export const HYPE_REGISTRY_INFO: PartialChainRecord<{ [dex: string]: { address: string; startBlock: number } }> = {
   [constants.Chain.ETHEREUM]: {
     [Dex.UNISWAP_V3]: {
       address: "0x31CcDb5bd6322483bebD0787e1DABd1Bf1f14946",
       startBlock: 13659998,
+    },
+  },
+  [constants.Chain.BSC]: {
+    [Dex.UNISWAP_V3]: {
+      address: "0x0b4645179c1b668464df01362fc6219a7ab3234c",
+      startBlock: 26520492,
+    },
+    [Dex.THENA]: {
+      address: "0xd4bcFC023736Db5617E5638748E127581d5929bd",
+      startBlock: 26097149,
     },
   },
 };
