@@ -1,8 +1,8 @@
+import { PartialChainRecord } from "../../types/chain";
 import { getParamCalls } from "../../utils/helper";
 import { Pool, uniswapV2_Pair } from "../../utils/pool";
 import { HypeRegistry__factory, Hypervisor__factory, Hypervisor } from "./types";
 import { abi, constants } from "@spockanalytics/base";
-import { PartialChainRecord } from "types/chain";
 
 // contract interfaces
 export const hypeRegistryInterface = HypeRegistry__factory.createInterface();
