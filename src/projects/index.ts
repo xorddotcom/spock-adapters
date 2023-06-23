@@ -17,9 +17,9 @@ export const Adapters: types.Adapter[] = [
   AlpacaAdapter,
   BullionFxAdapter,
   DafiAdapter,
-  MetamaskAdapter,
-  PStakeAdapter,
+  GammaAdapter,
   LifiAdapter,
+  MetamaskAdapter,
   PaxoAdapter,
   PStakeAdapter,
   RubicAdapter,
@@ -27,5 +27,4 @@ export const Adapters: types.Adapter[] = [
   TetuEarnAdapter,
   UnipilotAdapter,
   ZhartaAdapter,
-  GammaAdapter,
 ];

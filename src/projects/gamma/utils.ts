@@ -12,6 +12,7 @@ export const hypervisorInterface = Hypervisor__factory.createInterface();
 export const DEPOSIT = hypervisorInterface.getEventTopic(hypervisorInterface.getEvent("Deposit"));
 export const WITHDRAW = hypervisorInterface.getEventTopic(hypervisorInterface.getEvent("Withdraw"));
 
+// types
 export enum Label {
   ADD_LIQUIDITY = "Add Liquidity",
   REMOVE_LIQUIDITY = "Remove Liquidity",
@@ -34,6 +35,7 @@ export type VisorsInfo = {
   };
 };
 
+// constants
 export const HYPE_REGISTRY_INFO: PartialChainRecord<{ [dex: string]: { address: string; startBlock: number } }> = {
   [constants.Chain.ETHEREUM]: {
     [Dex.UNISWAP_V3]: {
@@ -54,29 +56,7 @@ export const HYPE_REGISTRY_INFO: PartialChainRecord<{ [dex: string]: { address: 
 };
 
 // helper functions
-
 export const gamma_Hypervisor = new Pool(uniswapV2_Pair<Hypervisor>(hypervisorInterface));
-
-export async function getHypervisorDex(address: string, chain: constants.Chain) {
-  const hypeRegistryDexes = Object.keys(HYPE_REGISTRY_INFO[chain] as object);
-  const hypeRegistryAddresses = Object.values(HYPE_REGISTRY_INFO[chain] as object).map((e) => e.address);
-
-  const registryIndexes = (
-    await abi.Multicall.multipleContractSingleData({
-      address: hypeRegistryAddresses,
-      chain,
-      contractInterface: hypeRegistryInterface,
-      fragment: "registryMap",
-      callInput: [address],
-    })
-  ).map((e) => e.output);
-
-  for (let i = 0; i < hypeRegistryDexes.length; i++) {
-    if (registryIndexes[i] > 0) return hypeRegistryDexes[i];
-  }
-
-  return "";
-}
 
 export async function getHypervisors(chain: constants.Chain, dex: Dex) {
   const hypeRegistryAddress = HYPE_REGISTRY_INFO[chain]?.[dex]?.address || "";
