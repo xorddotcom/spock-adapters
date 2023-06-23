@@ -22,6 +22,11 @@ export enum Dex {
   THENA = "Thena",
 }
 
+export enum EventType {
+  DEPOSIT,
+  WITHDRAW,
+}
+
 export type VisorsInfo = {
   [visorAddress: string]: {
     token0: { address: string; amount: number };
@@ -73,36 +78,27 @@ export async function getHypervisorDex(address: string, chain: constants.Chain) 
   return "";
 }
 
-export async function getHypervisors(chain: constants.Chain) {
-  const hypeRegistryAddresses = Object.values(HYPE_REGISTRY_INFO[chain] as object).map((e) => e.address);
+export async function getHypervisors(chain: constants.Chain, dex: Dex) {
+  const hypeRegistryAddress = HYPE_REGISTRY_INFO[chain]?.[dex]?.address || "";
 
   const hypervisorsCount = (
-    await abi.Multicall.multipleContractSingleData({
-      address: hypeRegistryAddresses,
+    await abi.Multicall.singleCall({
+      address: hypeRegistryAddress,
       chain,
       contractInterface: hypeRegistryInterface,
       fragment: "counter",
     })
-  ).map((e) => e.output);
+  ).output;
 
-  const registories = await Promise.all(
-    hypeRegistryAddresses.map((e, i) =>
-      abi.Multicall.singleContractMultipleData({
-        address: e,
-        chain,
-        contractInterface: hypeRegistryInterface,
-        fragment: "hypeByIndex",
-        callInput: getParamCalls(Number(hypervisorsCount[i])),
-      }),
-    ),
-  );
-
-  let visors: string[] = [];
-  registories.forEach(
-    (registory) => (visors = visors.concat(registory.map((visor) => visor?.output[0]?.toLowerCase()))),
-  );
-
-  return visors;
+  return (
+    await abi.Multicall.singleContractMultipleData({
+      address: hypeRegistryAddress,
+      chain,
+      contractInterface: hypeRegistryInterface,
+      fragment: "hypeByIndex",
+      callInput: getParamCalls(Number(hypervisorsCount)),
+    })
+  ).map((e) => e.output[0]?.toLowerCase());
 }
 
 export async function getHypervisorsInfo(addresses: string[], chain: constants.Chain) {

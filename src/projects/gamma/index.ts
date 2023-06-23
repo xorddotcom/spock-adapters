@@ -7,16 +7,23 @@ import {
   Label,
   hypervisorInterface,
   gamma_Hypervisor,
-  getHypervisorDex,
   getHypervisors,
+  Dex,
+  EventType,
 } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
 
-export async function depositEvent(event: types.Event<DepositEventObject>) {
-  const [hypervisorInfo, hypervisorDex] = await Promise.all([
-    gamma_Hypervisor.getPool(event.address, event.chain),
-    getHypervisorDex(event.address, event.chain),
-  ]);
+export async function handleEvent(event: types.Event<DepositEventObject>, dex: Dex, type: EventType) {
+  switch (type) {
+    case EventType.DEPOSIT:
+      return await depositEvent(event, dex);
+    case EventType.WITHDRAW:
+      return await withdrawEvent(event, dex);
+  }
+}
+
+export async function depositEvent(event: types.Event<DepositEventObject>, dex: Dex) {
+  const hypervisorInfo = await gamma_Hypervisor.getPool(event.address, event.chain);
 
   if (hypervisorInfo) {
     const block = await Promise.resolve(event.block);
@@ -30,18 +37,15 @@ export async function depositEvent(event: types.Event<DepositEventObject>) {
     );
 
     return utils.ProtocolValue.contribution({
-      label: `${Label.ADD_LIQUIDITY} (${hypervisorDex})`,
+      label: `${Label.ADD_LIQUIDITY} (${dex})`,
       value: parseFloat(totalSum.toString()),
       user: event.params.sender,
     });
   }
 }
 
-export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
-  const [hypervisorInfo, hypervisorDex] = await Promise.all([
-    gamma_Hypervisor.getPool(event.address, event.chain),
-    getHypervisorDex(event.address, event.chain),
-  ]);
+export async function withdrawEvent(event: types.Event<WithdrawEventObject>, dex: Dex) {
+  const hypervisorInfo = await gamma_Hypervisor.getPool(event.address, event.chain);
 
   if (hypervisorInfo) {
     const block = await Promise.resolve(event.block);
@@ -55,7 +59,7 @@ export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
     );
 
     return utils.ProtocolValue.extraction({
-      label: `${Label.REMOVE_LIQUIDITY} (${hypervisorDex})`,
+      label: `${Label.REMOVE_LIQUIDITY} (${dex})`,
       value: parseFloat(totalSum.toString()),
       user: event.params.sender,
     });
@@ -68,12 +72,21 @@ const GammaAdapter: types.Adapter = {
     [constants.Chain.BSC]: [
       {
         contract: hypervisorInterface,
-        getAddresses: getHypervisors,
+        getAddresses: (chain) => getHypervisors(chain, Dex.UNISWAP_V3),
         eventHandlers: {
-          [DEPOSIT]: depositEvent,
-          [WITHDRAW]: withdrawEvent,
+          [DEPOSIT]: (event) => handleEvent(event, Dex.UNISWAP_V3, EventType.DEPOSIT),
+          [WITHDRAW]: (event) => handleEvent(event, Dex.UNISWAP_V3, EventType.WITHDRAW),
         },
         startBlock: 26097149,
+      },
+      {
+        contract: hypervisorInterface,
+        getAddresses: (chain) => getHypervisors(chain, Dex.THENA),
+        eventHandlers: {
+          [DEPOSIT]: (event) => handleEvent(event, Dex.THENA, EventType.DEPOSIT),
+          [WITHDRAW]: (event) => handleEvent(event, Dex.THENA, EventType.WITHDRAW),
+        },
+        startBlock: 26520492,
       },
     ],
   },
