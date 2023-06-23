@@ -1,6 +1,7 @@
 import AlpacaAdapter from "./alpaca";
 import BullionFxAdapter from "./bullionfx";
 import DafiAdapter from "./dafi";
+import GammaAdapter from "./gamma";
 import LifiAdapter from "./lifi";
 import MetamaskAdapter from "./metamask";
 import PStakeAdapter from "./pStake";
@@ -26,4 +27,5 @@ export const Adapters: types.Adapter[] = [
   TetuEarnAdapter,
   UnipilotAdapter,
   ZhartaAdapter,
+  GammaAdapter,
 ];
