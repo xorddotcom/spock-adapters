@@ -1,16 +1,16 @@
 import { AddressMap } from "../../types/chain";
-import { GeneraicSwapFacet__factory } from "./types";
+import { AcrossFacet__factory } from "./types";
 import { constants, utils } from "@spockanalytics/base";
 
 // contract interfaces
-export const generaicSwapFacetInterface = GeneraicSwapFacet__factory.createInterface();
+export const acrossFacetInterface = AcrossFacet__factory.createInterface();
 
 // contract events
-export const RUBIC_TRANSFER_STARTED = generaicSwapFacetInterface.getEventTopic(
-  generaicSwapFacetInterface.getEvent("RubicTransferStarted"),
+export const LIFI_TRANSFER_STARTED = acrossFacetInterface.getEventTopic(
+  acrossFacetInterface.getEvent("LiFiTransferStarted"),
 );
-export const RUBIC_SWAPPED_GENERIC = generaicSwapFacetInterface.getEventTopic(
-  generaicSwapFacetInterface.getEvent("RubicSwappedGeneric"),
+export const LIFI_SWAPPED_GENERIC = acrossFacetInterface.getEventTopic(
+  acrossFacetInterface.getEvent("LiFiSwappedGeneric"),
 );
 
 // types

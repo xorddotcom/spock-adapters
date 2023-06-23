@@ -1,5 +1,5 @@
 import { tokenBalanceUSD } from "../../utils/sumBalances";
-import { computeTVL } from "./tvl";
+import { computeLendingTVL, computeBorrowTVL } from "./tvl";
 import { LogRepayEventObject } from "./types/BorrowFacet";
 import { LogDepositEventObject, LogWithdrawEventObject } from "./types/LendFacet";
 import { BorrowFacetInterface, LendFacetInterface, Label, REPAY, LEND, REDEEM } from "./utils";
@@ -89,7 +89,12 @@ const alpacaAdapter: types.Adapter = {
     [constants.Chain.BSC]: [
       {
         category: types.TVL_Category.TVL,
-        extractor: computeTVL,
+        extractor: computeLendingTVL,
+        startBlock: 27686778,
+      },
+      {
+        category: types.TVL_Category.BORROWED,
+        extractor: computeBorrowTVL,
         startBlock: 27686778,
       },
     ],
