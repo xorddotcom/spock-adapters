@@ -1,11 +1,22 @@
 import { sumBalancesUSD } from "../../utils/sumBalances";
 import { computeTVL } from "./tvl";
 import { DepositEventObject, WithdrawEventObject } from "./types/Hypervisor";
-import { DEPOSIT, WITHDRAW, Label, hypervisorInterface, gamma_Hypervisor } from "./utils";
+import {
+  DEPOSIT,
+  WITHDRAW,
+  Label,
+  hypervisorInterface,
+  gamma_Hypervisor,
+  getHypervisorDex,
+  getHypervisors,
+} from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
 
 export async function depositEvent(event: types.Event<DepositEventObject>) {
-  const hypervisorInfo = await gamma_Hypervisor.getPool(event.address, event.chain);
+  const [hypervisorInfo, hypervisorDex] = await Promise.all([
+    gamma_Hypervisor.getPool(event.address, event.chain),
+    getHypervisorDex(event.address, event.chain),
+  ]);
 
   if (hypervisorInfo) {
     const block = await Promise.resolve(event.block);
@@ -19,7 +30,7 @@ export async function depositEvent(event: types.Event<DepositEventObject>) {
     );
 
     return utils.ProtocolValue.contribution({
-      label: Label.ADD_LIQUIDITY,
+      label: `${Label.ADD_LIQUIDITY} (${hypervisorDex})`,
       value: parseFloat(totalSum.toString()),
       user: event.params.sender,
     });
@@ -27,7 +38,10 @@ export async function depositEvent(event: types.Event<DepositEventObject>) {
 }
 
 export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
-  const hypervisorInfo = await gamma_Hypervisor.getPool(event.address, event.chain);
+  const [hypervisorInfo, hypervisorDex] = await Promise.all([
+    gamma_Hypervisor.getPool(event.address, event.chain),
+    getHypervisorDex(event.address, event.chain),
+  ]);
 
   if (hypervisorInfo) {
     const block = await Promise.resolve(event.block);
@@ -41,7 +55,7 @@ export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
     );
 
     return utils.ProtocolValue.extraction({
-      label: Label.REMOVE_LIQUIDITY,
+      label: `${Label.REMOVE_LIQUIDITY} (${hypervisorDex})`,
       value: parseFloat(totalSum.toString()),
       user: event.params.sender,
     });
@@ -54,6 +68,7 @@ const GammaAdapter: types.Adapter = {
     [constants.Chain.BSC]: [
       {
         contract: hypervisorInterface,
+        getAddresses: getHypervisors,
         eventHandlers: {
           [DEPOSIT]: depositEvent,
           [WITHDRAW]: withdrawEvent,

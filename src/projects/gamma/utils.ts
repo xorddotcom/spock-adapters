@@ -52,32 +52,57 @@ export const HYPE_REGISTRY_INFO: PartialChainRecord<{ [dex: string]: { address: 
 
 export const gamma_Hypervisor = new Pool(uniswapV2_Pair<Hypervisor>(hypervisorInterface));
 
-export async function getHypervisors(chain: constants.Chain, dex: Dex, block: number) {
-  const hypeRegistryAddress = HYPE_REGISTRY_INFO[chain]?.[dex].address ?? "";
+export async function getHypervisorDex(address: string, chain: constants.Chain) {
+  const hypeRegistryDexes = Object.keys(HYPE_REGISTRY_INFO[chain] as object);
+  const hypeRegistryAddresses = Object.values(HYPE_REGISTRY_INFO[chain] as object).map((e) => e.address);
+
+  const registryIndexes = (
+    await abi.Multicall.multipleContractSingleData({
+      address: hypeRegistryAddresses,
+      chain,
+      contractInterface: hypeRegistryInterface,
+      fragment: "registryMap",
+      callInput: [address],
+    })
+  ).map((e) => e.output);
+
+  for (let i = 0; i < hypeRegistryDexes.length; i++) {
+    if (registryIndexes[i] > 0) return hypeRegistryDexes[i];
+  }
+
+  return "";
+}
+
+export async function getHypervisors(chain: constants.Chain) {
+  const hypeRegistryAddresses = Object.values(HYPE_REGISTRY_INFO[chain] as object).map((e) => e.address);
 
   const hypervisorsCount = (
-    await abi.Multicall.singleCall({
-      address: hypeRegistryAddress,
-      blockNumber: block,
+    await abi.Multicall.multipleContractSingleData({
+      address: hypeRegistryAddresses,
       chain,
       contractInterface: hypeRegistryInterface,
       fragment: "counter",
     })
-  ).output;
+  ).map((e) => e.output);
 
-  return (
-    await abi.Multicall.singleContractMultipleData({
-      address: hypeRegistryAddress,
-      chain,
-      contractInterface: hypeRegistryInterface,
-      fragment: "hypeByIndex",
-      callInput: getParamCalls(Number(hypervisorsCount.toString())),
-      blockNumber: block,
-    })
-  )
-    .map((e) => e.output)
-    .filter((e) => e[1] > 0)
-    .map((e) => e[0].toLowerCase());
+  const registories = await Promise.all(
+    hypeRegistryAddresses.map((e, i) =>
+      abi.Multicall.singleContractMultipleData({
+        address: e,
+        chain,
+        contractInterface: hypeRegistryInterface,
+        fragment: "hypeByIndex",
+        callInput: getParamCalls(Number(hypervisorsCount[i])),
+      }),
+    ),
+  );
+
+  let visors: string[] = [];
+  registories.forEach(
+    (registory) => (visors = visors.concat(registory.map((visor) => visor?.output[0]?.toLowerCase()))),
+  );
+
+  return visors;
 }
 
 export async function getHypervisorsInfo(addresses: string[], chain: constants.Chain) {

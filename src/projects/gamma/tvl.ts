@@ -1,11 +1,11 @@
 import { SummedBalances, sumSingleBalance } from "../../utils/sumBalances";
-import { Dex, getHypervisorsInfo, getHypervisors, getHypervisorsAmounts } from "./utils";
+import { getHypervisorsInfo, getHypervisors, getHypervisorsAmounts } from "./utils";
 import { constants } from "@spockanalytics/base";
 
 export async function computeTVL(chain: constants.Chain, block: number) {
   const balances: SummedBalances = {};
 
-  const hypervisors = await getHypervisors(chain, Dex.UNISWAP_V3, block);
+  const hypervisors = await getHypervisors(chain);
 
   let hypervisorsInfo = await getHypervisorsInfo(hypervisors, chain);
 
