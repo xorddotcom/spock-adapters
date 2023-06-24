@@ -1,13 +1,14 @@
 import { extractEvent } from "../../utils/extraction";
-import { expectContribution, expectExtraction } from "../../utils/testing";
+import { testTvl, expectContribution, expectExtraction } from "../../utils/testing";
 import { transferEvent } from "./index";
+import beefyAdapter from "./index";
 import { Label, TRANSFER, beefyVaultInterface, getVaultsAddresses } from "./utils";
 import { constants } from "@spockanalytics/base";
 
 describe("beefy", () => {
   describe("chain => polygon", () => {
     describe("transfer", () => {
-      it.only("should return contribution on deposit", async () => {
+      it("should return contribution on deposit", async () => {
         const protocolValue = await extractEvent({
           address: getVaultsAddresses,
           chain: constants.Chain.POLYGON,
@@ -17,8 +18,6 @@ describe("beefy", () => {
           signature: TRANSFER,
         });
 
-        console.log({ protocolValue });
-
         expectContribution(protocolValue, Label.DEPOSIT, "0x38019cd45c8543fb450ca80661be95ce65cd104a");
       });
 
@@ -27,12 +26,14 @@ describe("beefy", () => {
           chain: constants.Chain.POLYGON,
           contractInterface: beefyVaultInterface,
           hanlder: transferEvent,
-          hash: "0xb95fc2dea25ac3604f9aef90e4ebb2b5f75b3f9d339c013e642ca60298967db2",
+          hash: "0x71a0030fe3bc020bbd222d0d1c1ed09efb7eeaff23f880c8a55415e508da9bc2",
           signature: TRANSFER,
         });
 
-        expectExtraction(protocolValue, Label.WITHDRAW, "0x86185b7a03499e70ed3ebdc65afb88a0d19aae24");
+        expectExtraction(protocolValue, Label.WITHDRAW, "0xfe9deaed889afa4b85a2d67734293dfe5ebd176f");
       });
     });
   });
+
+  testTvl(beefyAdapter);
 });

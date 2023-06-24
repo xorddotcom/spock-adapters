@@ -1,9 +1,10 @@
 import { tokenBalanceUSD } from "../../utils/sumBalances";
+import { computeTVL } from "./tvl";
 import { BeefyVaultV7 } from "./types";
 import { TransferEventObject } from "./types/BeefyVaultV7";
 import { TRANSFER, beefyVaultInterface, getVaultsAddresses, getVault, underlyingLpPrice, Label } from "./utils";
 import { BigNumber } from "@ethersproject/bignumber";
-import { formatEther } from "@ethersproject/units";
+import { formatEther, parseEther } from "@ethersproject/units";
 import { abi, constants, types, utils } from "@spockanalytics/base";
 
 async function transferedValue(event: types.Event<TransferEventObject>) {
@@ -19,19 +20,22 @@ async function transferedValue(event: types.Event<TransferEventObject>) {
     ).output; //underlying lp price for 1(Decimal) mooshare
 
     const mooShare = formatEther(event.params.value); //mooshare in decimals
-    console.log({ mooShare });
     const underlyingLpBalance = utils.BN_Opeartion.mul(mooShare, formatEther(lpPricePerShare)); //underlyting lp in wei
-    console.log({ underlyingLpBalance: underlyingLpBalance.toString() });
 
     let lpPriceUSD = utils.BN_Opeartion.ZERO_BN;
 
     //if underlying asset is lp
     if (vault.oracle === "lps") {
       const price = await underlyingLpPrice(vault.oracleId);
-      console.log({ price });
       lpPriceUSD = underlyingLpBalance.multipliedBy(price);
     } else {
-      lpPriceUSD = await tokenBalanceUSD({ token: vault.tokenAddress, balance: underlyingLpBalance.toString() });
+      lpPriceUSD = await tokenBalanceUSD(
+        {
+          token: vault.tokenAddress,
+          balance: parseEther(parseFloat(underlyingLpBalance.toString()).toFixed(5)),
+        },
+        event.chain,
+      );
     }
 
     return parseFloat(lpPriceUSD.toString());
@@ -40,7 +44,7 @@ async function transferedValue(event: types.Event<TransferEventObject>) {
 
 async function deposit(event: types.Event<TransferEventObject>) {
   const value = await transferedValue(event);
-  if (value) {
+  if (typeof value !== "undefined") {
     return utils.ProtocolValue.contribution({
       label: Label.DEPOSIT,
       value,
@@ -51,7 +55,7 @@ async function deposit(event: types.Event<TransferEventObject>) {
 
 async function withdraw(event: types.Event<TransferEventObject>) {
   const value = await transferedValue(event);
-  if (value) {
+  if (typeof value !== "undefined") {
     return utils.ProtocolValue.extraction({
       label: Label.WITHDRAW,
       value,
@@ -78,7 +82,21 @@ const beefyAdapter: types.Adapter = {
         eventHandlers: {
           [TRANSFER]: transferEvent,
         },
-        startBlock: 16326700,
+        startBlock: 44284986,
+      },
+    ],
+  },
+  tvlExtractors: {
+    [constants.Chain.BSC]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL(types.TVL_Category.TVL),
+        startBlock: 44284986,
+      },
+      {
+        category: types.TVL_Category.STAKING,
+        extractor: computeTVL(types.TVL_Category.STAKING),
+        startBlock: 44284986,
       },
     ],
   },
