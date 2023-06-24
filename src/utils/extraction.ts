@@ -1,7 +1,8 @@
 import { Interface, Result } from "@ethersproject/abi";
-import { abi, constants, types } from "@spockanalytics/base";
+import { abi, constants, types, utils } from "@spockanalytics/base";
 
 interface TestTransformer {
+  address?: string | ((chain: constants.Chain) => Promise<string[]>);
   chain: constants.Chain;
   contractInterface: Interface;
   hanlder: types.EventHandler;
@@ -9,10 +10,18 @@ interface TestTransformer {
   signature: string;
 }
 
-export async function extractEvent({ chain, contractInterface, hanlder, hash, signature }: TestTransformer) {
+export async function extractEvent({ address, chain, contractInterface, hanlder, hash, signature }: TestTransformer) {
   const provider = abi.Web3Node.provider(chain);
   const receipt = await provider.getTransactionReceipt(hash);
-  const log = receipt.logs.find(({ topics }) => topics[0] === signature);
+  let log;
+  if (typeof address === "string") {
+    log = receipt.logs.find((log) => utils.isSameAddress(log.address, address));
+  } else if (typeof address === "function") {
+    const addresses = await address(chain);
+    log = receipt.logs.find((log) => addresses.includes(log.address.toLowerCase()));
+  } else {
+    log = receipt.logs.find(({ topics }) => topics[0] === signature);
+  }
 
   if (log) {
     const decodedLog = contractInterface.parseLog(log);

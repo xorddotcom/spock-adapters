@@ -1,4 +1,5 @@
 import AlpacaAdapter from "./alpaca";
+import BeefyAdapter from "./beefy";
 import BullionFxAdapter from "./bullionfx";
 import DafiAdapter from "./dafi";
 import GammaAdapter from "./gamma";
@@ -15,6 +16,7 @@ import { types } from "@spockanalytics/base";
 
 export const Adapters: types.Adapter[] = [
   AlpacaAdapter,
+  BeefyAdapter,
   BullionFxAdapter,
   DafiAdapter,
   GammaAdapter,
