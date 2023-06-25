@@ -87,7 +87,7 @@ const beefyAdapter: types.Adapter = {
     ],
   },
   tvlExtractors: {
-    [constants.Chain.BSC]: [
+    [constants.Chain.POLYGON]: [
       {
         category: types.TVL_Category.TVL,
         extractor: computeTVL(types.TVL_Category.TVL),
