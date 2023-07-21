@@ -138,11 +138,11 @@ export async function getHypervisorsAmounts(visorsInfo: VisorsInfo, chain: const
     visorsInfo[e] = {
       token0: {
         ...token0,
-        amount: amounts[i][0] || 0,
+        amount: amounts?.[i]?.[0] || 0,
       },
       token1: {
         ...token1,
-        amount: amounts[i][1] || 0,
+        amount: amounts?.[i]?.[1] || 0,
       },
     };
   });
