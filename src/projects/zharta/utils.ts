@@ -12,7 +12,7 @@ export const poolInterface = Pool__factory.createInterface();
 export const DEPOSIT = poolInterface.getEventTopic(poolInterface.getEvent("Deposit"));
 export const WITHDRAWAL = poolInterface.getEventTopic(poolInterface.getEvent("Withdrawal"));
 export const LOAN_CREATED = loansInterface.getEventTopic(loansInterface.getEvent("LoanCreated"));
-export const LOAN_PAID = loansInterface.getEventTopic(loansInterface.getEvent("LoanPaid"));
+export const LOAN_PAYMENT = loansInterface.getEventTopic(loansInterface.getEvent("LoanPayment"));
 
 // types
 export enum Label {
