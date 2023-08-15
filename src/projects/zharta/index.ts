@@ -1,8 +1,17 @@
 import { tokenBalanceUSD } from "../../utils/sumBalances";
 import { computeTVL } from "./tvl";
-import { LoanCreatedEventObject, LoanPaidEventObject } from "./types/Loans";
+import { LoanCreatedEventObject, LoanPaymentEventObject } from "./types/Loans";
 import { DepositEventObject, WithdrawalEventObject } from "./types/Pool";
-import { Label, loansInterface, poolInterface, DEPOSIT, WITHDRAWAL, LOAN_CREATED, LOAN_PAID, getLoan } from "./utils";
+import {
+  Label,
+  loansInterface,
+  poolInterface,
+  DEPOSIT,
+  WITHDRAWAL,
+  LOAN_CREATED,
+  LOAN_PAYMENT,
+  getLoan,
+} from "./utils";
 import { constants, types, utils, abi } from "@spockanalytics/base";
 
 export async function depositEvent(event: types.Event<DepositEventObject>) {
@@ -56,16 +65,14 @@ export async function loanCreatedEvent(event: types.Event<LoanCreatedEventObject
   }
 }
 
-export async function loanPaidEvent(event: types.Event<LoanPaidEventObject>) {
+export async function loanPaymentEvent(event: types.Event<LoanPaymentEventObject>) {
   const walletAddress = event.params.wallet;
-  const loanId = event.params.loanId;
-
-  const loanInfo = await getLoan(event.chain, [walletAddress, loanId.toNumber()], event.blockNumber);
   const token = await new abi.Token(event.params.erc20TokenContract, event.chain).metaData();
 
-  if (loanInfo) {
+  if (token) {
     const block = await Promise.resolve(event.block);
-    const amount = await tokenBalanceUSD({ token, balance: loanInfo.amount }, event.chain, block.timestamp);
+    const repayAmount = event.params.principal.add(event.params.interestAmount);
+    const amount = await tokenBalanceUSD({ token, balance: repayAmount }, event.chain, block.timestamp);
 
     return utils.ProtocolValue.contribution({
       label: Label.LOAN_PAID,
@@ -83,7 +90,7 @@ const zhartaAdapter: types.Adapter = {
         contract: loansInterface,
         eventHandlers: {
           [LOAN_CREATED]: loanCreatedEvent,
-          [LOAN_PAID]: loanPaidEvent,
+          [LOAN_PAYMENT]: loanPaymentEvent,
         },
         startBlock: 16422125,
       },

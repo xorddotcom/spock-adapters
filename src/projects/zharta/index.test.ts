@@ -1,8 +1,8 @@
 import { extractEvent } from "../../utils/extraction";
 import { testTvl, expectContribution, expectExtraction } from "../../utils/testing";
-import { depositEvent, withdrawalEvent, loanCreatedEvent, loanPaidEvent } from "./index";
+import { depositEvent, withdrawalEvent, loanCreatedEvent, loanPaymentEvent } from "./index";
 import zhartaAdapter from "./index";
-import { Label, poolInterface, DEPOSIT, WITHDRAWAL, loansInterface, LOAN_CREATED, LOAN_PAID } from "./utils";
+import { Label, poolInterface, DEPOSIT, WITHDRAWAL, loansInterface, LOAN_CREATED, LOAN_PAYMENT } from "./utils";
 import { constants } from "@spockanalytics/base";
 
 describe("zharta", () => {
@@ -50,9 +50,9 @@ describe("zharta", () => {
         const protocolValue = await extractEvent({
           chain: constants.Chain.ETHEREUM,
           contractInterface: loansInterface,
-          hanlder: loanPaidEvent,
+          hanlder: loanPaymentEvent,
           hash: "0x33af5519cd060d20fe23c682109cfc4cf8948b726e5f91327e13ab958823918c",
-          signature: LOAN_PAID,
+          signature: LOAN_PAYMENT,
         });
 
         expectContribution(protocolValue, Label.LOAN_PAID, "0x6a6177790d52b37294a4ad6f09fac561fd90f260");
