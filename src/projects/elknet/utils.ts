@@ -2,21 +2,13 @@ import { AddressMap, PartialChainRecord } from "../../types/chain";
 import { PartialTokenDecimals } from "../../types/token";
 import { factoryAddressMapping, AddressMappingResult } from "../../utils/addressMapping";
 import { Pool, uniswapV2_Pair } from "../../utils/pool";
-import {
-  ElkFactory__factory,
-  ElkPair__factory,
-  ElkFactory,
-  ElkPair,
-  Staking__factory,
-  Farming__factory,
-} from "./types";
+import { ElkFactory__factory, ElkPair__factory, ElkFactory, ElkPair, Staking__factory } from "./types";
 import { constants } from "@spockanalytics/base";
 
 // contract interfaces
 export const elkFactory = ElkFactory__factory.createInterface();
 export const elkPair = ElkPair__factory.createInterface();
 export const staking = Staking__factory.createInterface();
-export const farming = Farming__factory.createInterface();
 
 // contract events
 export const MINT = elkPair.getEventTopic(elkPair.getEvent("Mint"));
