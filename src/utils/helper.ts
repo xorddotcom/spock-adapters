@@ -6,7 +6,7 @@ export function createIncrementArray(length: number) {
 }
 
 export function getParamCalls(length: number) {
-  return createIncrementArray(length).map((item) => [item]);
+  return createIncrementArray(length).map((item) => item);
 }
 
 export function typeCast<T>(data: any): T {
