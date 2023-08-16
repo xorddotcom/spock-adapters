@@ -3,7 +3,7 @@ import { sumBalancesUSD, tokenBalanceUSD } from "../../utils/sumBalances";
 import { computeTVL } from "./tvl";
 import { BurnEventObject, MintEventObject } from "./types/ElkPair";
 import { StakedEventObject, WithdrawnEventObject } from "./types/Staking";
-import { BURN, MINT, elkPair, pairAddresses, elk_Pair, Label, ELK_TOKEN, staking, STAKE, UNSTAKE } from "./utils";
+import { BURN, MINT, STAKE, UNSTAKE, ELK_TOKEN, elkPair, staking, pairAddresses, elk_Pair, Label } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
 
 export async function mintEvent(event: types.Event<MintEventObject>) {
@@ -85,7 +85,7 @@ export async function withdrawnEvent(event: types.Event<WithdrawnEventObject>) {
 }
 
 const elknetAdapter: types.Adapter = {
-  appKey: "",
+  appKey: "f964f38e8bba1ea6ce41d371c17c2086f709b341b6c17f73ae22cbaf80162f53",
   transformers: {
     [constants.Chain.POLYGON]: [
       {
@@ -95,7 +95,7 @@ const elknetAdapter: types.Adapter = {
           [MINT]: mintEvent,
           [BURN]: burnEvent,
         },
-        startBlock: 22757600,
+        startBlock: 22757610,
       },
       {
         contract: staking,
@@ -113,7 +113,7 @@ const elknetAdapter: types.Adapter = {
       {
         category: types.TVL_Category.TVL,
         extractor: computeTVL,
-        startBlock: 22757600,
+        startBlock: 22757610,
       },
       {
         category: types.TVL_Category.STAKING,
