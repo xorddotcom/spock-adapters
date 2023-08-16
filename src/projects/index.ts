@@ -2,6 +2,7 @@ import AlpacaAdapter from "./alpaca";
 import BeefyAdapter from "./beefy";
 import BullionFxAdapter from "./bullionfx";
 import DafiAdapter from "./dafi";
+import ElknetAdapter from "./elknet";
 import GammaAdapter from "./gamma";
 import LifiAdapter from "./lifi";
 import MetamaskAdapter from "./metamask";
@@ -19,6 +20,7 @@ export const Adapters: types.Adapter[] = [
   BeefyAdapter,
   BullionFxAdapter,
   DafiAdapter,
+  ElknetAdapter,
   GammaAdapter,
   LifiAdapter,
   MetamaskAdapter,
