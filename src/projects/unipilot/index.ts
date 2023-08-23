@@ -43,7 +43,7 @@ export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
   const vaultAddress = event.address;
   const vault = await unipilotVault.getPool(vaultAddress, event.chain);
   if (vault) {
-    const [block, transaction] = await Promise.all([event.block, event.transaction]);
+    const block = await Promise.resolve(event.block);
     const totalSum = await sumBalancesUSD(
       [
         { token: vault.token0, balance: event.params.amount0 },
@@ -55,7 +55,7 @@ export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
     return utils.ProtocolValue.extraction({
       label: Label.REMOVE_LIQUIDITY,
       value: parseFloat(totalSum.toString()),
-      user: transaction.from,
+      user: event.params.recipient,
     });
   }
 }
