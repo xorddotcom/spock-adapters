@@ -37,7 +37,7 @@ export async function lifiSwappedGenericEvent(event: types.Event<LiFiSwappedGene
   }
 }
 
-const rubicAdapter: types.Adapter = {
+const lifiAdapter: types.Adapter = {
   appKey: "8d102f9ff8a986e4a1d272cec1d9477a2efb8a474d532761506d77e210b68603",
   transformers: {
     [constants.Chain.ETHEREUM]: [
@@ -54,4 +54,4 @@ const rubicAdapter: types.Adapter = {
   },
 };
 
-export default rubicAdapter;
+export default lifiAdapter;

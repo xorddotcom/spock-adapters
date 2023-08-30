@@ -4,6 +4,7 @@ import BullionFxAdapter from "./bullionfx";
 import DafiAdapter from "./dafi";
 import ElknetAdapter from "./elknet";
 import GammaAdapter from "./gamma";
+import HelloLabsAdapter from "./helloLabs";
 import LifiAdapter from "./lifi";
 import MetamaskAdapter from "./metamask";
 import PStakeAdapter from "./pStake";
@@ -22,6 +23,7 @@ export const Adapters: types.Adapter[] = [
   DafiAdapter,
   ElknetAdapter,
   GammaAdapter,
+  HelloLabsAdapter,
   LifiAdapter,
   MetamaskAdapter,
   PaxoAdapter,
