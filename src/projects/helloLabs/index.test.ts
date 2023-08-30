@@ -47,7 +47,7 @@ describe("helloBridge", () => {
         expectContribution(protocolValue, Label.DEPOSIT, "0x06a555f62fa48c1a1f2889492e363f3b65d8badd");
       });
 
-      it.only("should return contribution on claim", async () => {
+      it("should return contribution on claim", async () => {
         const protocolValue = await extractEvent({
           chain: constants.Chain.ETHEREUM,
           contractInterface: bridgeInterface,
