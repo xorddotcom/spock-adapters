@@ -13,6 +13,7 @@ import RubicAdapter from "./rubic";
 import TenderizeAdapter from "./tenderize";
 import TetuEarnAdapter from "./tetu";
 import UnipilotAdapter from "./unipilot";
+import ZeroLiquidAdapter from "./zeroLiquid";
 import ZhartaAdapter from "./zharta";
 import { types } from "@spockanalytics/base";
 
@@ -32,5 +33,6 @@ export const Adapters: types.Adapter[] = [
   TenderizeAdapter,
   TetuEarnAdapter,
   UnipilotAdapter,
+  ZeroLiquidAdapter,
   ZhartaAdapter,
 ];
