@@ -15,13 +15,9 @@ export async function computeTVL(chain: constants.Chain, block: number, timestam
     })
   ).output;
 
-  console.log({ yeildTokens });
-
   const balanceOfInput = yeildTokens.map((token) => ({ token, owner: PROXY_ZERO_LIQUID }));
 
   const proxyBalances = await abi.erc20MultiBalanceOf(balanceOfInput, chain, block);
-
-  console.log({ proxyBalances });
 
   sumMultipleBalance(balances, proxyBalances);
 
