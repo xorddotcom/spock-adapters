@@ -1,6 +1,7 @@
 import { tokenBalanceUSD } from "../../utils/sumBalances";
+import { computeTVL } from "./tvl";
 import { DepositEventObject, WithdrawEventObject, MintEventObject, BurnEventObject } from "./types/ZeroLiquid";
-import { Label, DEPOSIT, WITHDRAW, MINT, BURN, zETH, zeroLiquidInterface } from "./utils";
+import { Label, DEPOSIT, WITHDRAW, MINT, BURN, wrappedETH, zeroLiquidInterface, PROXY_ZERO_LIQUID } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
 
 export async function depositEvent(event: types.Event<DepositEventObject>) {
@@ -37,7 +38,12 @@ export async function withdrawEvent(event: types.Event<WithdrawEventObject>) {
 
 export async function mintEvent(event: types.Event<MintEventObject>) {
   const block = await Promise.resolve(event.block);
-  const amount = await tokenBalanceUSD({ token: zETH, balance: event.params.amount }, event.chain, block.timestamp);
+  //using wrappedETH instead of zETH becuase zETH pricing are not able right now, will replace it in future
+  const amount = await tokenBalanceUSD(
+    { token: wrappedETH, balance: event.params.amount },
+    event.chain,
+    block.timestamp,
+  );
   return utils.ProtocolValue.contribution({
     label: Label.MINT,
     value: parseFloat(amount.toString()),
@@ -47,9 +53,13 @@ export async function mintEvent(event: types.Event<MintEventObject>) {
 
 export async function burnEvent(event: types.Event<BurnEventObject>) {
   const block = await Promise.resolve(event.block);
-  const amount = await tokenBalanceUSD({ token: zETH, balance: event.params.amount }, event.chain, block.timestamp);
-  return utils.ProtocolValue.contribution({
-    label: Label.MINT,
+  const amount = await tokenBalanceUSD(
+    { token: wrappedETH, balance: event.params.amount },
+    event.chain,
+    block.timestamp,
+  );
+  return utils.ProtocolValue.extraction({
+    label: Label.BURN,
     value: parseFloat(amount.toString()),
     user: event.params.sender,
   });
@@ -60,7 +70,7 @@ const zeroLiquidAdapter: types.Adapter = {
   transformers: {
     [constants.Chain.ETHEREUM]: [
       {
-        address: "0x0246e28c6b161764492e54cbf852e28a4da2d672", //Poxy_Zero_Liquid
+        address: PROXY_ZERO_LIQUID,
         contract: zeroLiquidInterface,
         eventHandlers: {
           [DEPOSIT]: depositEvent,
@@ -68,6 +78,15 @@ const zeroLiquidAdapter: types.Adapter = {
           [BURN]: burnEvent,
           [MINT]: mintEvent,
         },
+        startBlock: 17986759,
+      },
+    ],
+  },
+  tvlExtractors: {
+    [constants.Chain.ETHEREUM]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
         startBlock: 17986759,
       },
     ],

@@ -1,7 +1,8 @@
 import { extractEvent } from "../../utils/extraction";
-import { expectContribution, expectExtraction } from "../../utils/testing";
+import { expectContribution, expectExtraction, testTvl } from "../../utils/testing";
 import { depositEvent, withdrawEvent, mintEvent, burnEvent } from "./index";
-import { Label, DEPOSIT, WITHDRAW, MINT, BURN, zETH, zeroLiquidInterface } from "./utils";
+import zeroLiquidAdapter from "./index";
+import { Label, DEPOSIT, WITHDRAW, MINT, BURN, zeroLiquidInterface } from "./utils";
 import { constants } from "@spockanalytics/base";
 
 describe("zeroLiquid", () => {
@@ -43,7 +44,7 @@ describe("zeroLiquid", () => {
         expectContribution(protocolValue, Label.MINT, "0x6671219099ea6ccc75eb3f4f4200d46a97b09a19");
       });
 
-      it("should return contribution on burn", async () => {
+      it("should return extraction on burn", async () => {
         const protocolValue = await extractEvent({
           chain: constants.Chain.ETHEREUM,
           contractInterface: zeroLiquidInterface,
@@ -52,8 +53,10 @@ describe("zeroLiquid", () => {
           signature: BURN,
         });
 
-        expectContribution(protocolValue, Label.BURN, "0x4e3aa6092cd50ddafcb3e091990ede029f18653b");
+        expectExtraction(protocolValue, Label.BURN, "0x4e3aa6092cd50ddafcb3e091990ede029f18653b");
       });
     });
   });
+
+  testTvl(zeroLiquidAdapter);
 });
