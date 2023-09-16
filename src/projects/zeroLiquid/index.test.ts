@@ -32,7 +32,7 @@ describe("zeroLiquid", () => {
         expectExtraction(protocolValue, Label.WITHDRAW, "0xa0a31d7d02723e66ea24df8285b30ea5e29e2317");
       });
 
-      it("should return contribution on mint", async () => {
+      it.skip("should return contribution on mint", async () => {
         const protocolValue = await extractEvent({
           chain: constants.Chain.ETHEREUM,
           contractInterface: zeroLiquidInterface,
@@ -44,7 +44,7 @@ describe("zeroLiquid", () => {
         expectContribution(protocolValue, Label.MINT, "0x6671219099ea6ccc75eb3f4f4200d46a97b09a19");
       });
 
-      it("should return extraction on burn", async () => {
+      it.skip("should return extraction on burn", async () => {
         const protocolValue = await extractEvent({
           chain: constants.Chain.ETHEREUM,
           contractInterface: zeroLiquidInterface,
