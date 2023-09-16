@@ -75,8 +75,8 @@ const zeroLiquidAdapter: types.Adapter = {
         eventHandlers: {
           [DEPOSIT]: depositEvent,
           [WITHDRAW]: withdrawEvent,
-          [BURN]: burnEvent,
-          [MINT]: mintEvent,
+          // [BURN]: burnEvent,
+          // [MINT]: mintEvent,
         },
         startBlock: 17986759,
       },
