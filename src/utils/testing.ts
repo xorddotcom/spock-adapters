@@ -8,6 +8,10 @@ const CHAIN_NAME: ChainRecord<string> = {
   [constants.Chain.BSC]: "BSC",
   [constants.Chain.ETHEREUM]: "Ethereum",
   [constants.Chain.POLYGON]: "Polygon",
+  [constants.Chain.OPTIMISM]: "Optimism",
+  [constants.Chain.ARBITRUM_ONE]: "Arbitrum",
+  [constants.Chain.AVALANCHE]: "Avalanche",
+  [constants.Chain.FANTOM]: "Fantom",
 };
 
 export function testTvl(adapter: types.Adapter) {
