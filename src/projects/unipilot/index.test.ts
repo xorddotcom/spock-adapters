@@ -103,5 +103,30 @@ describe("unipilot", () => {
     });
   });
 
+  describe("chain => Arbitrum", () => {
+    describe("vault", () => {
+      it("should return contribution on deposit", async () => {
+        const protocolValue = await extractEvent({
+          chain: constants.Chain.ARBITRUM_ONE,
+          contractInterface: vault,
+          hanlder: depositEvent,
+          hash: "0x5f4cf2763fb76c78f4fac9cd68313b674c1291a6fecc7b154d941f88d9d8c9b0",
+          signature: DEPOSIT,
+        });
+        expectContribution(protocolValue, Label.ADD_LIQUIDITY, "0x8a83716acd66d9e1fb18c9b79540b72e04f80ac0");
+      });
+      it("should return extraction on withdraw", async () => {
+        const protocolValue = await extractEvent({
+          chain: constants.Chain.ARBITRUM_ONE,
+          contractInterface: vault,
+          hanlder: withdrawEvent,
+          hash: "0x317b0725f95bb1d3c22161b890df28396bc2a0d08f42aba4f6305b26bb8b533d",
+          signature: WITHDRAW,
+        });
+        expectExtraction(protocolValue, Label.REMOVE_LIQUIDITY, "0x8a83716acd66d9e1fb18c9b79540b72e04f80ac0");
+      });
+    });
+  });
+
   // testTvl(unipilotAdapter);
 });

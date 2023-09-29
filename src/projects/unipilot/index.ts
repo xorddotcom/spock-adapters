@@ -120,6 +120,16 @@ const unipilotAdapter: types.Adapter = {
         startBlock: 27139991,
       },
     ],
+    [constants.Chain.ARBITRUM_ONE]: [
+      {
+        contract: vault,
+        eventHandlers: {
+          [DEPOSIT]: depositEvent,
+          [WITHDRAW]: withdrawEvent,
+        },
+        startBlock: 58774134,
+      },
+    ],
   },
   tvlExtractors: {
     [constants.Chain.ETHEREUM]: [
@@ -146,6 +156,13 @@ const unipilotAdapter: types.Adapter = {
         category: types.TVL_Category.TVL,
         extractor: computeTVL,
         startBlock: 27139991,
+      },
+    ],
+    [constants.Chain.ARBITRUM_ONE]: [
+      {
+        category: types.TVL_Category.TVL,
+        extractor: computeTVL,
+        startBlock: 58774134,
       },
     ],
   },
