@@ -43,6 +43,7 @@ export const VAULT_CREATION_TOPIC: PartialChainRecord<string> = {
   [constants.Chain.ETHEREUM]: "VaultCreated(address,address,uint24,address)",
   [constants.Chain.POLYGON]: "VaultCreated(address,address,uint16,uint24,address)",
   [constants.Chain.BSC]: "VaultCreated(address,address,uint16,uint24,address)",
+  [constants.Chain.ARBITRUM_ONE]: "VaultCreated(address,address,uint16,uint24,address)",
 };
 
 export const FACTORY_INFO: PartialChainRecord<Record<Factory, { address: string; startBlock: number }>> = {
@@ -74,6 +75,16 @@ export const FACTORY_INFO: PartialChainRecord<Record<Factory, { address: string;
     [Factory.PASSIVE]: {
       address: "0x6900c436cf15d6d0016dc71a5ce5ade843031efd",
       startBlock: 27140068,
+    },
+  },
+  [constants.Chain.ARBITRUM_ONE]: {
+    [Factory.ACTIVE]: {
+      address: "0xca69c359e3297aa855e77f83e071feab17f0ede6",
+      startBlock: 59667444,
+    },
+    [Factory.PASSIVE]: {
+      address: "0x6900c436cf15d6d0016dc71a5ce5ade843031efd",
+      startBlock: 58774134,
     },
   },
 };
