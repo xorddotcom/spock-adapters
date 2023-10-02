@@ -8,9 +8,18 @@ interface TestTransformer {
   hanlder: types.EventHandler;
   hash: string;
   signature: string;
+  eventIndex?: number;
 }
 
-export async function extractEvent({ address, chain, contractInterface, hanlder, hash, signature }: TestTransformer) {
+export async function extractEvent({
+  address,
+  chain,
+  contractInterface,
+  hanlder,
+  hash,
+  signature,
+  eventIndex,
+}: TestTransformer) {
   const provider = abi.Web3Node.provider(chain);
   const receipt = await provider.getTransactionReceipt(hash);
   let log;
@@ -20,7 +29,9 @@ export async function extractEvent({ address, chain, contractInterface, hanlder,
     const addresses = await address(chain);
     log = receipt.logs.find((log) => addresses.includes(log.address.toLowerCase()));
   } else {
-    log = receipt.logs.find(({ topics }) => topics[0] === signature);
+    log = receipt.logs.find(
+      ({ topics, logIndex }) => topics[0] === signature && (eventIndex ? logIndex === eventIndex : true),
+    );
   }
 
   if (log) {
