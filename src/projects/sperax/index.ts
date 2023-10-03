@@ -53,6 +53,13 @@ const SperaxAdapter: types.Adapter = {
         startBlock: 9349291,
       },
     ],
+    [constants.Chain.ETHEREUM]: [
+      {
+        category: types.TVL_Category.STAKING,
+        extractor: computeStakingTVL,
+        startBlock: 14527094,
+      },
+    ],
   },
 };
 

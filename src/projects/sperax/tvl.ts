@@ -25,7 +25,7 @@ export async function computeStakingTVL(chain: constants.Chain, block: number) {
 
   const supply = (
     await abi.Multicall.singleCall({
-      address: VeSPAAddress,
+      address: VeSPAAddress[chain] as string,
       chain,
       contractInterface: VeSPAInterface,
       fragment: "totalSPALocked",
@@ -33,7 +33,7 @@ export async function computeStakingTVL(chain: constants.Chain, block: number) {
     })
   )?.output;
 
-  sumSingleBalance(balances, SPAAddress, supply);
+  sumSingleBalance(balances, SPAAddress[chain] as string, supply);
 
   return balances;
 }
