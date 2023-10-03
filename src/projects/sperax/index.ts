@@ -27,7 +27,7 @@ export async function handleTransfer(event: types.Event<Transfer_EventObject>) {
 }
 
 const SperaxAdapter: types.Adapter = {
-  appKey: "---",
+  appKey: "92e8b0763354b4a6403b7824e062cd343f33ce23b157438f78c722bdb334e900",
   transformers: {
     [constants.Chain.ARBITRUM_ONE]: [
       {
