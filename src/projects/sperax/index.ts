@@ -50,7 +50,7 @@ export async function handleDeposit(event: types.Event<DepositEventObject>) {
 
   return utils.ProtocolValue.contribution({
     label: Label.STAKE,
-    value: assetValue.toNumber(),
+    value: parseFloat(assetValue.toString()),
     user: event.params.provider,
   });
 }
@@ -66,7 +66,7 @@ export async function handleWithdraw(event: types.Event<WithdrawEventObject>) {
 
   return utils.ProtocolValue.extraction({
     label: Label.UNSTAKE,
-    value: assetValue.toNumber(),
+    value: parseFloat(assetValue.toString()),
     user: event.params.provider,
   });
 }
