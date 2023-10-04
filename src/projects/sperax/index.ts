@@ -1,8 +1,9 @@
-import { computeCollateralTVL, computeStakingTVL } from "./tvl";
+import { stakingTvl } from "../../utils/staking";
+import { computeCollateralTVL } from "./tvl";
 import { Transfer_address_address_uint256_EventObject as Transfer_EventObject } from "./types/USDs";
-import { Label, USDsInterface, TRANSFER, USDsAddress } from "./utils";
+import { Label, USDsInterface, TRANSFER, USDsAddress, VeSPAAddress, SPAAddress } from "./utils";
+import { formatUnits } from "@ethersproject/units";
 import { constants, types, utils } from "@spockanalytics/base";
-import { formatUnits } from "ethers/lib/utils";
 
 export async function handleTransfer(event: types.Event<Transfer_EventObject>) {
   if (event.params.value.eq(0)) return;
@@ -11,16 +12,16 @@ export async function handleTransfer(event: types.Event<Transfer_EventObject>) {
     // mint
 
     return utils.ProtocolValue.contribution({
-      label: `${Label.ADD_COLLATERAL}`,
-      value: utils.BN_Opeartion.mul(formatUnits(event.params.value, 18), 1).toNumber(),
+      label: Label.ADD_COLLATERAL,
+      value: parseFloat(formatUnits(event.params.value, 18)), //USD stable $1 price
       user: event.params.to,
     });
   } else if (event.params.to === constants.ZERO_ADDRESS) {
     // burn
 
     return utils.ProtocolValue.extraction({
-      label: `${Label.REMOVE_COLLATERAL}`,
-      value: utils.BN_Opeartion.mul(formatUnits(event.params.value, 18), 1).toNumber(),
+      label: Label.REMOVE_COLLATERAL,
+      value: parseFloat(formatUnits(event.params.value, 18)), //USD stable $1 price
       user: event.params.from,
     });
   }
@@ -34,7 +35,7 @@ const SperaxAdapter: types.Adapter = {
         contract: USDsInterface,
         address: USDsAddress,
         eventHandlers: {
-          [TRANSFER]: (event) => handleTransfer(event),
+          [TRANSFER]: handleTransfer,
         },
         startBlock: 4032282,
       },
@@ -49,17 +50,23 @@ const SperaxAdapter: types.Adapter = {
       },
       {
         category: types.TVL_Category.STAKING,
-        extractor: computeStakingTVL,
+        extractor: stakingTvl(
+          VeSPAAddress[constants.Chain.ARBITRUM_ONE] as string,
+          SPAAddress[constants.Chain.ARBITRUM_ONE] as string,
+        ),
         startBlock: 9349291,
       },
     ],
-    [constants.Chain.ETHEREUM]: [
-      {
-        category: types.TVL_Category.STAKING,
-        extractor: computeStakingTVL,
-        startBlock: 14527094,
-      },
-    ],
+    // [constants.Chain.ETHEREUM]: [
+    //   {
+    //     category: types.TVL_Category.STAKING,
+    //     extractor: stakingTvl(
+    //       VeSPAAddress[constants.Chain.ETHEREUM] as string,
+    //       SPAAddress[constants.Chain.ETHEREUM] as string,
+    //     ),
+    //     startBlock: 14527094,
+    //   },
+    // ],
   },
 };
 
