@@ -27,6 +27,7 @@ export const Adapters: types.Adapter[] = [
   GammaAdapter,
   HelloLabsAdapter,
   LifiAdapter,
+  MagpieAdapter,
   MetamaskAdapter,
   PaxoAdapter,
   PStakeAdapter,
@@ -36,5 +37,4 @@ export const Adapters: types.Adapter[] = [
   UnipilotAdapter,
   ZeroLiquidAdapter,
   ZhartaAdapter,
-  MagpieAdapter,
 ];
