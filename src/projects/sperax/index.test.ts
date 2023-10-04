@@ -11,7 +11,7 @@ describe("Sperax", () => {
         const protocolValue = await extractEvent({
           chain: constants.Chain.ARBITRUM_ONE,
           contractInterface: USDsInterface,
-          hanlder: (event) => handleTransfer(event),
+          hanlder: handleTransfer,
           hash: "0x1106261bc469a64bcd1fa424174f0fa8146503d401a9df1e130651cc389f1ad4",
           signature: TRANSFER,
           eventIndex: 49,
@@ -24,7 +24,7 @@ describe("Sperax", () => {
         const protocolValue = await extractEvent({
           chain: constants.Chain.ARBITRUM_ONE,
           contractInterface: USDsInterface,
-          hanlder: (event) => handleTransfer(event),
+          hanlder: handleTransfer,
           hash: "0xcde76ee4b50f6ccb4fc58fa7da9841f7c5664cdaca1a6d7360e59fbdd6e67f3a",
           signature: TRANSFER,
           eventIndex: 3,
