@@ -6,6 +6,7 @@ import ElknetAdapter from "./elknet";
 import GammaAdapter from "./gamma";
 import HelloLabsAdapter from "./helloLabs";
 import LifiAdapter from "./lifi";
+import MagpieAdapter from "./magpie";
 import MetamaskAdapter from "./metamask";
 import PStakeAdapter from "./pStake";
 import PaxoAdapter from "./paxo";
@@ -27,6 +28,7 @@ export const Adapters: types.Adapter[] = [
   GammaAdapter,
   HelloLabsAdapter,
   LifiAdapter,
+  MagpieAdapter,
   MetamaskAdapter,
   PaxoAdapter,
   PStakeAdapter,
