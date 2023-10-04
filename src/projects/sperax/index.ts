@@ -88,13 +88,6 @@ const SperaxAdapter: types.Adapter = {
         address: VeSPAAddress[constants.Chain.ARBITRUM_ONE],
         eventHandlers: {
           [DEPOSIT]: handleDeposit,
-        },
-        startBlock: 9349310,
-      },
-      {
-        contract: VeSPAInterface,
-        address: VeSPAAddress[constants.Chain.ARBITRUM_ONE],
-        eventHandlers: {
           [WITHDRAW]: handleWithdraw,
         },
         startBlock: 9349310,
