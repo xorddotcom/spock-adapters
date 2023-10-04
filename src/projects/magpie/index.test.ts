@@ -28,7 +28,7 @@ describe("Magpie", () => {
           signature: SWAP_IN,
         });
 
-        expectContribution(protocolValue, `${Label.SWAP_IN} (1 -> 6)`, "0x6e054b0b80fd06ada55eaaf09c625e7d2833d9a6");
+        expectContribution(protocolValue, Label.SWAP_IN, "0x6e054b0b80fd06ada55eaaf09c625e7d2833d9a6");
       }, 50000);
 
       it("should return contribution on swapOut", async () => {
@@ -40,7 +40,7 @@ describe("Magpie", () => {
           signature: SWAP_OUT,
         });
 
-        expectExtraction(protocolValue, `${Label.SWAP_OUT} (5 -> 1)`, "0xc6547284d2c7dbdc4bc7a29105b01d62c03b9481");
+        expectExtraction(protocolValue, Label.SWAP_OUT, "0xc6547284d2c7dbdc4bc7a29105b01d62c03b9481");
       }, 50000);
     });
   });

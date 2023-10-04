@@ -31,7 +31,7 @@ export async function handleSwapIn(event: types.Event<SwapInEventObject>) {
   const amount = await tokenBalanceUSD({ token, balance: event.params.amountIn }, event.chain, block.timestamp);
 
   return utils.ProtocolValue.contribution({
-    label: `${Label.SWAP_IN} (${event.params.transferKey.networkId} -> ${event.params.transaction.recipientNetworkId})`,
+    label: Label.SWAP_IN,
     value: amount.toNumber(),
     user: event.params.fromAddress,
   });
@@ -48,7 +48,7 @@ export async function handleSwapOut(event: types.Event<SwapOutEventObject>) {
   const amount = await tokenBalanceUSD({ token, balance: event.params.amountOut }, event.chain, block.timestamp);
 
   return utils.ProtocolValue.extraction({
-    label: `${Label.SWAP_OUT} (${event.params.transferKey.networkId} -> ${event.params.transaction.recipientNetworkId})`,
+    label: Label.SWAP_OUT,
     value: amount.toNumber(),
     user: event.params.toAddress,
   });
