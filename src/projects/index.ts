@@ -31,6 +31,7 @@ export const Adapters: types.Adapter[] = [
   PaxoAdapter,
   PStakeAdapter,
   RubicAdapter,
+  SperaxAdapter,
   TenderizeAdapter,
   TetuEarnAdapter,
   UnipilotAdapter,
