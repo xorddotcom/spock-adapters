@@ -14,7 +14,7 @@ export async function handleSwap(event: types.Event<SwapEventObject>) {
 
   return utils.ProtocolValue.contribution({
     label: Label.SWAP,
-    value: amount.toNumber(),
+    value: parseFloat(amount.toString()),
     user: event.params.fromAddress,
   });
 }
@@ -30,7 +30,7 @@ export async function handleSwapIn(event: types.Event<SwapInEventObject>) {
 
   return utils.ProtocolValue.contribution({
     label: Label.SWAP_IN,
-    value: amount.toNumber(),
+    value: parseFloat(amount.toString()),
     user: event.params.fromAddress,
   });
 }
@@ -46,7 +46,7 @@ export async function handleSwapOut(event: types.Event<SwapOutEventObject>) {
 
   return utils.ProtocolValue.contribution({
     label: Label.SWAP_OUT,
-    value: amount.toNumber(),
+    value: parseFloat(amount.toString()),
     user: event.params.toAddress,
   });
 }
