@@ -1,7 +1,19 @@
 import { stakingTvl } from "../../utils/staking";
+import { tokenBalanceUSD } from "../../utils/sumBalances";
 import { computeCollateralTVL } from "./tvl";
 import { Transfer_address_address_uint256_EventObject as Transfer_EventObject } from "./types/USDs";
-import { Label, USDsInterface, TRANSFER, USDsAddress, VeSPAAddress, SPAAddress } from "./utils";
+import { WithdrawEventObject, UserCheckpointEventObject as DepositEventObject } from "./types/VeSPA";
+import {
+  USDsInterface,
+  VeSPAInterface,
+  TRANSFER,
+  DEPOSIT,
+  WITHDRAW,
+  USDsAddress,
+  VeSPAAddress,
+  SPAAddress,
+  Label,
+} from "./utils";
 import { formatUnits } from "@ethersproject/units";
 import { constants, types, utils } from "@spockanalytics/base";
 
@@ -27,6 +39,38 @@ export async function handleTransfer(event: types.Event<Transfer_EventObject>) {
   }
 }
 
+export async function handleDeposit(event: types.Event<DepositEventObject>) {
+  const block = await Promise.resolve(event.block);
+
+  const assetValue = await tokenBalanceUSD(
+    { token: SPAAddress[event.chain] as string, balance: event.params.value },
+    event.chain,
+    block.timestamp,
+  );
+
+  return utils.ProtocolValue.contribution({
+    label: Label.STAKE,
+    value: assetValue.toNumber(),
+    user: event.params.provider,
+  });
+}
+
+export async function handleWithdraw(event: types.Event<WithdrawEventObject>) {
+  const block = await Promise.resolve(event.block);
+
+  const assetValue = await tokenBalanceUSD(
+    { token: SPAAddress[event.chain] as string, balance: event.params.value },
+    event.chain,
+    block.timestamp,
+  );
+
+  return utils.ProtocolValue.extraction({
+    label: Label.UNSTAKE,
+    value: assetValue.toNumber(),
+    user: event.params.provider,
+  });
+}
+
 const SperaxAdapter: types.Adapter = {
   appKey: "92e8b0763354b4a6403b7824e062cd343f33ce23b157438f78c722bdb334e900",
   transformers: {
@@ -38,6 +82,15 @@ const SperaxAdapter: types.Adapter = {
           [TRANSFER]: handleTransfer,
         },
         startBlock: 4032282,
+      },
+      {
+        contract: VeSPAInterface,
+        address: VeSPAAddress[constants.Chain.ARBITRUM_ONE],
+        eventHandlers: {
+          [DEPOSIT]: handleDeposit,
+          [WITHDRAW]: handleWithdraw,
+        },
+        startBlock: 9349310,
       },
     ],
   },

@@ -39,4 +39,5 @@ export const Adapters: types.Adapter[] = [
   UnipilotAdapter,
   ZeroLiquidAdapter,
   ZhartaAdapter,
+  SperaxAdapter,
 ];
