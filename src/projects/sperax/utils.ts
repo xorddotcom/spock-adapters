@@ -1,6 +1,6 @@
 import { USDs__factory, VeSPA__factory } from "./types";
 import { constants } from "@spockanalytics/base";
-import { PartialChainRecord } from "types/chain";
+import { PartialChainRecord } from "../../types/chain";
 
 // contract interfaces
 export const USDsInterface = USDs__factory.createInterface();
