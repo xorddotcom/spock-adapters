@@ -11,6 +11,7 @@ import MetamaskAdapter from "./metamask";
 import PStakeAdapter from "./pStake";
 import PaxoAdapter from "./paxo";
 import RubicAdapter from "./rubic";
+import SperaxAdapter from "./sperax";
 import TenderizeAdapter from "./tenderize";
 import TetuEarnAdapter from "./tetu";
 import UnipilotAdapter from "./unipilot";
@@ -27,14 +28,15 @@ export const Adapters: types.Adapter[] = [
   GammaAdapter,
   HelloLabsAdapter,
   LifiAdapter,
+  MagpieAdapter,
   MetamaskAdapter,
   PaxoAdapter,
   PStakeAdapter,
   RubicAdapter,
+  SperaxAdapter,
   TenderizeAdapter,
   TetuEarnAdapter,
   UnipilotAdapter,
   ZeroLiquidAdapter,
   ZhartaAdapter,
-  MagpieAdapter,
 ];
