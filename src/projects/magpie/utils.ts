@@ -1,6 +1,6 @@
+import { PartialChainRecord } from "../../types/chain";
 import { AggregatorFacet__factory } from "./types";
 import { constants } from "@spockanalytics/base";
-import { PartialChainRecord } from "types/chain";
 
 // contract interfaces
 export const aggregatorFacetInterface = AggregatorFacet__factory.createInterface();
