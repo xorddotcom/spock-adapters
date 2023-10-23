@@ -12,12 +12,12 @@ export async function sumBalancesUSD(
   chain: constants.Chain = constants.Chain.ETHEREUM,
   timestamp?: number,
 ) {
-  const addresses = inputs.map(({ token }) => token.address);
+  const addresses = inputs.map(({ token }) => token.address.toLowerCase());
   const prices = await api.ankr.multipleTokenPrices({ addresses, chain, toTimestamp: timestamp });
 
   return inputs.reduce((accum, { token, balance }) => {
     const formattedBalance = formatUnits(balance, token.decimals);
-    accum = accum.plus(utils.BN_Opeartion.mul(formattedBalance, prices[token.address]));
+    accum = accum.plus(utils.BN_Opeartion.mul(formattedBalance, prices[token.address.toLowerCase()]));
     return accum;
   }, utils.BN_Opeartion.ZERO_BN);
 }
