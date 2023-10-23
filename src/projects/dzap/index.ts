@@ -158,7 +158,7 @@ export async function modifyPositionEvent(event: types.Event<ModifiedEventObject
 }
 
 const dzapAdapter: types.Adapter = {
-  appKey: "0d0d6195eaef60fadf0f52dc2a232177465e5a4c6ad6b43496ca188b91189d5d",
+  appKey: "e2cb630dc30f69a36a8cd5cbe0b3bd3c34556190879823725def6b2efc9ec832",
   transformers: {
     [constants.Chain.ETHEREUM]: [
       {
