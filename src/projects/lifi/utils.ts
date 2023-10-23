@@ -1,4 +1,4 @@
-import { AddressMap } from "../../types/chain";
+import { WRAPPED_NATIVE_TOKEN } from "../../constants/tokens";
 import { AcrossFacet__factory } from "./types";
 import { constants, utils } from "@spockanalytics/base";
 
@@ -22,11 +22,7 @@ export enum Label {
 //constants
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
-const WRAPPED_NATIVE: AddressMap = {
-  [constants.Chain.ETHEREUM]: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-};
-
 // helper functions
 export function assetAddress(sendingAsset: string, chain: constants.Chain) {
-  return utils.isSameAddress(ZERO_ADDRESS, sendingAsset) ? WRAPPED_NATIVE[chain] : sendingAsset;
+  return utils.isSameAddress(ZERO_ADDRESS, sendingAsset) ? WRAPPED_NATIVE_TOKEN[chain] : sendingAsset;
 }

@@ -22,12 +22,6 @@ export enum Label {
 }
 
 //constants
-export const NativeToken: AddressMap = {
-  [constants.Chain.ETHEREUM]: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-  [constants.Chain.POLYGON]: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
-  [constants.Chain.BSC]: "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c",
-};
-
 export const MetamaskStakingAggregator: AddressMap = {
   [constants.Chain.ETHEREUM]: "0x67054183db455d74839d1ea11f7e497350f64c71",
 };

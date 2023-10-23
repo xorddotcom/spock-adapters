@@ -1,3 +1,4 @@
+import { WRAPPED_NATIVE_TOKEN } from "../../constants/tokens";
 import { tokenBalanceUSD } from "../../utils/sumBalances";
 import { SubmittedEventObject } from "./types/LidoEthStaking";
 import { SwapEventObject } from "./types/MetaSwap";
@@ -9,7 +10,6 @@ import {
   MetaSwapInterface,
   STAKE_LIDO,
   STAKE_ROCKET,
-  NativeToken,
   Label,
 } from "./utils";
 import { constants, types, utils } from "@spockanalytics/base";
@@ -18,10 +18,8 @@ export async function stakeLidoEvent(event: types.Event<SubmittedEventObject>) {
   if (utils.isSameAddress(event.params.sender, MetamaskStakingAggregator[event.chain])) {
     const [block, transaction] = await Promise.all([event.block, event.transaction]);
 
-    const token = NativeToken[event.chain] ?? "";
-
     const assetValue = await tokenBalanceUSD(
-      { token: token, balance: event.params.amount },
+      { token: WRAPPED_NATIVE_TOKEN[event.chain], balance: event.params.amount },
       event.chain,
       block.timestamp,
     );
@@ -38,10 +36,8 @@ export async function stakeRocketEvent(event: types.Event<DepositReceivedEventOb
   if (utils.isSameAddress(event.params.from, MetamaskStakingAggregator[event.chain])) {
     const [block, transaction] = await Promise.all([event.block, event.transaction]);
 
-    const token = NativeToken[event.chain] ?? "";
-
     const assetValue = await tokenBalanceUSD(
-      { token: token, balance: event.params.amount },
+      { token: WRAPPED_NATIVE_TOKEN[event.chain], balance: event.params.amount },
       event.chain,
       block.timestamp,
     );
@@ -61,7 +57,7 @@ export async function swapEvent(event: types.Event<SwapEventObject>) {
   let { tokenFrom } = MetaSwapInterface.decodeFunctionData("swap", transaction.data);
 
   if (tokenFrom && amount) {
-    if (tokenFrom === constants.ZERO_ADDRESS) tokenFrom = NativeToken[event.chain];
+    if (tokenFrom === constants.ZERO_ADDRESS) tokenFrom = WRAPPED_NATIVE_TOKEN[event.chain];
 
     const block = await Promise.resolve(event.block);
     const assetValue = await tokenBalanceUSD({ token: tokenFrom, balance: amount }, event.chain, block.timestamp);
